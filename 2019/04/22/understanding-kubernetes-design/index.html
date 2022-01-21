@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
   <script>
@@ -15,7 +15,7 @@
   <meta name="description" content="Suhwan Jee&#39;s blog">
   <meta name="keyword" content="Develop, Backend, Server, Spring">
   
-    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"> 
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
   
   <title>
     
@@ -25,13 +25,17 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plugins/gitment.css">
+
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-  <script src="/js/qrious.js"></script>
+  
+<script src="/js/qrious.js"></script>
 <script src="/js/gitment.js"></script>
+
   
   
     <!-- MathJax support START -->
@@ -58,9 +62,9 @@
   
 
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <div class="wechat-share">
-  <img src="/images/favicon.png">
+  <img src="/images/favicon.png" />
 </div>
 
   <body>
@@ -190,15 +194,15 @@
 </ul>
 <p>이러한 상태 감지와 이에 대응되는 action은 끊임없이 이루어진다. Kubernetes는 지속적으로 각종 current state를 측정하여 저장한다. 그리고 각 컴포넌트는 자신이 바라보는 current state와 desired state가 일치하도록 최선을 다한다.</p>
 <h2 id="Kubernetes-object-예시"><a href="#Kubernetes-object-예시" class="headerlink" title="Kubernetes object 예시"></a>Kubernetes object 예시</h2><p>Kubernetes를 단순히 action을 실행하는 tool로 보았을 때 이해가 잘 안 된 대표적인 요소가 바로 label과 label selector였다.</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nginx-deployment</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  replicas:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">  template:</span></span><br><span class="line"><span class="attr">    metadata:</span></span><br><span class="line"><span class="attr">      labels:</span></span><br><span class="line"><span class="attr">        app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    spec:</span></span><br><span class="line"><span class="attr">      containers:</span></span><br><span class="line"><span class="attr">      - name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">        image:</span> <span class="attr">nginx:1.7.9</span></span><br><span class="line"><span class="attr">        ports:</span></span><br><span class="line"><span class="attr">        - containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-deployment</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
 <p>위 예시는 간단하게 nginx 컨테이너 하나로 구성된 Pod의 복사본을 3개 띄우는 Deployment를 정의한 YAML 파일이다. 이 Deployment Controller를 생성하면 Kubernetes는 위에서 본 대로 ReplicaSet Controller를 만들고, Pod을 만들고, 해당 Pod를 Node에 bind 시키고, bind 된 Node는 Pod을 띄우는 일련의 과정을 수행할 것이다.</p>
 <p>만약 단순히 Kubernetes가 특정 action을 input으로 받아 이를 수행하는 툴이었다면 YAML 파일은 단순히 아래와 같이 구성되어도 괜찮았을 것이다.</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  replicas:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">  template:</span></span><br><span class="line"><span class="attr">    containers:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">      image:</span> <span class="attr">nginx:1.7.9</span></span><br><span class="line"><span class="attr">      ports:</span></span><br><span class="line"><span class="attr">      - containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">      <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
 <p>이 정도의 정보로도 충분히 “nginx 컨테이너 하나로 구성된 Pod의 복사본을 3개 띄워주세요”라는 메세지를 전달할 수 있다.</p>
 <p>하지만 우리가 Kubernetes에 전달하는 명령의 본질은 이것이 아니다. “nginx 컨테이너 하나로 구성된 Pod의 복사본을 3개 띄운 <strong>상태로 유지해주세요</strong>“이다. 이 명령을 수행하기 위해서 Kubernetes는 훨씬 더 많은 일을 해야 한다. 가장 중요한 일은 current state를 측정하는 것, 즉 이 명령을 위해 띄운 container가 몇 개인지 추적하는 일이다. 그래야 desired state를 이루기 위해 어떤 행동을 취할지 판단할 수 있기 때문이다. 이를 위해서는 어떤 Pod이 이 명령에 속하는 Pod인지 알 수 있어야 한다. 바로 이 때문에 Pod에 라벨을 붙이는 <code>spec.template.metadata.labels.app</code> field와, current state를 측정하기 위해 어떤 container를 counting해야 하는지를 정하는 <code>spec.selector.matchLabels</code> field가 필요하다.</p>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://www.slideshare.net/InhoKang2/kubernetes-from-beginner-to-advanced?fbclid=IwAR3TiUX17l460cjFKJa0unGVUMruOz2ElQYxCgVAcvM60z3C26McQeHiKyw" target="_blank" rel="noopener">강인호님 웨비나 - Microservice, From beginner to Advanced</a></li>
-<li><a href="https://kubernetes.io" target="_blank" rel="noopener">Kubernetes 공식 홈페이지</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.slideshare.net/InhoKang2/kubernetes-from-beginner-to-advanced?fbclid=IwAR3TiUX17l460cjFKJa0unGVUMruOz2ElQYxCgVAcvM60z3C26McQeHiKyw">강인호님 웨비나 - Microservice, From beginner to Advanced</a></li>
+<li><a target="_blank" rel="noopener" href="https://kubernetes.io">Kubernetes 공식 홈페이지</a></li>
 </ul>
 </section>
     <!-- Tags START -->
@@ -240,7 +244,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#개요"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Kubernetes의-Input은-Action이-아니라-Desired-State이다"><span class="toc-nav-text">Kubernetes의 Input은 Action이 아니라 Desired State이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Kubernetes-Internals"><span class="toc-nav-text">Kubernetes Internals</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Kubernetes-object-예시"><span class="toc-nav-text">Kubernetes object 예시</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#References"><span class="toc-nav-text">References</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Kubernetes%EC%9D%98-Input%EC%9D%80-Action%EC%9D%B4-%EC%95%84%EB%8B%88%EB%9D%BC-Desired-State%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">Kubernetes의 Input은 Action이 아니라 Desired State이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Kubernetes-Internals"><span class="toc-nav-text">Kubernetes Internals</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Kubernetes-object-%EC%98%88%EC%8B%9C"><span class="toc-nav-text">Kubernetes object 예시</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#References"><span class="toc-nav-text">References</span></a></li></ol>
     
   </div>
 </aside>
@@ -330,9 +334,9 @@
 </div>
     <footer class="app-footer">
   <p class="copyright">
-    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
     <br>
-    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
   </p>
 </footer>
 
@@ -377,6 +381,8 @@
 </script>
 <!-- Baidu Tongji -->
 
+
 <script src="/js/script.js"></script>
+
   </body>
 </html>

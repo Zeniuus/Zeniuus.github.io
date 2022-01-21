@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
   <script>
@@ -15,7 +15,7 @@
   <meta name="description" content="Suhwan Jee&#39;s blog">
   <meta name="keyword" content="Develop, Backend, Server, Spring">
   
-    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"> 
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
   
   <title>
     
@@ -25,13 +25,17 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plugins/gitment.css">
+
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-  <script src="/js/qrious.js"></script>
+  
+<script src="/js/qrious.js"></script>
 <script src="/js/gitment.js"></script>
+
   
   
     <!-- MathJax support START -->
@@ -58,9 +62,9 @@
   
 
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <div class="wechat-share">
-  <img src="/images/favicon.png">
+  <img src="/images/favicon.png" />
 </div>
 
   <body>
@@ -290,7 +294,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#전략적-설계"><span class="toc-nav-text">전략적 설계</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Ubiquitous-Language-보편-언어"><span class="toc-nav-text">Ubiquitous Language (보편 언어)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#바운디드-컨텍스트와-거대한-엔티티"><span class="toc-nav-text">바운디드 컨텍스트와 거대한 엔티티</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#비즈니스와-조직에-관심을-기울이자"><span class="toc-nav-text">비즈니스와 조직에 관심을 기울이자</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#아키텍처"><span class="toc-nav-text">아키텍처</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#계층-아키텍처"><span class="toc-nav-text">계층 아키텍처</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#CQRS와-이벤트-소싱"><span class="toc-nav-text">CQRS와 이벤트 소싱</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#전술적-설계"><span class="toc-nav-text">전술적 설계</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#분산-시스템"><span class="toc-nav-text">분산 시스템</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#고정자-트랜잭션적-일관성-amp-결과적-일관성"><span class="toc-nav-text">고정자, 트랜잭션적 일관성 &amp; 결과적 일관성</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#생각들"><span class="toc-nav-text">생각들</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Spring과-DDD의-관계-Spring을-올바르게-사용하는-패턴"><span class="toc-nav-text">Spring과 DDD의 관계 - Spring을 올바르게 사용하는 패턴?</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#스타트업과-DDD"><span class="toc-nav-text">스타트업과 DDD?</span></a></li></ol></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%A0%84%EB%9E%B5%EC%A0%81-%EC%84%A4%EA%B3%84"><span class="toc-nav-text">전략적 설계</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Ubiquitous-Language-%EB%B3%B4%ED%8E%B8-%EC%96%B8%EC%96%B4"><span class="toc-nav-text">Ubiquitous Language (보편 언어)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EB%B0%94%EC%9A%B4%EB%94%94%EB%93%9C-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8%EC%99%80-%EA%B1%B0%EB%8C%80%ED%95%9C-%EC%97%94%ED%8B%B0%ED%8B%B0"><span class="toc-nav-text">바운디드 컨텍스트와 거대한 엔티티</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4%EC%99%80-%EC%A1%B0%EC%A7%81%EC%97%90-%EA%B4%80%EC%8B%AC%EC%9D%84-%EA%B8%B0%EC%9A%B8%EC%9D%B4%EC%9E%90"><span class="toc-nav-text">비즈니스와 조직에 관심을 기울이자</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98"><span class="toc-nav-text">아키텍처</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EA%B3%84%EC%B8%B5-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98"><span class="toc-nav-text">계층 아키텍처</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#CQRS%EC%99%80-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%86%8C%EC%8B%B1"><span class="toc-nav-text">CQRS와 이벤트 소싱</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%A0%84%EC%88%A0%EC%A0%81-%EC%84%A4%EA%B3%84"><span class="toc-nav-text">전술적 설계</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EB%B6%84%EC%82%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C"><span class="toc-nav-text">분산 시스템</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EA%B3%A0%EC%A0%95%EC%9E%90-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EC%A0%81-%EC%9D%BC%EA%B4%80%EC%84%B1-amp-%EA%B2%B0%EA%B3%BC%EC%A0%81-%EC%9D%BC%EA%B4%80%EC%84%B1"><span class="toc-nav-text">고정자, 트랜잭션적 일관성 &amp; 결과적 일관성</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%83%9D%EA%B0%81%EB%93%A4"><span class="toc-nav-text">생각들</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Spring%EA%B3%BC-DDD%EC%9D%98-%EA%B4%80%EA%B3%84-Spring%EC%9D%84-%EC%98%AC%EB%B0%94%EB%A5%B4%EA%B2%8C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%ED%8C%A8%ED%84%B4"><span class="toc-nav-text">Spring과 DDD의 관계 - Spring을 올바르게 사용하는 패턴?</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85%EA%B3%BC-DDD"><span class="toc-nav-text">스타트업과 DDD?</span></a></li></ol></li></ol>
     
   </div>
 </aside>
@@ -380,9 +384,9 @@
 </div>
     <footer class="app-footer">
   <p class="copyright">
-    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
     <br>
-    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
   </p>
 </footer>
 
@@ -427,6 +431,8 @@
 </script>
 <!-- Baidu Tongji -->
 
+
 <script src="/js/script.js"></script>
+
   </body>
 </html>

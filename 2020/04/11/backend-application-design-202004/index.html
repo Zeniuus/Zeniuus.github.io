@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
   <script>
@@ -15,7 +15,7 @@
   <meta name="description" content="Suhwan Jee&#39;s blog">
   <meta name="keyword" content="Develop, Backend, Server, Spring">
   
-    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"> 
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
   
   <title>
     
@@ -25,13 +25,17 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plugins/gitment.css">
+
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-  <script src="/js/qrious.js"></script>
+  
+<script src="/js/qrious.js"></script>
 <script src="/js/gitment.js"></script>
+
   
   
     <!-- MathJax support START -->
@@ -58,9 +62,9 @@
   
 
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <div class="wechat-share">
-  <img src="/images/favicon.png">
+  <img src="/images/favicon.png" />
 </div>
 
   <body>
@@ -226,7 +230,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#개요"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#설계는-복잡성을-현명하게-다루기-위해-필요하다"><span class="toc-nav-text">설계는 복잡성을 현명하게 다루기 위해 필요하다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#설계는-변경의-비용이-높은-결정을-미리-잘-내리는-것이다"><span class="toc-nav-text">설계는 변경의 비용이 높은 결정을 미리 잘 내리는 것이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#좋은-설계는-미래를-고려하는-설계이다"><span class="toc-nav-text">좋은 설계는 미래를 고려하는 설계이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#시스템을-지속적이고-점진적으로-개선해야-한다"><span class="toc-nav-text">시스템을 지속적이고 점진적으로 개선해야 한다</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%84%A4%EA%B3%84%EB%8A%94-%EB%B3%B5%EC%9E%A1%EC%84%B1%EC%9D%84-%ED%98%84%EB%AA%85%ED%95%98%EA%B2%8C-%EB%8B%A4%EB%A3%A8%EA%B8%B0-%EC%9C%84%ED%95%B4-%ED%95%84%EC%9A%94%ED%95%98%EB%8B%A4"><span class="toc-nav-text">설계는 복잡성을 현명하게 다루기 위해 필요하다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%84%A4%EA%B3%84%EB%8A%94-%EB%B3%80%EA%B2%BD%EC%9D%98-%EB%B9%84%EC%9A%A9%EC%9D%B4-%EB%86%92%EC%9D%80-%EA%B2%B0%EC%A0%95%EC%9D%84-%EB%AF%B8%EB%A6%AC-%EC%9E%98-%EB%82%B4%EB%A6%AC%EB%8A%94-%EA%B2%83%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">설계는 변경의 비용이 높은 결정을 미리 잘 내리는 것이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%A2%8B%EC%9D%80-%EC%84%A4%EA%B3%84%EB%8A%94-%EB%AF%B8%EB%9E%98%EB%A5%BC-%EA%B3%A0%EB%A0%A4%ED%95%98%EB%8A%94-%EC%84%A4%EA%B3%84%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">좋은 설계는 미래를 고려하는 설계이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%84-%EC%A7%80%EC%86%8D%EC%A0%81%EC%9D%B4%EA%B3%A0-%EC%A0%90%EC%A7%84%EC%A0%81%EC%9C%BC%EB%A1%9C-%EA%B0%9C%EC%84%A0%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-nav-text">시스템을 지속적이고 점진적으로 개선해야 한다</span></a></li></ol>
     
   </div>
 </aside>
@@ -316,9 +320,9 @@
 </div>
     <footer class="app-footer">
   <p class="copyright">
-    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
     <br>
-    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
   </p>
 </footer>
 
@@ -363,6 +367,8 @@
 </script>
 <!-- Baidu Tongji -->
 
+
 <script src="/js/script.js"></script>
+
   </body>
 </html>

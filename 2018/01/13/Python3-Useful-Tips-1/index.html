@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
   <script>
@@ -15,7 +15,7 @@
   <meta name="description" content="Suhwan Jee&#39;s blog">
   <meta name="keyword" content="Develop, Backend, Server, Spring">
   
-    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"> 
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
   
   <title>
     
@@ -25,13 +25,17 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plugins/gitment.css">
+
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-  <script src="/js/qrious.js"></script>
+  
+<script src="/js/qrious.js"></script>
 <script src="/js/gitment.js"></script>
+
   
   
     <!-- MathJax support START -->
@@ -58,9 +62,9 @@
   
 
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <div class="wechat-share">
-  <img src="/images/favicon.png">
+  <img src="/images/favicon.png" />
 </div>
 
   <body>
@@ -149,14 +153,14 @@
 <h1 id="defaultdict"><a href="#defaultdict" class="headerlink" title="defaultdict"></a><code>defaultdict</code></h1><p><code>dict</code> 자료구조는 타 Collections 자료구조(<code>list</code>, <code>set</code>…)에 비해서 key가 있다는 큰 차이가 있기에 특정 상황에서 굉장히 유용하게 사용될 수 있죠. 예를 들면 <code>list</code>는 index만으로 데이터에 접근해야하기 때문에 코드의 가독성이 떨어지는 경우가 종종 있는데, 이럴 때 <code>dict</code>를 사용하면 가독성도 높이고 편하게 데이터를 저장할 수 있습니다.</p>
 <p>하지만 가끔가다 불편한 점이 있는데, 한 가지 예시 상황을 보여드리도록 하겠습니다. 예를 들어, 사람과 소속 단체의 <code>tuple</code>의 <code>list</code>가 있다고 합시다. 이 때 각 동아리에 어떤 사람들이 들어있는지 <code>list</code>로 정리하고 싶습니다. 이런 경우 <code>dict</code>을 쓰면 아주 편리하게 코드를 작성할 수 있죠.</p>
 <pre><code>people_group_tuples = [(&apos;Zeniuus&apos;, &apos;SPARCS&apos;), ...]
-group_member_dict = {}
+group_member_dict = &#123;&#125;
 
 for pair in people_group_tuples:
     group_member_dict[pair[1]].append(pair[0])
 </code></pre><p>하지만, 위의 코드는 실행시키자마자 오류가 날 것입니다. 왜냐하면 <strong><code>group_member_dict</code>에 ‘SPARCS’라는 key를 가진 key-value pair가 없기 때문</strong>입니다. 따라서 <code>group_member_dict[pair[1]]</code>은 <code>KeyError</code>을 띄울 것입니다.</p>
 <p>이 오류를 해결하려면 아래와 같이 코드를 수정해야 할 것입니다.</p>
 <pre><code>people_group_tuples = [(&apos;Zeniuus&apos;, &apos;SPARCS&apos;), ...]
-group_member_dict = {}
+group_member_dict = &#123;&#125;
 
 for pair in people_group_tuples:
     # key가 없으면 key-value pair을 만들어준다.
@@ -185,12 +189,12 @@ people_list = [Person(&apos;Zeniuus&apos;, &apos;male&apos;), ...]
 
 def person_str(person):
     # 기존 tuple과 같이 index 접근도 가능하고 field 접근도 가능하다.
-    return f&apos;{person[0]} is {person.gender}.&apos;
+    return f&apos;&#123;person[0]&#125; is &#123;person.gender&#125;.&apos;
 
 for person in people_list:
     print(person_str(person))
 </code></pre><p><code>namedtuple</code>을 사용하면 기존 <code>tuple</code>처럼 <code>tuple_[i]</code>와 같은 접근도 가능하고, <code>tuple_.field_name</code>과 같이 field 접근도 가능합니다.</p>
-<p>오늘은 <code>collecitons</code> library에 속한 몇 가지 좋은 툴을 알아봤는데, 좀 더 자세한 사항은 <a href="https://docs.python.org/3.3/library/collections.html" target="_blank" rel="noopener">Python3 공식 documentation</a>을 참고해주시기 바랍니다.</p>
+<p>오늘은 <code>collecitons</code> library에 속한 몇 가지 좋은 툴을 알아봤는데, 좀 더 자세한 사항은 <a target="_blank" rel="noopener" href="https://docs.python.org/3.3/library/collections.html">Python3 공식 documentation</a>을 참고해주시기 바랍니다.</p>
 </section>
     <!-- Tags START -->
     
@@ -321,9 +325,9 @@ for person in people_list:
 </div>
     <footer class="app-footer">
   <p class="copyright">
-    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
     <br>
-    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
   </p>
 </footer>
 
@@ -368,6 +372,8 @@ for person in people_list:
 </script>
 <!-- Baidu Tongji -->
 
+
 <script src="/js/script.js"></script>
+
   </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
   <script>
@@ -15,7 +15,7 @@
   <meta name="description" content="Suhwan Jee&#39;s blog">
   <meta name="keyword" content="Develop, Backend, Server, Spring">
   
-    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"> 
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
   
   <title>
     
@@ -25,13 +25,17 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plugins/gitment.css">
+
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-  <script src="/js/qrious.js"></script>
+  
+<script src="/js/qrious.js"></script>
 <script src="/js/gitment.js"></script>
+
   
   
     <!-- MathJax support START -->
@@ -58,9 +62,9 @@
   
 
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <div class="wechat-share">
-  <img src="/images/favicon.png">
+  <img src="/images/favicon.png" />
 </div>
 
   <body>
@@ -194,8 +198,8 @@
 </code></pre><p><code>--onto [newbase]</code>가 없었다면 upstream에는 없는 branch의 커밋들이 upstream에 적용이 되었을 테지만, <code>--onto</code> 옵션을 사용했으므로 이 커밋들이 upstream이 아닌 newbase 브랜치에 적용되게 됩니다. 위에서 언급한대로 “base를 다시 정하고 싶은 커밋을 결정하는 일과 해당 커밋들을 다시 적용할 base를 결정하는 일을 분리”할 수 있게 된 것이죠.</p>
 <h1 id="Git-Rebase를-사용하면-안되는-경우"><a href="#Git-Rebase를-사용하면-안되는-경우" class="headerlink" title="Git Rebase를 사용하면 안되는 경우"></a>Git Rebase를 사용하면 안되는 경우</h1><p>아마 가장 중요한 섹션이 아닐까 싶습니다. 이렇게 강력하고 다양한 상황에서 사용될 수 있는 <code>git rebase</code>이지만, 절대 사용해서는 안될 상황이 있습니다. 바로 <strong><em>여러명이 협업하고 있는 레포지토리에 이미 push한 경우</em></strong>이죠.</p>
 <p>push를 한 이후에 <code>git rebase</code>를 사용하면 커밋 히스토리가 변경되기 때문에 remote와 상당히 많은 conflict가 뜨게 됩니다. 따라서 보통 push한 커밋을 <code>git rebase</code>로 변경한 이후에는 강제로 커밋 히스토리를 덮어 씌우도록 force push를 하게 되죠(<code>git push [--force | -f]</code>).</p>
-<p>만일 remote가 혼자 작업하는 레포지토리라면 큰 상관이 없습니다. 다른 곳에서 같은 레포지토리를 remote로 사용하고 있다고 하더라도 지우고 다시 clone을 받으면 되니까요. 하지만 여러명이 작업할 때에는 새로 clone을 받기가 힘듭니다. 그러면 <code>git pull</code>을 통해 여러분들이 rebase로 덮어 씌운 새로운 커밋 히스토리를 다운받게 될텐데, 이렇게 되면 <code>git pull</code>을 받은 모든 사람들의 로컬 레포지토리가 엉망진창이 됩니다. 자세한 사항은 <a href="https://git-scm.com/book/ko/v1/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-Rebase%ED%95%98%EA%B8%B0#Rebase%EC%9D%98-%EC%9C%84%ED%97%98%EC%84%B1" target="_blank" rel="noopener">git-scm 홈페이지</a>에 이보다 잘 설명할 수 없을 정도로 깔끔하게 정리되어 있으니 한번씩 꼭 읽어보시기 바랍니다.</p>
-<p>또한, 한글판에는 없지만 <a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing/#_rebase_rebase" target="_blank" rel="noopener">영문판</a>에는 위와 같은 경우에 대한 solution도 제공하고 있습니다. 간략하게 결론만 설명하자면, <code>git rebase</code>와 <code>git push --force</code>를 통해 커밋 히스토리가 새롭게 쓰여진 remote를 pull 받을 때 <code>git pull</code>이 아닌 <code>git pull --rebase</code>를 사용하면 “상당수의 경우” 깔끔하게 자동으로 merge가 된다고 합니다.</p>
+<p>만일 remote가 혼자 작업하는 레포지토리라면 큰 상관이 없습니다. 다른 곳에서 같은 레포지토리를 remote로 사용하고 있다고 하더라도 지우고 다시 clone을 받으면 되니까요. 하지만 여러명이 작업할 때에는 새로 clone을 받기가 힘듭니다. 그러면 <code>git pull</code>을 통해 여러분들이 rebase로 덮어 씌운 새로운 커밋 히스토리를 다운받게 될텐데, 이렇게 되면 <code>git pull</code>을 받은 모든 사람들의 로컬 레포지토리가 엉망진창이 됩니다. 자세한 사항은 <a target="_blank" rel="noopener" href="https://git-scm.com/book/ko/v1/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-Rebase%ED%95%98%EA%B8%B0#Rebase%EC%9D%98-%EC%9C%84%ED%97%98%EC%84%B1">git-scm 홈페이지</a>에 이보다 잘 설명할 수 없을 정도로 깔끔하게 정리되어 있으니 한번씩 꼭 읽어보시기 바랍니다.</p>
+<p>또한, 한글판에는 없지만 <a target="_blank" rel="noopener" href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing/#_rebase_rebase">영문판</a>에는 위와 같은 경우에 대한 solution도 제공하고 있습니다. 간략하게 결론만 설명하자면, <code>git rebase</code>와 <code>git push --force</code>를 통해 커밋 히스토리가 새롭게 쓰여진 remote를 pull 받을 때 <code>git pull</code>이 아닌 <code>git pull --rebase</code>를 사용하면 “상당수의 경우” 깔끔하게 자동으로 merge가 된다고 합니다.</p>
 </section>
     <!-- Tags START -->
     
@@ -236,7 +240,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#과거의-커밋-수정하기"><span class="toc-nav-text">과거의 커밋 수정하기</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#커밋-이곳저곳으로-옮기기"><span class="toc-nav-text">커밋 이곳저곳으로 옮기기</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Git-Rebase를-사용하면-안되는-경우"><span class="toc-nav-text">Git Rebase를 사용하면 안되는 경우</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EA%B3%BC%EA%B1%B0%EC%9D%98-%EC%BB%A4%EB%B0%8B-%EC%88%98%EC%A0%95%ED%95%98%EA%B8%B0"><span class="toc-nav-text">과거의 커밋 수정하기</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EC%BB%A4%EB%B0%8B-%EC%9D%B4%EA%B3%B3%EC%A0%80%EA%B3%B3%EC%9C%BC%EB%A1%9C-%EC%98%AE%EA%B8%B0%EA%B8%B0"><span class="toc-nav-text">커밋 이곳저곳으로 옮기기</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Git-Rebase%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EB%A9%B4-%EC%95%88%EB%90%98%EB%8A%94-%EA%B2%BD%EC%9A%B0"><span class="toc-nav-text">Git Rebase를 사용하면 안되는 경우</span></a></li></ol>
     
   </div>
 </aside>
@@ -326,9 +330,9 @@
 </div>
     <footer class="app-footer">
   <p class="copyright">
-    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
     <br>
-    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
   </p>
 </footer>
 
@@ -373,6 +377,8 @@
 </script>
 <!-- Baidu Tongji -->
 
+
 <script src="/js/script.js"></script>
+
   </body>
 </html>

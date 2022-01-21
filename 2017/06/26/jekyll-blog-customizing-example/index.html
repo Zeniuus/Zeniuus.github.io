@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
   <script>
@@ -15,7 +15,7 @@
   <meta name="description" content="Suhwan Jee&#39;s blog">
   <meta name="keyword" content="Develop, Backend, Server, Spring">
   
-    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"> 
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
   
   <title>
     
@@ -25,13 +25,17 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plugins/gitment.css">
+
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-  <script src="/js/qrious.js"></script>
+  
+<script src="/js/qrious.js"></script>
 <script src="/js/gitment.js"></script>
+
   
   
     <!-- MathJax support START -->
@@ -58,9 +62,9 @@
   
 
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <div class="wechat-share">
-  <img src="/images/favicon.png">
+  <img src="/images/favicon.png" />
 </div>
 
   <body>
@@ -147,17 +151,17 @@
 <p>이번에 제가 변경할 것은, 아래 사진에서 보이는 블로그 상단의 메뉴바의 항목들을 변경하려고 하는 것입니다.</p>
 <p><img src="/images/jekyll_customizingexample/original_layout.png" alt="blog layout"></p>
 <p>일단 About은 아무런 쓸모가 없으며, RSS는 제가 뭔지 모르고, Archive는 글을 항목별로 보여주지 못하기 때문에 너무 광범위한 메뉴라고 생각됩니다. 그래서 저는 1. 메뉴바에서 About과 RSS를 지우고, 2. Archive 메뉴를 Develop이라는 메뉴로 바꾼 후, 3. ‘develop’ tag를 가지고 있는 놈들만 Develop 메뉴에서 보여줄 예정입니다.</p>
-<p><br></p>
+<p><br /></p>
 <ol>
 <li><p>우선 메뉴바에서 About과 RSS 항목을 삭제해보도록 하겠습니다. 그러면 일단 저 항목을 생성하는 파일이 무엇인지 찾아야합니다. 그러기 위해서, 지난 시간에 배웠던 지식인 ‘블로그의 가장 첫 화면은 project 폴더의 <code>index.html</code>이 생성한다’를 활용하여 <code>index.html</code> 파일을 확인해보도록 하겠습니다.</p>
 <p> <img src="/images/jekyll_customizingexample/index_html.png" alt="index.html"></p>
 <p> 네, 파일의 시작이 <code>&lt;h1&gt;Zeniuus의 블로그&lt;/h1&gt;</code>인 것을 보아 여기에는 상단 메뉴바를 생성하는 코드가 없군요. 그러면 이 파일이 레이아웃으로 사용하고 있는 <code>default.html</code>을 확인해보도록 하겠습니다.</p>
 <p> <img src="/images/jekyll_customizingexample/default_html.png" alt="default.html"></p>
-<p> 여기에 <code>&lt;html&gt;</code> tag가 있는 것을 보아하니 이 코드 중 하나가 범인이겠군요. 분명 <code>index.html</code>의 코드가 삽입되는 </p><p>안녕하세요, 이번 포스트에서는 지난 포스트에서 배운 Jekyll project의 파일 구조를 바탕으로 실제로 제 Jekyll 블로그를 어떻게 커스터마이징하는지를 보여드리도록 하겠습니다. 파일 구조에 대한 원론적인 이해도 중요하지만, 이를 실제로 어떻게 활용하는지를 보여주는 것 또한 굉장히 도움이 될 것이라고 생각합니다.</p>
+<p> 여기에 <code>&lt;html&gt;</code> tag가 있는 것을 보아하니 이 코드 중 하나가 범인이겠군요. 분명 <code>index.html</code>의 코드가 삽입되는 <p>안녕하세요, 이번 포스트에서는 지난 포스트에서 배운 Jekyll project의 파일 구조를 바탕으로 실제로 제 Jekyll 블로그를 어떻게 커스터마이징하는지를 보여드리도록 하겠습니다. 파일 구조에 대한 원론적인 이해도 중요하지만, 이를 실제로 어떻게 활용하는지를 보여주는 것 또한 굉장히 도움이 될 것이라고 생각합니다.</p>
 <p>이번에 제가 변경할 것은, 아래 사진에서 보이는 블로그 상단의 메뉴바의 항목들을 변경하려고 하는 것입니다.</p>
 <p><img src="/images/jekyll_customizingexample/original_layout.png" alt="blog layout"></p>
 <p>일단 About은 아무런 쓸모가 없으며, RSS는 제가 뭔지 모르고, Archive는 글을 항목별로 보여주지 못하기 때문에 너무 광범위한 메뉴라고 생각됩니다. 그래서 저는 1. 메뉴바에서 About과 RSS를 지우고, 2. Archive 메뉴를 Develop이라는 메뉴로 바꾼 후, 3. ‘develop’ tag를 가지고 있는 놈들만 Develop 메뉴에서 보여줄 예정입니다.</p>
-<p><br></p>
+<p><br /></p>
 <ol>
 <li><p>우선 메뉴바에서 About과 RSS 항목을 삭제해보도록 하겠습니다. 그러면 일단 저 항목을 생성하는 파일이 무엇인지 찾아야합니다. 그러기 위해서, 지난 시간에 배웠던 지식인 ‘블로그의 가장 첫 화면은 project 폴더의 <code>index.html</code>이 생성한다’를 활용하여 <code>index.html</code> 파일을 확인해보도록 하겠습니다.</p>
 <p> <img src="/images/jekyll_customizingexample/index_html.png" alt="index.html"></p>
@@ -171,7 +175,7 @@
 <p> <img src="/images/jekyll_customizingexample/layout_rss_removed.png" alt="RSS 메뉴 삭제"></p>
 <p> 와우! 저희가 생각하는 대로 잘 삭제되었습니다.</p>
 <p> 그럼 이제 About 메뉴도 삭제해보도록 하겠습니다. 다시 한번 <code>header.html</code>의 코드를 잘 보시면, <code>&lt;a&gt;</code> tag가 조건부로 생성되고 있음을 느낌상 알 수 있습니다. 파이썬 문법이랑 비슷하다고 생각한다면, 대충 site.pages라는 변수에 대해 iteration을 하는데 각각의 항목의 active 변수가 true면 <code>&lt;a&gt;</code> tag를 생성하는 것 같죠? 그러면 느낌대로 한번 해보겠습니다.</p>
-<p> 일단 site.pages라는 변수가 어떻게 생성되는지 잘 모르겠으니까, 약간의 구글링을 통해서 알아봅시다. <a href="http://jekyllrb-ko.github.io/docs/pages/" target="_blank" rel="noopener">Jekyll 사이트 다큐멘테이션</a>이 잘 되어있더군요. 저 링크를 들어가서 확인하시면, <code>파일명.html</code> 혹은 <code>폴더명/index.html</code>으로 파일을 만들면 새로운 페이지가 생긴다는 것을 알 수 있습니다. 그래서 project 폴더를 뜯어봤더니 About.md와 Archive.md가 있음을 확인했습니다. 둘 중 About.md 파일을 열어보겠습니다.</p>
+<p> 일단 site.pages라는 변수가 어떻게 생성되는지 잘 모르겠으니까, 약간의 구글링을 통해서 알아봅시다. <a target="_blank" rel="noopener" href="http://jekyllrb-ko.github.io/docs/pages/">Jekyll 사이트 다큐멘테이션</a>이 잘 되어있더군요. 저 링크를 들어가서 확인하시면, <code>파일명.html</code> 혹은 <code>폴더명/index.html</code>으로 파일을 만들면 새로운 페이지가 생긴다는 것을 알 수 있습니다. 그래서 project 폴더를 뜯어봤더니 About.md와 Archive.md가 있음을 확인했습니다. 둘 중 About.md 파일을 열어보겠습니다.</p>
 <p> <img src="/images/jekyll_customizingexample/about_md_original.png" alt="About.md"></p>
 <p> 보시면 YAML 헤더에 active 변수가 정의되어있음을 알 수 있습니다. 그러면 이 변수를 지워보도록 하겠습니다.</p>
 <p> <img src="/images/jekyll_customizingexample/about_md_fixed.png" alt="About.md 수정"></p>
@@ -193,8 +197,8 @@
 <p> <img src="/images/jekyll_customizingexample/layout_develop_menu.png" alt="develop 메뉴 글 보여주기"></p>
 </li>
 </ol>
-<p><br><br>지금까지 일부분이지만 블로그의 디자인을 바꿔보는 연습을 해보았습니다. 저는 아직 post.excerpt가 뭔지 모르고, {&#37; &#37;}을 어떻게 사용하는지도 정확히 모릅니다. 하지만 기존 개발 지식으로 직접 하나하나 수정해보면서 어떤 부분이 어떤 작용을 하는지는 논리적으로 유추하고 대략적으로 파악할 수 있습니다. 위에서 보신 바와 같이 크게 어려운 작업이 아니니 여러분들도 여러분들만의 블로그를 만들 수 있었으면 좋겠습니다.</p>
- 위의 부분인 <code>header.html</code> 또는 <code>aside.html</code> 중 하나일 것 같은데, 이름을 보아하니 <code>aside.html</code>은 블로그 왼쪽의 사진이 있는 부분을 생성하는 부분이고, <code>header.html</code>이 저희가 고치기를 원하는 메뉴바와 관련된 코드인 것 같습니다. 그러면 <code>header.html</code>을 보도록 할까요?<p></p>
+<p><br /><br>지금까지 일부분이지만 블로그의 디자인을 바꿔보는 연습을 해보았습니다. 저는 아직 post.excerpt가 뭔지 모르고, {&#37; &#37;}을 어떻게 사용하는지도 정확히 모릅니다. 하지만 기존 개발 지식으로 직접 하나하나 수정해보면서 어떤 부분이 어떤 작용을 하는지는 논리적으로 유추하고 대략적으로 파악할 수 있습니다. 위에서 보신 바와 같이 크게 어려운 작업이 아니니 여러분들도 여러분들만의 블로그를 만들 수 있었으면 좋겠습니다.</p>
+ 위의 부분인 <code>header.html</code> 또는 <code>aside.html</code> 중 하나일 것 같은데, 이름을 보아하니 <code>aside.html</code>은 블로그 왼쪽의 사진이 있는 부분을 생성하는 부분이고, <code>header.html</code>이 저희가 고치기를 원하는 메뉴바와 관련된 코드인 것 같습니다. 그러면 <code>header.html</code>을 보도록 할까요?</p>
 <p> <img src="/images/jekyll_customizingexample/header_html_original.png" alt="header.html"></p>
 <p> 보시면 {&#37; &#37;}로 감싸져서 <code>&lt;a&gt;</code> tag를 생성하는 부분과 RSS라는 내용을 가진 <code>&lt;a&gt;</code> tag를 생성하고 있습니다. 저희가 제대로 찾은 것 같군요. 일단 한번 RSS 항목만 지워보도록 하겠습니다. 아래 사진과 같이 주석처리를 해주시거나 삭제하시면 됩니다.</p>
 <p> <img src="/images/jekyll_customizingexample/header_html_fixed.png" alt="header.html 수정"></p>
@@ -202,7 +206,7 @@
 <p> <img src="/images/jekyll_customizingexample/layout_rss_removed.png" alt="RSS 메뉴 삭제"></p>
 <p> 와우! 저희가 생각하는 대로 잘 삭제되었습니다.</p>
 <p> 그럼 이제 About 메뉴도 삭제해보도록 하겠습니다. 다시 한번 <code>header.html</code>의 코드를 잘 보시면, <code>&lt;a&gt;</code> tag가 조건부로 생성되고 있음을 느낌상 알 수 있습니다. 파이썬 문법이랑 비슷하다고 생각한다면, 대충 site.pages라는 변수에 대해 iteration을 하는데 각각의 항목의 active 변수가 true면 <code>&lt;a&gt;</code> tag를 생성하는 것 같죠? 그러면 느낌대로 한번 해보겠습니다.</p>
-<p> 일단 site.pages라는 변수가 어떻게 생성되는지 잘 모르겠으니까, 약간의 구글링을 통해서 알아봅시다. <a href="http://jekyllrb-ko.github.io/docs/pages/" target="_blank" rel="noopener">Jekyll 사이트 다큐멘테이션</a>이 잘 되어있더군요. 저 링크를 들어가서 확인하시면, <code>파일명.html</code> 혹은 <code>폴더명/index.html</code>으로 파일을 만들면 새로운 페이지가 생긴다는 것을 알 수 있습니다. 그래서 project 폴더를 뜯어봤더니 About.md와 Archive.md가 있음을 확인했습니다. 둘 중 About.md 파일을 열어보겠습니다.</p>
+<p> 일단 site.pages라는 변수가 어떻게 생성되는지 잘 모르겠으니까, 약간의 구글링을 통해서 알아봅시다. <a target="_blank" rel="noopener" href="http://jekyllrb-ko.github.io/docs/pages/">Jekyll 사이트 다큐멘테이션</a>이 잘 되어있더군요. 저 링크를 들어가서 확인하시면, <code>파일명.html</code> 혹은 <code>폴더명/index.html</code>으로 파일을 만들면 새로운 페이지가 생긴다는 것을 알 수 있습니다. 그래서 project 폴더를 뜯어봤더니 About.md와 Archive.md가 있음을 확인했습니다. 둘 중 About.md 파일을 열어보겠습니다.</p>
 <p> <img src="/images/jekyll_customizingexample/about_md_original.png" alt="About.md"></p>
 <p> 보시면 YAML 헤더에 active 변수가 정의되어있음을 알 수 있습니다. 그러면 이 변수를 지워보도록 하겠습니다.</p>
 <p> <img src="/images/jekyll_customizingexample/about_md_fixed.png" alt="About.md 수정"></p>
@@ -224,7 +228,7 @@
 <p> <img src="/images/jekyll_customizingexample/layout_develop_menu.png" alt="develop 메뉴 글 보여주기"></p>
 </li>
 </ol>
-<p><br><br>지금까지 일부분이지만 블로그의 디자인을 바꿔보는 연습을 해보았습니다. 저는 아직 post.excerpt가 뭔지 모르고, {&#37; &#37;}을 어떻게 사용하는지도 정확히 모릅니다. 하지만 기존 개발 지식으로 직접 하나하나 수정해보면서 어떤 부분이 어떤 작용을 하는지는 논리적으로 유추하고 대략적으로 파악할 수 있습니다. 위에서 보신 바와 같이 크게 어려운 작업이 아니니 여러분들도 여러분들만의 블로그를 만들 수 있었으면 좋겠습니다.</p>
+<p><br /><br>지금까지 일부분이지만 블로그의 디자인을 바꿔보는 연습을 해보았습니다. 저는 아직 post.excerpt가 뭔지 모르고, {&#37; &#37;}을 어떻게 사용하는지도 정확히 모릅니다. 하지만 기존 개발 지식으로 직접 하나하나 수정해보면서 어떤 부분이 어떤 작용을 하는지는 논리적으로 유추하고 대략적으로 파악할 수 있습니다. 위에서 보신 바와 같이 크게 어려운 작업이 아니니 여러분들도 여러분들만의 블로그를 만들 수 있었으면 좋겠습니다.</p>
 </section>
     <!-- Tags START -->
     
@@ -355,9 +359,9 @@
 </div>
     <footer class="app-footer">
   <p class="copyright">
-    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
     <br>
-    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
   </p>
 </footer>
 
@@ -402,6 +406,8 @@
 </script>
 <!-- Baidu Tongji -->
 
+
 <script src="/js/script.js"></script>
+
   </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
   <script>
@@ -15,7 +15,7 @@
   <meta name="description" content="Suhwan Jee&#39;s blog">
   <meta name="keyword" content="Develop, Backend, Server, Spring">
   
-    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"> 
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
   
   <title>
     
@@ -25,13 +25,17 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plugins/gitment.css">
+
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-  <script src="/js/qrious.js"></script>
+  
+<script src="/js/qrious.js"></script>
 <script src="/js/gitment.js"></script>
+
   
   
     <!-- MathJax support START -->
@@ -58,9 +62,9 @@
   
 
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <div class="wechat-share">
-  <img src="/images/favicon.png">
+  <img src="/images/favicon.png" />
 </div>
 
   <body>
@@ -173,7 +177,7 @@
 <p>다방면으로 뼈를 맞았지만, 가장 크게 느꼈던 타다 서버 코드 베이스의 문제는 “아는 사람만 건들 수 있다”는 것이었다. 타다의 코드 베이스는 개인의 기억과 능력에 너무 크게 의존하고 있었다. 요구사항의 변화에 따라 리팩토링을 하지 않아 현재 서비스의 기획과는 잘 맞지 않는 구조의 코드가 그대로 남아 있다. 모듈화가 제대로 되어 있지 않아 영수증에 새로운 항목 하나를 추가하려면 파일 십수개를 고쳐야 한다. 한 클래스의 책임이 점점 커져서 이곳저곳에서 마구잡이로 사용되고 있다. 기존 팀 멤버는 기억에 의존해서 금방금방 코드 베이스를 변경할 수 있지만, 새로운 사람이 적응하기에는 너무나도 어려운 코드였다. 또한, 기존 팀 멤버 역시 수정을 빠르게 할 수는 있더라도, 실수 한 번으로 큰 버그가 날 위험에는 여전히 노출되어 있었다.</p>
 <p>덕분에 나는 새로운 사람이 쉽게 이해하고 적응할 수 있는 코드를 작성할 필요성을 깨달았다. 중복을 최대한 줄이고, 특정 기능의 스펙이 변경되면 하면 코드의 한 부분만 변경하면 되도록 한다. 복잡한 상세 로직은 최대한 숨기고, 로직 자체는 최대한 직관적으로 짠다. 책임과 역할이 분명히 드러나도록 변수명/클래스명을 쓴다. 코드 베이스 내에서 코딩 컨벤션을 맞추고, 자주 나타나는 구현 패턴에 대해서는 best practice를 남겨둔다. 조금 느리더라도 이해하기 쉽고 고치기 안전한 코드를 작성해야 하는 시기이다.</p>
 <p>한편, 나는 여전히 지금의 코드 베이스를 만들어낸 타다 베이직 시절의 개발 방법론은 적절했다고 생각한다. 속도를 중시하여 필요한 것만 가볍게 개발하는 서버팀의 방식은 서비스의 폭발적인 성장과 서버팀원의 충원이 급하지 않은 상황에 적합했다. 지금 타다 코드 베이스가 문제가 되는 이유는 운영하는 서비스가 많아졌기 때문인데, 1. 회사 조직이 점점 목적조직화됨에 따라 각 서비스마다 독립적으로 기능을 개발하고 배포하고 싶은 니즈가 생겼고, 2. 새로운 개발자를 빠르게 확충할 필요가 생겼다.</p>
-<p>이전에 읽었던 <a href="https://gyuwon.github.io/blog/2020/07/31/what-is-good-code.html?fbclid=IwAR0iQ_n1O9v9Vkn8HI2oEah2phtppZEzFYKtYt_iYsb7x0oQlidzibOnzp0" target="_blank" rel="noopener">이규원 님의 글</a>이 생각난다. 무조건 좋은 코드는 없다. 특정 상황에 더 적절한 코드가 있을 뿐이다.<br><br></p>
+<p>이전에 읽었던 <a target="_blank" rel="noopener" href="https://gyuwon.github.io/blog/2020/07/31/what-is-good-code.html?fbclid=IwAR0iQ_n1O9v9Vkn8HI2oEah2phtppZEzFYKtYt_iYsb7x0oQlidzibOnzp0">이규원 님의 글</a>이 생각난다. 무조건 좋은 코드는 없다. 특정 상황에 더 적절한 코드가 있을 뿐이다.<br><br></p>
 <h2 id="2021년에-하고-싶은-것"><a href="#2021년에-하고-싶은-것" class="headerlink" title="2021년에 하고 싶은 것"></a>2021년에 하고 싶은 것</h2><p>올해 읽었던 글 중 ‘슈퍼개발자는 10배의 생산성을 가진 사람이 아니라 타인의 생산성을 10배 늘려주는 사람이다’라는 이야기가 참 인상깊었다. 그래서 2021년은 다른 팀원의 생산성을 늘려줄 수 있는 방법에 대해 고민하고 배우는 한 해가 됐으면 좋겠다. 마침 내년에 서비스 하나를 담당하여 리딩(?)하는 역할을 맡게 됐으니, 배운 것을 실제로 적용해보면 더욱 좋을 것이다.</p>
 <p>이러한 맥락에서, 내년에는 소프트웨어 개발의 이론적인 측면에 대해 공부하는 것을 최우선 목표로 잡으려고 한다. 지금까지는 개인 공부 시간의 대부분을 실무에 필수적인 지식을 익히는 데에 사용했다. 언어의 문법, 프레임워크 및 라이브러리의 사용 방법, DB 트랜잭션과 락, Spring Reactor, k8s, helm, prometheus 등, 모르면 아예 코드를 작성할 수 없거나 버그가 날 수 있는 그런 지식 말이다. 이제는 한 단계 눈을 높여서 좀 더 추상적인 지식을 공부할 필요를 느낀다. SRE, GoF의 Design Pattern, DDD, branching workflow 등 여러 개발 방법론과 개념들을 익히는 것은 유지보수의 생산성을 늘리는 코드를 작성하는 데에 큰 도움이 될 것이다.</p>
 <p>또한, 팀의 생산성을 위해 고민하는 시간을 확보하는 것도 중요할 것이다. 올해 1달간 훈련소에서 지루한 시간을 보내면서, 그리고 새로운 팀원이 들어와서 느낀 것은 정신없이 달리는 동안은 주변이 잘 보이지 않는다는 것이다. 멈춰서서 여유를 가지고 달려온 길을 뒤돌아봐야만 비로소 달리는 방향이 잘못되었다는 것을 인지할 수 있다. 목표가 무엇인지, 일하는 방식이 정말 효율적인지, 익숙해져서 느끼지 못하는 불편함이 있지는 않은지, 종종 의도적으로 멈춰서서 점검할 필요가 있다.</p>
@@ -218,7 +222,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#개발자의-역할-체화"><span class="toc-nav-text">개발자의 역할 체화</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#백엔드-시스템-대한-이해"><span class="toc-nav-text">백엔드 시스템 대한 이해</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#좋은-코드에-대한-생각-시기적절한-코드"><span class="toc-nav-text">좋은 코드에 대한 생각 - 시기적절한 코드</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2021년에-하고-싶은-것"><span class="toc-nav-text">2021년에 하고 싶은 것</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9D%98-%EC%97%AD%ED%95%A0-%EC%B2%B4%ED%99%94"><span class="toc-nav-text">개발자의 역할 체화</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EB%B0%B1%EC%97%94%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EB%8C%80%ED%95%9C-%EC%9D%B4%ED%95%B4"><span class="toc-nav-text">백엔드 시스템 대한 이해</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%A2%8B%EC%9D%80-%EC%BD%94%EB%93%9C%EC%97%90-%EB%8C%80%ED%95%9C-%EC%83%9D%EA%B0%81-%EC%8B%9C%EA%B8%B0%EC%A0%81%EC%A0%88%ED%95%9C-%EC%BD%94%EB%93%9C"><span class="toc-nav-text">좋은 코드에 대한 생각 - 시기적절한 코드</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2021%EB%85%84%EC%97%90-%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%9D%80-%EA%B2%83"><span class="toc-nav-text">2021년에 하고 싶은 것</span></a></li></ol>
     
   </div>
 </aside>
@@ -308,9 +312,9 @@
 </div>
     <footer class="app-footer">
   <p class="copyright">
-    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    &copy; 2022 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
     <br>
-    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
   </p>
 </footer>
 
@@ -355,6 +359,8 @@
 </script>
 <!-- Baidu Tongji -->
 
+
 <script src="/js/script.js"></script>
+
   </body>
 </html>
