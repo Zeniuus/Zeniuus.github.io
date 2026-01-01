@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Git Rebase (1)
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Git Rebase (1)</h2>
+  <p class="post-date">2018-01-21</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>안녕하세요, 이번 포스팅과 다음 포스팅에서는 git을 처음 배우는 사람들이 가장 어려워한다는 <code>git rebase</code>에 대해서 알아보도록 하겠습니다. 이번 포스팅은 git에 대해 어느 정도 지식이 있는 사람이 보기에 적합할 것 같습니다. 적어도 커밋이 무엇인지, 브랜치가 무엇인지에 대한 정확한 개념이 잡혀있어야 합니다.</p>
+<h1 id="왜-Git-Rebase를-알아야-하는가"><a href="#왜-Git-Rebase를-알아야-하는가" class="headerlink" title="왜 Git Rebase를 알아야 하는가?"></a>왜 Git Rebase를 알아야 하는가?</h1><p>git을 처음 배우면 보통 <code>git add</code>와 <code>git commit</code>을 중점적으로 배우게 되는데, 이 이외의 것을 배우려고는 잘 하지 않죠. 왜냐하면 여기까지만 배워도 새로운 “버전”을 만드는 일은 충분히 해낼 수 있기 때문입니다. 이 외에 배워봤자 <code>git reset</code> 정도일까요?</p>
+<p>하지만, 사람은 실수를 정말 많이 하는 동물이죠. 언제나 여러분들이 한 커밋이 완벽하고 고칠 점이 없을 리가 없습니다. 지난 커밋을 취소하거나 수정하고 싶을 때도 있고, 잘못된 브랜치에 커밋해서 다른 브랜치로 커밋을 옮기고 싶을 경우도 있을 것입니다.</p>
+<p>이와 같이 이미 해버린 커밋을 수정하는 데에 유용하게 사용되는 커맨드가 바로 <code>git rebase</code> 입니다. <code>git rebase</code>로는 위에서 언급했던 것처럼 이전 커밋을 수정하고, 커밋을 다른 브랜치로 옮기는 일을 할 수 있습니다. 그 이상으로 브랜치를 깔끔하게 유지하고, 브랜치를 이어붙이는 등 커밋에 관련된 여러분들이 상상하는 대부분의 것을 할 수 있습니다. 그렇기 때문에 협업을 할 때에는 반드시 <code>git rebase</code>를 알아야 하고, 또 <code>git rebase</code>를 잘 쓸 수 있어야 비로소 git의 기능을 잘 활용하는 것이라고 생각합니다.</p>
+<h1 id="Git-Rebase로-Merge하기"><a href="#Git-Rebase로-Merge하기" class="headerlink" title="Git Rebase로 Merge하기"></a>Git Rebase로 Merge하기</h1><p>그럼 도대체 <code>git rebase</code>가 무엇을 하는 커맨드일까요? 이를 알아보기 전에, 실제로 <code>git rebase</code>를 많이 활용하는 상황을 한번 살펴보도록 하겠습니다.</p>
+<p><code>git rebase</code>가 유용하게 사용되는 첫 번째 사용처는 바로 merge 입니다. 앞서 말씀드린대로 <code>git rebase</code>를 사용하여 merge를 한다면 <code>git merge</code>로 merge하는 것보다 커밋 히스토리가 훨씬 깔끔하게 남기 때문에 다른 사람들의 작업을 보기가 편해집니다.</p>
+<p>만약에 아래와 같은 두 개의 브랜치를 merge한다고 합시다.</p>
+<p><img src="/images/git_rebase_example/git_two_branches.png" alt="Merge 전 두 개의 브랜치"></p>
+<p>두 개의 브랜치를 merge하기 위해서 보통</p>
+<pre><code>$ git checkout master
+$ git merge dev
+</code></pre><p>를 하겠죠? 그러면 아래와 같이 두 개의 브랜치를 3-way merging을 통해 merge하게 됩니다.</p>
+<p><img src="/images/git_rebase_example/git_merging_with_git_merge.png" alt="git merge를 통한 merge"></p>
+<p>많이들 보시던 브랜치의 모양이죠? <code>git merge</code>를 통해 merge를 하면 이런 식으로 2개의 커밋을 포인팅하는 새로운 커밋이 생기고 이를 브랜치가 가리키게 됩니다.</p>
+<p>이게 무엇이 문제냐 하면, 만약 여러명이 작업을 하고 있는 경우에 계속 <code>git merge</code>를 통해서 할 경우에 아래와 같이 지저분한 커밋 히스토리가 생기게 됩니다.</p>
+<p><img src="/images/git_rebase_example/git_dirty_commit_history.png" alt="지저분한 커밋 히스토리"></p>
+<p>이러면 다른 사람이 이 레포지토리에서 작업을 하려고 할 때 무슨 의도로 저런 작업들을 한건지 파악하기 힘들겠죠?</p>
+<p>여기가 바로 <code>git rebase</code>가 빛을 발할 때입니다. 만약</p>
+<pre><code>$ git rebase master dev
+</code></pre><p>혹은</p>
+<pre><code>$ git checkout dev
+$ git rebase master
+</code></pre><p>의 커맨드를 통해 merge를 했다면, 결과적으로 레포지토리에 남는 커밋 히스토리는 아래와 같은 모양을 띕니다.</p>
+<p><img src="/images/git_rebase_example/git_merging_with_git_rebase_1.png" alt="git rebase를 통한 merge 1"></p>
+<p>이 다음에 fast-forward를 시키기 위해</p>
+<pre><code>$ git checkout master
+$ git merge dev
+</code></pre><p>를 하면!</p>
+<p><img src="/images/git_rebase_example/git_merging_with_git_rebase_2.png" alt="git rebase를 통한 merge 2"></p>
+<p>짜잔~ 깔끔한 커밋 히스토리가 남게 되었습니다.</p>
+<h1 id="Git-Rebase는-무엇인가"><a href="#Git-Rebase는-무엇인가" class="headerlink" title="Git Rebase는 무엇인가?"></a>Git Rebase는 무엇인가?</h1><p><code>git rebase</code>는 어떻게 이런 깔끔한 커밋 히스토리를 남길 수 있었을까요?</p>
+<p><strong><code>git rebase</code>는 말 그대로 커밋의 base를 다시(re) 정하는 작업</strong>입니다. 우리가 입력했던</p>
+<pre><code>$ git rebase master dev
+</code></pre><p>라는 명령어를 풀어서 설명하자면 <strong>“master와 dev 브랜치의 공통 조상 커밋부터 dev 브랜치까지의 모든 커밋의 base를 master 브랜치의 위치로 바꾸어라”</strong>라는 의미인 것이죠. 그렇기 때문에 <strong>master와 dev의 공통 조상 커밋인 C1부터 dev에만 있었던 C4, C5 커밋들이 master 브랜치가 가리키고 있던 C3을 base로 하여 다시 적용된 것</strong>입니다.</p>
+<p>조금 더 정확하고 자세하게 설명하자면, 위의 명령어가 입력된 순간 다음과 같은 일이 일어납니다.</p>
+<ol>
+<li><code>git checkout dev</code>를 통해 dev 브랜치로 HEAD를 이동시킵니다.</li>
+<li>master 브랜치와 dev 브랜치의 공통 조상인 C1부터 dev 브랜치까지의 모든 커밋에 대해 diff를 적용하여 각 커밋을 통해 변경된 점을 로컬에 저장합니다.</li>
+<li><code>git reset --hard master</code>을 통해 dev를 master 브랜치로 이동시킵니다.</li>
+<li>로컬에 저장했던 각 커밋을 하나하나 dev에 적용시킵니다.</li>
+</ol>
+<p>아직 git에 익숙하지 않아 <code>git reset --hard master</code>와 같은 명령어가 익숙치 않으신 분들을 위해서 조금 풀어쓰자면 아래와 같은 내용입니다.</p>
+<ol>
+<li>내가 옮기고 싶은 커밋들이 있는 브랜치(여기서는 dev 브랜치)로 이동합니다.</li>
+<li>커밋을 옮겨갈 목적지 브랜치(여기서는 master 브랜치)에는 없는, 이 브랜치에서만 있었던 변경사항 커밋들(여기서는 C4, C5)을 로컬에 저장합니다.</li>
+<li>현재 브랜치를 옮겨갈 브랜치와 동일한 상태로 만듭니다. (<code>git reset --hard master</code>)</li>
+<li>로컬에 저장했던 각 커밋을 하나하나 dev에 적용시킵니다.</li>
+</ol>
+<p>만약 4번을 진행하는 동안 master 브랜치와 conflict가 뜬다면 rebase가 중지되고 직접 conflict를 해소해야 합니다. 해소한 이후에는 <code>git rebase --continue</code> 명령어를 입력하면 다시 rebase가 진행됩니다.</p>
+<p>하는 작업은 꽤 복잡하지만, 모두 <strong><em>“커밋의 베이스를 다시 정한다”</em></strong>라는 목적을 이루기 위한 작업들이니 각 단계에서 하는 일을 하나하나 이해해 나간다면 그렇게 어려운 작업은 아닐 것이라고 생각합니다.</p>
+<p>다음 포스팅에서는 <code>git rebase</code>의 작동 원리에 대해서 조금 더 정확하게 알아보고, 제가 실제로 <code>git rebase</code>를 유용하게 써먹었던 다양한 상황을 예시를 통해 알아보도록 하겠습니다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/01/13/Python3-Useful-Tips-1/">
+        <span class="nav-arrow">← </span>
+        
+          Python3 Useful Tips - 1
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/01/27/Git-Rebase-2/">
+        
+          Git Rebase (2)
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EC%99%9C-Git-Rebase%EB%A5%BC-%EC%95%8C%EC%95%84%EC%95%BC-%ED%95%98%EB%8A%94%EA%B0%80"><span class="toc-nav-text">왜 Git Rebase를 알아야 하는가?</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Git-Rebase%EB%A1%9C-Merge%ED%95%98%EA%B8%B0"><span class="toc-nav-text">Git Rebase로 Merge하기</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Git-Rebase%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80"><span class="toc-nav-text">Git Rebase는 무엇인가?</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2018/01/21/Git-Rebase-1/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Git Rebase (1)",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      [라포 회고록] 개발자 경험은 의도하든 의도하지 않았든 하나의 제품이다
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>[라포 회고록] 개발자 경험은 의도하든 의도하지 않았든 하나의 제품이다</h2>
+  <p class="post-date">2025-07-13</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><blockquote>
+<p>“A company’s developer experience is a product, whether anyone designed it or not.”</p>
+<ul>
+<li><a href="https://chadxz.dev/startup/">https://chadxz.dev/startup/</a></li>
+</ul>
+</blockquote>
+<p>위 문장은 긱뉴스에서 봤던 것인데, 플랫폼 개발자로서 내가 배운 것들을 한 문장으로 요약한다면 위 문장이 될 것 같다. “개발자 경험은, 의도하든 의도하지 않았든 하나의 제품이다.”</p>
+<p>나는 일을 하든 다른 것을 하든 도구의 불편함에 둔감한 편이었다. 이것저것 따져보고 물건을 사기보다는 그냥 대충 하나 사고, 적당히 만족하고, 오래 쓰는 것에 만족하는 사람이었다. 개발할 때도 비슷했는데, 개발을 보조해주는 소프트웨어는 불필요하다는 생각에 큰 관심을 두지 않았고, DB랑 Spring 등 내가 사용하는 핵심 기술들의 공식 문서를 정독하는 것을 더 좋아했다. 이러한 성향 때문에 개발 과정에서 있었던 불편함을 그냥 인내하고 방치하곤 했다. 그리고 그게 옳다고 생각했다. ‘그게 그렇게 불편해? 그거 뭐 얼마나 불편하다고, 그거 자동화할 시간에 그냥 손으로 처리하고 피처 하나 더 찍는 게 더 비즈니스 임팩트가 크잖아.’</p>
+<p>플랫폼 팀에 직/간접적으로 관여하면서 가장 중요하게 배운 것은 이 생각이 ‘어느 정도’ 틀렸다는 점이었다. VCNC는 보다 작은 회사였고, 개발 환경도 상당히 단순했기 때문에 이러한 불편함이 부각되지 않았을 뿐이었다.</p>
+<p>‘사람이 해야 하는 일’이라는 관점에서 제품 개발 과정을 MECE하게 분리해보면, 1. 반드시 사람이 해야 하는 부분(e.g. 설계, 실제 코딩 등)과 2. 아직 자동화가 되지 않아서 어쩔 수 없이 사람이 처리하고 있는 부분(e.g. 테스트 환경이나 배포 시스템에서 자동화되지 않은 부분 등)이 있다. <strong>이중 2번은 단순히 산술적으로 계산한 시간보다 더 많은 시간을 낭비시키는데</strong>, 크게 세 가지 포인트에서 그렇다.</p>
+<ol>
+<li>컨텍스트 스위칭으로 인해 인지 부하를 일으킨다.</li>
+<li>작업 과정에서 사람이 실수하거나 무언가 오류가 발생할 확률이 늘어난다. 그만큼 이를 디버깅하고 대응하는 시간 역시 더욱 늘어난다.</li>
+<li><p>가장 중요한 점으로, <strong>수기 처리가 필요한 부분으로 인해 발생하는 비효율은 선형적이지 않고 기하급수적으로 증가</strong>한다.</p>
+<p> 예를 들어 전체 개발 과정이 100이고, 이중 10을 사람이 직접 처리하거나 대기해야 한다고 해보자. 개발 과정이 복잡해져서 이 비중이 10 → 20으로 증가하면, 내가 온전히 생산적으로 활용할 수 있는 시간은 90 → 80으로 감소한다.</p>
+<p> 한편, 이 비중이 50인 상태에서 똑같이 10이 증가해서 60으로 증가하는 경우, 내가 온전히 생산적으로 활용할 수 있는 시간은 50 → 40이 된다. 이는 90 → 80보다 훨씬 더 큰 폭의 감소이다. 9분의 8은 0.888…이지만, 5분의 4는 0.8이다.</p>
+</li>
+</ol>
+<p>이러한 측면에서, <strong>작업 과정의 비효율의 양을 과소평가하지 않고 적절한 수준으로 유지하는 것이 매우 중요</strong>하다. 아무런 생각 없이 그냥 필요한 제품 개발 프로세스를 도입하고 발전시켜 나가다 보면 자동화되지 않은 부분의 비중이 감당할 수 없는 수준으로 증가하기 쉽다. 이는 제품 개발 프로세스를 개선한 사람의 의도와는 달리 작업자의 생산성을 매우 떨어뜨린다. 이러한 측면에서 “개발자 경험은, 의도하든 의도하지 않았든 하나의 제품이다.” 제품팀의 일원으로서, 과도하게 질이 떨어지는 제품(= 개발자 경험)을 유저(= 개발자)에게 제공하는 불상사는 없어야 할 것이다.</p>
+<p>작업 비효율 부채의 양을 낮게 관리하는 가장 좋은 방법은, 당연한 말이지만 제품 개발 환경을 가능한 단순하게 유지하는 것이다. 체감상 MSA 및 멀티 레포가 도입되는 순간부터 부채 관리의 난이도가 상당히 올라가고, 플랫폼 개발만 하는 조직을 별도로 둬야만 하는 상황에 놓인다고 느꼈다. 이는 작은 팀에서 상당히 아까운 일이라는 생각이 든다. 그래서 가능한 오래 모노리스 및 모노 레포 구조를 유지하는 것이 최선의 방향이라고 생각한다. 조직 구조가 커짐에 따라 MSA를 하게 된다면, 그때는 어쩔 수 없이 플랫폼 팀을 두는 것이 최선일 것 같고.</p>
+<hr>
+<p>2년이 조금 넘는 기간 동안 서버 플랫폼 팀으로 일하면서 내가 내린 결론은, 내가 플랫폼 개발자로서 적성이 부족하다는 것이다. 플랫폼 개발자는 개발 경험의 부채를 잘 관리하는 책임을 가진 팀이기 때문에, 플랫폼 개발자가 적성에 잘 맞으려면 크게 두 가지 적성이 필요하다고 생각한다.</p>
+<ol>
+<li><p>개발 경험의 불편함에 대한 민감도</p>
+<p> 개발 경험 중 불편한 부분을 날카롭게 캐치해야만 이를 적절히 자동화할 수 있다.</p>
+</li>
+<li><p>기술에 대한 흥미</p>
+<p> 다양한 기술에 대한 폭넓고 깊은 지식은 개발 경험을 개선하는 측면에 다방면으로 도움이 된다. 어떤 불편이 있을 때 이를 도와주는 툴을 더욱 빠르게 서치할 수 있고, 다른 기술에서 활용되는 패턴을 도입하자는 아이디어를 더욱 쉽게 떠올릴 수도 있다.</p>
+</li>
+</ol>
+<p>근데 2년간 플랫폼 개발을 해보니 나는 두 가지 적성 모두 딱히 없다는 결론을 내렸다. 글의 초반부에서 이야기했듯이 온갖 불편함에 둔감한 편이고, 주변 사람들이 테크 뉴스를 잘 트래킹하는 것에 비해 나는 전혀 트래킹하지 않고, 트래킹하고 싶다는 생각도 잘 들지 않는다. 나는 기술보다는 비즈니스 임팩트에 대한 관심도가 더 높은 사람인 것 같고, 그래서 플랫폼 개발보다는 직접 제품 개발을 하는 게 더 적성에 맞다고 느낀다.</p>
+<p>인생을 살면서 어떠한 선택지를 삭제하는 것은 상당히 기쁜 일이다. 특히 그 선택의 영향력이 크고, 선택지가 몇 가지 없는 상황일수록 더더욱 그렇다. 아마 이후 커리어에서는 플랫폼 조직을 선택하지 않을 것 같다. 그러기보다는 제품 조직 쪽에서 플랫폼 조직에 영향력을 미칠 수 있는 방법 - 예를 들어 개발 과정의 불편함에 대해 적극적으로 어필하는 등 - 에 대해 고민하겠지. 이런 좋은 결론을 내릴 수 있어서 다행이라고 생각한다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2025/07/09/rapportlabs-memoir-intro/">
+        <span class="nav-arrow">← </span>
+        
+          [라포 회고록] 들어가며 - 3년간 배운 것들
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2025/07/21/what-is-platform-team/">
+        
+          [라포 회고록] 조직적인 관점에서의 플랫폼 팀에 대한 생각
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2025/07/13/devex-as-implicit-product/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "[라포 회고록] 개발자 경험은 의도하든 의도하지 않았든 하나의 제품이다",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      2018.10.19.
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>2018.10.19.</h2>
+  <p class="post-date">2018-10-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="0"><a href="#0" class="headerlink" title="#0"></a>#0</h1><p>글을 쓰는 것이 5개월 만이다. 오랜만이라고도 할 수 있지만, 그만큼 내가 고요한 나날을 보낸 건지, 아니면 정신없이 달리고 있었던 건지는 모르겠다.<br><br /></p>
+<h1 id="1"><a href="#1" class="headerlink" title="#1"></a>#1</h1><p>요즘은 SPARCS 선배님께서 공동 창업한 Lablup이라는 회사에서 일하고 있다. 회사에 대해서 간단하게 설명하자면, Lablup은 “Make AI Accessible”이라는 목표를 가지고 Backend.AI라는 오픈소스 프레임워크를 개발하고 있는 회사다. Backend.AI의 역할을 한 줄로 요약하자면 “오픈소스 분산형 머신러닝 오케스트레이션 프레임워크”라고 할 수 있다. 정말 쉽게 말하자면 코드 실행 엔진인데, 사용자가 머신러닝 작업을 할 때 코드 작성에만 집중할 수 있도록 개발환경 세팅이나 리소스 관리 등을 대신 해주는 프레임워크다.<br><br /></p>
+<p>내가 이 회사를 선택했던 이유 중 가장 큰 부분은 이름에서부터 느껴지듯 전반적인 백엔드 작업에 대한 숙련도를 쌓을 수 있을 것이라 기대했기 때문이다. 그리고 기대대로 나는 쉘 스크립트, AWS, Docker, migration tool 등 DevOps와 관련된 지식부터 DB, socket, zmq, Redis, Etcd 등 백엔드에 필요한 다양한 경험을 쌓고 있다. 꽤 중요한 부분을 차지했던 다른 이유는 선배님의 포스(?)가 너무 대단하여 꼭 같이 일을 하며 배워보고 싶었기 때문이다. 이 부분 역시 아주 흡족한데, 선배님 뿐만 아니라 회사의 다른 모든 분들도 너무 훌륭하셔서 배울게 넘쳐나고 있다. 덕분에 요즘은 허겁지겁 바쁘게 배우는데 대부분의 시간을 쏟고 있다.<br><br /></p>
+<h1 id="2"><a href="#2" class="headerlink" title="#2"></a>#2</h1><p>나는 내가 월급 루팡이라고 생각하고 있는데, 그 이유는 내가 회사에서 하는 일은 별로 없음에도 불구하고 (인턴 치고) 많은 돈도 받고 너무 다양한 경험도 할 수 있기 때문이다. 이제 회사를 다닌지 6주 정도 됐는데 다녀온 회사 외 활동이 벌써 3개나 된다. 하나는 기억이 잘 안나고(사실 노잼이어서 기억이 안 난다), 다른 두 개는 AWS에서 직접 개최하는 AWS SageMaker 교육 세션과 SOSCON 2018이었다. SOSCON은 부스에서 열심히 설명했다고 하지만, AWS SageMaker 교육 세션은 정말 그냥 수업을 들으러 간 것이었다. 더더욱 회사 일을 열심히 해야겠다는 생각이 드는 부분이다.<br><br /></p>
+<p>이번 주 수-목은 회사 차원에서 SOSCON에 참여했다. 풀어서 쓰면 Samsung Open Source Conference인데, 말 그대로 오픈 소스에 대한 행사였다. 행사는 총 1박 2일이었는데, 삼성전자 부사장, 리눅스 재단 대표, 인텔 부사장 등 꽤 화려한 연사의 키노트로 시작되었다. 나중에 들은 이야기인데, 2년 전에는 무려 그 리누스 토르발즈(!)가 키노트 연사로 초청되어 엄청난 화제가 되었다고 한다. 키노트 이후에는 DAY 2까지 다양한 회사의 부스와 세션이 계속된다. 우리 회사는 보아하니 대표님이 개인적으로 SOSCON과 관련이 있으셔서 회사 차원에서 부스를 개최한 듯 했다.<br><br /></p>
+<h1 id="3"><a href="#3" class="headerlink" title="#3"></a>#3</h1><p>아무래도 회사가 오픈소스 프레임워크를 개발하기도 하고, 회사 분들이 대부분 오픈소스를 하셔서 나는 최근에 오픈소스에 꽤 관심이 생겼다. 정확히 표현하자면, 약간 오픈소스에 관심은 있으면서도 이게 뭔지도 모르겠고 어떻게 하는지도 모르겠으니 발을 담그기 겁이 나는 그런 상황이었다. 그래서 이번 SOSCON에서 유독 끌리는 세션이 하나 있었는데, 네이버 PaaS 부서의 박재성 개발자님께서 진행하시는 “오픈소스 개발 : Behind the scenes”였다. 과연 실제로 오픈소스를 하시는 분들은 어떻게 오픈소스 개발을 진행하시는지 궁금해서 회사 부스를 잠깐 빠지고 세션을 들으러 갔다.<br><br /></p>
+<p>요약하자면, 이 세션은 내가 첫 오픈소스 참여를 하게 만드는 계기가 될 만큼 꽤 충격적이였다. 세션은 내게 오픈소스 생태계가 얼마나 참담한지를 적나라하게 보여주었다. 대다수의 오픈소스 개발자가, 오픈소스에 기여하는 바에 대해 그 어떤 금전적 보상을 받지 못하면서도 개발하면서도 욕을 먹고 있는 말도 안되는 상황을 겪고 있었다. 내가 가장 충격적이었던 것은, 대다수의 오픈소스의 메인 컨트리뷰터가 1~2명이라는 것이었다. 모두가 오픈소스를 사용하면서도, 그 책임은 극소수의 개발자가 지고 있었다.<br><br /></p>
+<p>세션을 듣고 난 후 나는 더 이상 오픈소스를 마냥 사용하기만 해서는 안 되겠다고 생각했다. 세션에서의 말처럼 오픈소스를 이용하는 데에 모종의 비용을 지불해야 하는게 옳다고 생각했으며, 같은 개발자로서 오픈소스 문화를 유지하는 데에 책임감을 느꼈다. 물론 지금 당장 오픈소스의 메인테이너가 될 만큼의 컨트리뷰션은 할 수 없겠지만, 아무리 못해도 오타 고치기는 할 수 있지 않겠는가.<br><br /></p>
+<p>당장 실행으로 옮기기로 했다. 이전에 오픈소스 라이브러리를 사용하다가 우연하게 발견한 버그를 재현하여 이슈를 오픈했다. 오픈소스가 무서운 이유는 그게 뭔지 모르기 때문이었다. 한 걸음을 내딛어보니 오픈소스가 무엇인지 느껴졌고, 더 이상 별로 무섭게 느껴지지 않았다.<br><br /></p>
+<h1 id="4"><a href="#4" class="headerlink" title="#4"></a>#4</h1><p>Lablup을 골랐던 이유 중 사소했던 하나가 떠올랐다. “Make AI Accessible”이라는 목표가 마음에 들었기 때문이다.<br><br /></p>
+<p>나는, 물론 아직 2년차의 햇병아리 개발자긴 하지만, 개발이 다수에게 ‘실제로 어려워야 하는 정도’보다 과하게 어렵게 다가온다고 생각한다. 초보 개발자가 건방지게 말해보자면, 개발의 본질은 아주 단순하다. Why?에 대한 대답의 연속이 바로 개발이다. 왜 이렇게 해야하는가? 더 좋은 방법은 없는가? 이러한 질문의 연속 끝에 현대의 개발 트렌드가 올라와있는 것이다.<br><br /></p>
+<p>문제는, 개발의 본질은 아주 단순하지만, 개발 자체는 너무 복잡하다는 것이다. 우선 Why?와 그에 대한 대답이 너무 많이 쌓아올려졌다. 사용자가 모던 자바스크립트 프레임워크의 작동 원리를 제대로 이해하려면 그 이전의 웹의 역사를 다 공부해야 한다. 또한, 쌓아올려진 두께 뿐만 아니라 그 넓이도 매우 넓다. 다시 말해, 너무 다양한 코너 케이스가 있다는 것이다. OS만 하더라도 수십개, 그 위에서 언어만 하더라도 또 수백개, 각각의 언어 안에서 자주 쓰이는 프레임워크가 수십개… 문제는 이들은 모두 각기 다른 needs에서 나왔으므로 각각의 용도가 다르기 때문에 어디선가 분명 필요한 상황이 있을 것이라는 점이다.<br><br /></p>
+<p>이러한 점을 고려하더라도, 나는 개발이 불필요하게 어렵다고 생각한다. 분명 지식의 양이 늘어나는 속도는 폭발적이지만, 그 만큼 우리는 알 필요가 없는 계층을 추상화하여 압축해가고 있다. 결국, 추상화 계층 위에서 보자면 각자가 겪는 문제의 종류는 얼마 되지 않을 수 있다. 하지만, 많은 사람들은 자신이 겪은 문제와 이를 어떻게 해결했는지를 공유하지 않는다. 따라서 사람들은 같은 종류의 문제에 봉착하고, 같은 종류의 삽질을 한다. 나는 이러한 삽질이 크나큰 낭비라고 생각한다.<br><br /></p>
+<p>Lablup은 애초에 자주 발생하는 문제를 본인들이 해결해줌으로써 불필요한 낭비를 없애고 있었다. 나는 Lablup의 이런 점이 마음에 들었다. 오픈소스도 지금 생각해보면 비슷한 맥락으로 생각할 수 있을 것 같다. Github는 누군가가 자신의 삽질을 포장하여 내놓고, 자신이 삽질을 피하기 위해 다른 사람이 미리 해놓은 삽질 과정을 구할 수 있는 장소이기도 한 것이다.<br><br /></p>
+<p>내가 개발 관련 글을 꾸준히 올려야겠다고 다시 마음을 먹은 것도 같은 이유 때문이다. 나는 아직 부족함이 많은 주니어 개발자지만, 누군가가 더 이상 나와 같은 삽질을 하며 시간을 낭비하지 않기를 원한다. 특히, 영어로 된 자료들을 읽기 힘들어하는 많은 개발자들에게 내 글이 도움이 되었으면 한다. 그렇게 사람들이 조금 더 개발을 쉽고 재밌다고 느끼면 좋겠다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/05/15/am-i-doing-alright/">
+        <span class="nav-arrow">← </span>
+        
+          2018.05.15.
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/10/20/use-git-in-aws-lambda/">
+        
+          삽질기 - AWS Lambda를 활용하여 Github에 자동으로 커밋하기
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#0"><span class="toc-nav-text">#0</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1"><span class="toc-nav-text">#1</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2"><span class="toc-nav-text">#2</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3"><span class="toc-nav-text">#3</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4"><span class="toc-nav-text">#4</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2018/10/19/contribute-to-developers/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "2018.10.19.",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

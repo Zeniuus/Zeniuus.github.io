@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      2019.12.27.
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>2019.12.27.</h2>
+  <p class="post-date">2019-12-27</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="0"><a href="#0" class="headerlink" title="0."></a>0.</h2><p>금요일 밤, 사람들은 한창 술을 먹고 있을 것이라는 내 기대가 틀렸다는 듯이 카페는 거의 만석이었다. 대부분 둘이서 짝지어서 앉아있는 사람들의 이야기는 서로 겹쳐서, 마치 여러 파형이 섞여 원래 파형을 알아볼 수 없는 파도와 같이 내 귓가를 때려댄다. 어느 정도의 소음은 이어폰을 통과하면서 희석되어 집중하기 딱 좋은 화이트 노이즈를 만들지만, 이 정도로 시끄러우면 도저히 책을 읽을 수 없다. 나는 결국 책을 덮고 노트북을 펼쳤다. 책을 읽으려고 카페에 온 것이지만, 상관없다. 책은 집에서 술 한잔을 걸치면서 읽어도 괜찮다. 지금은 이미 책을 읽으려는 마음은 사그라들고, 글을 쓰고 싶다는 기분이 차오른 상태이다.</p>
+<p>금요일 밤마다 카페에 온 것이 벌써 한 달 넘게 지났다. 보통 집이 아니라 카페의 분위기를 즐기며 책을 읽고 싶다는 생각으로 카페에 들어가지만, 무작위적인 소음 속에서 1시간 정도 책을 읽다 보면 한 주 동안 틈틈이 했던 여러 가지 생각이 스멀스멀 떠오르고, 결국 자연스럽게 노트북을 펼치고 글을 적게 된다.</p>
+<p>2019년이라는 한 해의 대부분의 시간이 나를 지나쳐갔다. 그 짧지 않은 시간 동안, 나는 정말 많이 변했다. 2019년은 내 인생에서 가장 많은 변화를 겪은 해라고 할 수 있다. 매년 가장 많이 변하는 해가 갱신되는 것 같은 기분이 들지만, 그건 그것 나름대로 좋은 징조다. 내가 매년 더 빠르게 변화해간다는 뜻이니까.</p>
+<p>개발자 회고에서 쓴 대로 개발자로서의 나도 정말 많은 성장을 이뤄냈지만, 사실 올해 가장 중요한 변화는 “개발자가 아닌 나”가 겪은 변화다. “내 속엔 내가 너무도 많아”라는 노래 가사처럼, 한 사람의 안에는 수많은 “나”가 살아가고 있다. “개발자인 나”가 프로 개발자로서의 첫발을 내디딘 것과 마찬가지로, “개발자가 아닌 나” 역시 지금까지 둘러싸여 있던 껍질을 깨부수고 세상을 향해 첫발을 내디뎠다.</p>
+<h2 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h2><p>무라카미 하루키의 &lt;노르웨이의 숲&gt;을 정신없이 읽고 있는 도중이었다. 갑자기, 정말 아무 이유 없이 문득, 와타나베와 미도리의 대화를 읽는 와중 작은 생각이 스쳐 지나갔다. 내가 지금 도대체 뭘 읽고 있는 거지? 책을 읽어본 사람이라면 알겠지만, &lt;노르웨이의 숲&gt;은 굉장히 19금적인 요소가 다분한 책이다. “미도리”라는 등장인물의 성격이 특히 그러한데, 도대체 작가가 미도리를 왜 이렇게 야한 인물로 설정했는지 이해가 되질 않았다.</p>
+<p>한 번 책에 대해 의문이 생기고 난 뒤에는 “왜?”라는 질문이 소설을 읽는 내내 머릿속에서 지워지지 않았다. 책을 구성하는 대부분의 문장에 대해 나는 “도대체 이 문장이 왜 책에서 필요한 거지?”라는 질문에 대한 대답을 내놓지 못했다. 내게 이러한 문장은 소설에서 빠지든 말든 아무래도 상관없는, 정말 무의미한 문장으로 느껴졌다. 소설에서 중요한 건 스토리가 아니었던가? 무라카미 하루키는 왜 이 문장을 이 책에 담았으며, 왜 하필 이 단어를 선택했을까?</p>
+<p>내가 생각하기에 필요 없어 보이는 문장을 책에서 전부 덜어냈더니, 몇 문단 남짓한 스토리만이 남았다. 와타나베 - 나오코 - 가즈키의 관계. 와타나베 - 나오코 - 레이코 씨의 관계. 와타나베 - 나오코 - 미도리의 관계. 하지만 이 스토리는 내가 그토록 몰입해서 읽을 만한 재미를 담고 있지 않았다. 이 스토리로 내가 소설을 쓴다면 도저히 &lt;노르웨이의 숲&gt; 만큼이나 미친 듯이 빠져들어 읽을 수 있는 소설은 절대 쓰지 못할 것이다.</p>
+<p>그때 깨달았다. 소설에서 정말로 중요한 것은 1%의 스토리가 아니라, 나머지 99%의 쓸모 없어 보이는 문장이라는 것을. 세세하게 묘사한 풍경이 상상력을 자극하고, 문장의 뉘앙스가 소설의 전체적인 분위기를 좌우한다. “미련”이라는 단어 대신 그녀가 남겨두고 간 편지 한 통을 차마 버리지 못한다는 문장으로 독자를 몰입시킨다. 소설을 소설로서 완성시키고 소설의 재미를 좌우하는 것은 스토리가 아니라, 얼핏 보면 쓸모없어 보이는 문장 하나하나이다.</p>
+<h2 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h2><p>내 삶을 스토리로 엮어보면 무척이나 지루하다. 1996년 5월 6일 경북 구미 출생. 4살에 분당으로 이사. 중탑초등학교 졸업. 야탑중학교 졸업. 한국과학영재학교 졸업. 20살에 충북 보은으로 이사. 한국과학기술원 재학 중. 현재 휴학하고 VCNC에서 산업기능요원으로 활동 중. 누구나 떠올릴 수 있을 만한, 무미건조하고 밋밋하기 그지없는 이야기다. 길이로 치자면 한 문단도 되지 않는다.</p>
+<p>나는 이 지루하고 밋밋한 스토리를 만들기 위해 고등학교 2학년 때부터 6년이라는 시간 동안 정말 많이 고민하고, 또 노력했다. 고등학교 때부터 줄곧 나는 내 인생의 핵심적인 스토리는 “어떤 직장을 갖느냐”라고 생각했다. 내 생각은 이랬다. 잠자는 시간을 제외하고, 인생에서 가장 많이 시간을 차지하는 부분은 직장이다. 따라서 내 인생에서 가장 중요한 선택은 직장을 다니는 시간이 얼마나 행복하느냐다. 그래서 6년간 나는 내가 어떤 일을 하고 먹고 살지에 대해서 치열하게 고민했다.</p>
+<p>덕분에 나는 “어떤 직장을 갖느냐”라는 질문에 대해 최선의 대답을 내놓았다고, 아직까지는 그렇게 생각하고 있다.  지적인 호기심을 채우는 것과 어려운 문제를 푸는 것을 좋아하는 내 성격에 개발자는 꼭 맞는 직업이었다. 세상은 정말 어려운 문제로 가득 차있어서, 아무리 문제를 풀고 또 풀어도 재미있는 문제가 계속 생겨났다. 경험이 쌓일수록 배우고 싶은 것도 점점 늘어나서, 퇴근 후에 시간을 내서 공부할 정도로 공부하는 것도 재미있었다. 개발자로서의 나는 행복했다.</p>
+<p>하지만 미처 예상하지 못했던 것은, 퇴근 후의 4시간이 생각보다 아주 긴 시간이었다는 점이다. 이 4시간은 내가 6년 간 치열하게 해왔던 고민에는 없었던 시간이었다. 덕분에 나는 아무런 준비 없이 퇴근 후의 시간을 마주해야만 했다. 무엇을 하면서 보내야 할지 대비하지 않고 맞이하는 4시간은 정말 덧없이 길어서, 내가 무슨 일을 하든, 어떤 발버둥을 치든 나를 지루하게 하고, 시간을 무의미하게 보내고 있다는 생각이 들게 했다. 회사를 벗어나면 열정적으로 일하던 나는 어디론가 사라지고, 그저 텅 빈 사람만이 남았다. 개발자가 아닌 나는 아무것도 아니었다.</p>
+<h2 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h2><p>&lt;노르웨이의 숲&gt;을 접하고, 소설의 스토리가 아니라 문장 그 자체를 음미하는 방법을 배운 이후로 내 삶은 180도 달라졌다. 내 삶에서 부족한 것이 무엇인지 정확하게 느껴졌다. “나”라는 소설에는 뼈대가 되는 스토리는 있었지만, 소설을 소설답게 만드는 문장, 즉 디테일이 없었다.</p>
+<p>사실, 디테일은 없었던 게 아니다. 디테일은 늘 내 곁에 있었지만, 단지 내가 무시하고 지나쳤을 뿐이다. 회사 동료들과 식사를 하면서 나눈 즐거운 이야기, 개발할 때 끙끙거리다가 멋진 아이디어를 떠올렸을 때의 감동, 동네 근처의 예쁜 카페 안에서 글을 쓰고 있다는 만족감, 오랜만에 고등학교 친구들과 얼굴을 볼 생각에 들뜨는 마음. 내 삶은 이런 수많은 디테일로 이루어져 있고, 이 디테일 덕분에 내 인생은 지루한 줄거리를 바탕으로 재미있고 뒷 내용이 궁금한 소설이 되어 간다는 사실을, 나는 인제야 깨달았을 뿐이다.</p>
+<p>디테일의 중요성을 한 번 깨달은 이후로, 마치 24년간 살아온 세상과는 다른 세상에 온 것처럼 세상이 달라 보인다. 책의 문장을 음미하는 재미를 제대로 느낀 이후에는 책을 읽는 재미가 배가 되었다. 싱글 몰트 위스키가 어떻게 제조되는지를 알고, 내가 지금 마시는 위스키가 어떤 특별한 과정을 통해 만들어졌는지를 알면 독한 알코올 향에 가려져 있던 술의 다양한 풍미가 느껴지고, 거기서 거기였던 술이 다르게 보이기 시작한다. 향수의 종류, 향수의 향이 시간에 따라 달라진다는 사실, 향수의 향에 영향을 주는 요인을 듣고 난 이후로는 향을 즐기게 되었고, 향수를 꼬박꼬박 뿌리게 되었다. 같은 피아노곡이더라도 내 연주와 선생님 연주의 차이를 느끼고, 선생님의 연주에 감동하고, 더 디테일을 살려 연주할 수 있도록 노력한다. 크리스마스에 내가 지내는 공간을 꾸며보고, 크리스마스 분위기에 취해본다. 퇴근 후의 4시간은 디테일을 챙기기에 너무 부족한 시간이 되었다.</p>
+<p>디테일에 신경을 쓰게 된 이후로, 디테일을 더 잘 느끼려는 노력도 하게 되었다. 몇 달 전부터 글을 자주 쓰고 있는데, 글쓰기는 내 생각을 더 깊이 표현하고 기록으로 남기려다 보니 생긴 취미이다. 요즘에는 사진 촬영에 관심이 생겼다. 살면서 종종 마주치는, 작은 감동을 느끼게 해주는 그 순간의 디테일을 기록으로 남기고 싶었기 때문이다. 평생 왜 쓰는지 이해가 안 됐던 일기도 쓰기 시작했다. 내가 다녀온 장소, 먹었던 음식, 보았던 풍경과 그 순간 내가 느낀 감정이 잊히는 게 너무나도 아쉬워서, 이를 어딘가 보관하고 나중에 꺼내 보고 싶다는 생각이 들었다.</p>
+<h2 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h2><p>사람과 사람이 만나는 건 세계와 세계가 만나는 것이라는 이야기가 있다. 몇 달 전 회사 동료에게 저 이야기를 들었을 때 가장 먼저 들었던 생각은, 과연 내게 다른 사람에게 보여줄 만한 세계가 있을까 하는 의문이었다. 나는 열심히 공부하고, 고민하고 보고 따라 할 줄만 알지, 내가 다른 사람에게 보여주고 그 사람의 세계를 넓혀줄 수 있는 나만의 세계는 가지고 있지 않았다.</p>
+<p>디테일을 챙기기 시작한 이후로, 텅 비어있던 내 안의 세계가 점점 채워져 가는 게 느껴진다. 아직 깊이는 부족하지만 말이다. 디테일을 챙긴다는 것은 결국, 세상의 수많은 부분 중 어떤 부분과 맞닿아 있을 것이고, 어떤 부분에 더 관심을 기울일 것인가의 문제다. 작년까지, 나는 진로에 대한 고민과 개발 이외에는 그 어떤 것이도 흥미가 없었다. 관심을 기울이지 않았으니, 당연히 세상에 존재하는 수많은 흥미로운 부분을 보지 못하고 지나칠 수밖에 없었다. 하지만 삶의 디테일에 신경 쓰고 세상을 주의 깊게 들여다보기 시작하니, 개발 외에도 내 관심을 뺏어가는 일이 점점 많아졌다. 새로운 관심사를 찾아갈 때마다 내 세계에는 새로운 색이 칠해졌고, 나는 조금 더 뚜렷해졌다.</p>
+<p>요즘의 관심사는 더 많은 새로운 관심사를 찾는 것이다. 역시 가장 좋은 방법은 사람을 만나는 게 아닐까 싶다. 새로운 사람은 언제나 세상을 새로운 각도로 바라보게 해준다. 이미 알던 사람과도 조금 더 주의 깊게 대화를 하다 보면 그 사람을 더 잘 알게 되고, 그 사람의 세계의 새로운 면모를 발견하게 된다. 다른 사람들을 통해 세상의 다양한 부분을 발견하고, 그 중에서 내가 더 깊이 관심을 기울일 부분을 선택하고, 실제로 관심을 기울이는 노력을 함으로써 나는 더 풍부한 사람이 된다.</p>
+<p>2019년은 디테일이 중요하다는 사실을 깨닫고, 내게 맞는 디테일로 나를 채워가는 과정이었다. 조금이지만 더 읽어보고 싶은 사람이 된 것 같고, 다른 사람의 세계를 만날 준비가 된 것 같다. 세상의 더 많은 부분을 발견하고, 더 많은 디테일로 내 삶을 채우고, 더 다채로운 색깔을 띤 사람이 되기 위해 노력할 2020년의 하루하루가 기대된다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/12/17/goodbye-2019-as-developer-2/">
+        <span class="nav-arrow">← </span>
+        
+          2019년 개발자 회고 (2)
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/01/16/spring-transaction-common-mistakes/">
+        
+          Spring Transaction 사용 시 주의할 점
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0"><span class="toc-nav-text">0.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1"><span class="toc-nav-text">1.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2"><span class="toc-nav-text">2.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3"><span class="toc-nav-text">3.</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4"><span class="toc-nav-text">4.</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2019/12/27/goodbye-2019/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "2019.12.27.",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

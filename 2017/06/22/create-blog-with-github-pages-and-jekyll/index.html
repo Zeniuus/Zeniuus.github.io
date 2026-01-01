@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Github Pages와 Jekyll로 블로그 만들기
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Github Pages와 Jekyll로 블로그 만들기</h2>
+  <p class="post-date">2017-06-22</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>첫 포스트에서는 이 블로그와 같은 블로그를 만드는 법을 알아보겠습니다.</p>
+<p>이 블로그는 Github에서 제공하는 Github Pages라는 서비스와 Jekyll이라는 블로그 지향적인 정적 사이트 생성기를 사용하여 제작되었는데요, 마크업 언어로 파일을 작성하여 Github repo에 올리기만 하면 자동으로 Jekyll이 이를 랜더링하여 정적 웹사이트를 완성해줍니다. 쉽게 이야기하면, 여러분들이 markdown 형식의 글만 작성하면 복잡하게 html / css 파일을 작성하거나 서버를 직접 돌리지 않고도 Github와 Jekyll이 자동으로 여러분들만의 예쁘고 깔끔한 블로그를 만들어준다는 것입니다.</p>
+<p>사실 Github Pages 자체에서 Jekyll을 사용하여 웹사이트를 랜더링하기 때문에 여러분들의 컴퓨터에 굳이 Jekyll을 설치하지 않아도 되지만, 충분한 공부가 되기 위해 이번 포스팅에서는 Jekyll을 설치한 후 여러분들의 첫 블로그를 만들어보도록 하겠습니다.<br><br /><br><br /></p>
+<ol>
+<li><p>Jekyll 설치</p>
+<p> 우선 Jekyll을 설치해보도록 하겠습니다. 아래의 커맨드를 shell에 입력하여 Jekyll을 설치합니다.</p>
+<pre><code>gem install jekyll
+</code></pre><p> 이 과정에서 여러가지 오류가 생길 수 있습니다.</p>
+<p> <code>ruby 2.1.0</code> 이상이 필요하다고 한다면, <code>brew</code>로 <code>ruby</code>를 설치해주시거나</p>
+<pre><code>brew install ruby
+</code></pre><p> 혹은 이미 설치되어 있다면 <code>brew</code>로 <code>ruby</code> 버전을 업그레이드 해주시면 됩니다.</p>
+<pre><code>brew upgrade ruby
+</code></pre><p> 또한, 아래와 같이 permission이 없다는 에러가 발생할 수 있습니다.</p>
+<pre><code>ERROR:  While executing gem ...(Gem::FilePermissionError) 
+You don&apos;t have write permissions for the /Library/Ruby/Gems/2.0.0 directory. 
+</code></pre><p> 이럴 경우에는 sudo 권한을 주어 업그레이드 하면 됩니다.<br><br /><br><br /></p>
+</li>
+<li><p>Jekyll project 생성</p>
+<p> 이제 새로운 Jekyll project를 생성해보도록 하겠습니다. 아래의 코드를 실행하여 <code>new-my-blog</code>라는 폴더에 Jekyll project를 생성합니다.</p>
+<pre><code>jekyll new my-new-blog
+</code></pre><p> 이 때 <code>my-new-blog</code>라는 폴더는 없어도 됩니다.</p>
+<p> 여기서도 오류가 발생할 수 있습니다.</p>
+<p> 한 가지 가능한 오류는 <code>bundler</code>에 대한 dependency error입니다.</p>
+<pre><code>Dependency Error: Yikes! It looks like you don&apos;t have bundler or one of its dependencies installed.
+In order to use Jekyll as currently configured, you&apos;ll need to install this gem.
+The full error message from Ruby is: &apos;cannot load such file -- bundler&apos;
+If you run into trouble, you can find helpful resources at https://jekyllrb.com/help/! 
+</code></pre><p> 이럴 경우에는 단순히 <code>bundler</code>를 설치해주시면 됩니다.</p>
+<pre><code>gem install bundler
+</code></pre><p> 이 때도 permission이 필요하다는 오류가 발생할 수 있습니다. 그러면 위와 마찬가지로 sudo 권한을 주시면 됩니다.<br><br /><br><br /></p>
+</li>
+<li><p>Jekyll server 실행</p>
+<p> 우선 생성한 <code>my-new-blog</code> project 폴더로 이동합니다.</p>
+<pre><code>cd my-new-blog
+</code></pre><p> 아래의 커맨드를 실행하여 <code>localhost:4000</code>으로 블로그 서버를 실행합니다.</p>
+<pre><code>jekyll serve
+</code></pre><p> 이제 <code>localhost:4000</code>을 통해 접속할 수 있습니다.<br><br /><br><br /></p>
+</li>
+<li><p>Github Pages와 연동</p>
+<p> 이제 방금 생성된 Jekyll project를 Github Pages와 연동해보도록 하겠습니다.</p>
+<p> 우선 Github에 접속하여 새로운 repo를 만드는데, 이름을 반드시 <code>[자신의 아이디].github.io</code>로 생성해야 합니다. 반드시요!</p>
+<p> repo를 생성하셨으면 해당 repo를 자신의 컴퓨터로 clone해 옵니다.</p>
+<pre><code>git clone https://github.com/[자신의 아이디]/[자신의 아이디].github.io.git
+</code></pre><p> 그 다음 위의 2번에서 만든 jekyll project 폴더에 있는 내용물을 모두 clone한 저장소로 복사-붙여넣기 합니다.</p>
+<p> 이제 로컬 저장소로 이동하여 로컬 저장소에 있는 파일들을 github에 push해 줍니다.</p>
+<pre><code>git add . // 해당 repo의 모든 파일을 track합니다.
+git commit -m &quot;initial commit&quot; // add된 파일을 commit 합니다.
+git push -u origin master // origin의 master branch를 upstream branch로 지정하고 push합니다.
+</code></pre><p> 이제 Github Pages와 로컬 Jekyll project가 연동되었습니다. <code>[자신의 아이디].github.io</code>에 접속하시면 3번에서 <code>localhost:4000</code>에 접속하여 확인했던 블로그와 동일한 화면을 볼 수 있습니다.</p>
+</li>
+</ol>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+    
+      <a class="nav-right" href="/2017/06/22/jekyll-themes/">
+        
+          Jekyll로 만든 블로그에 테마 적용하기
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2017/06/22/create-blog-with-github-pages-and-jekyll/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Github Pages와 Jekyll로 블로그 만들기",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

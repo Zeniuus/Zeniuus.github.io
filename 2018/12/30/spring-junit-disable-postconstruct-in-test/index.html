@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Spring + JUnit - 테스트에서 @PostConstruct 비활성화 하기
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Spring + JUnit - 테스트에서 @PostConstruct 비활성화 하기</h2>
+  <p class="post-date">2018-12-30</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>이번 글은 테스트를 돌릴 때 <code>@PostConstruct</code>와 <code>@PreDestroy</code> hook을 비활성화하는 방법에 대한 글이다.<br><br/></p>
+<h2 id="문제-상황"><a href="#문제-상황" class="headerlink" title="문제 상황"></a>문제 상황</h2><p>아래와 같이 batch job을 <code>@PostConstruct</code>과 <code>ScheduledExecutorService</code>를 활용하여 띄운다고 해보자.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">class SomeBatchJob &#123;</span><br><span class="line">    private val executor = Executors.newSingleThreadScheduledExecutor()</span><br><span class="line"></span><br><span class="line">    @PostConstruct</span><br><span class="line">    fun start() &#123;</span><br><span class="line">        executor.scheduleWithFixedDelay(&#123;</span><br><span class="line">            run() </span><br><span class="line">        &#125;, 0, 60L, TimeUnit.MINUTES)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fun run() &#123;</span><br><span class="line">        // do some batch job</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @PreDestroy</span><br><span class="line">    fun end() &#123;</span><br><span class="line">        executor.shutdown()</span><br><span class="line">        executor.awaitTermination(60L, TimeUnit.MINUTES)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>이제 이 batch job의 로직을 테스트하고 싶다. 그러면 <code>@PostConstruct</code>에 의해 실행되는 batch job이 테스트에 영향을 미칠 수 있기 때문에 당연히 이를 비활성화하고 싶을 것이다.<br><br /></p>
+<p>내가 가장 먼저 떠올린 방법은 여태까지 해왔던 대로 <code>@Primary</code> 어노테이션을 사용해서 bean을 덮어쓰는 것이였다. 그래서 <code>SomeBatchJob</code>을 상속받은 <code>SomeBatchJobMock</code>을 만들어 <code>start()</code>와 <code>end()</code>가 아무런 작업도 하지 않도록 override한 후 테스트 configuration에 <code>@Primary</code> 어노테이션을 활용해 bean을 덮어썼다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">class SomeBatchJobMock : SomeBatchJob() &#123;</span><br><span class="line">    override fun start() &#123;&#125;</span><br><span class="line">    override fun end() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">class TestConfiguration &#123;</span><br><span class="line">    @Primary</span><br><span class="line">    @Bean</span><br><span class="line">    fun someBatchJobMock(): SomeBatchJob &#123;</span><br><span class="line">        return SomeBatchJobMock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner::class)</span><br><span class="line">@SpringBootTest(</span><br><span class="line">    classes = [TestConfiguration::class]</span><br><span class="line">)</span><br><span class="line">class SomeBatchJobTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    fun test() &#123;</span><br><span class="line">        // test logic here</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>하지만 테스트를 돌려보면 <code>SomeBatchJob.start()</code>가 실행되는 것을 확인할 수 있다. 어떻게 된 일일까?<br><br/></p>
+<h2 id="Primary-어노테이션-작동-방식"><a href="#Primary-어노테이션-작동-방식" class="headerlink" title="@Primary 어노테이션 작동 방식"></a>@Primary 어노테이션 작동 방식</h2><p>필자는 이것 때문에 굉장한 삽질을 했는데, 결국 이는 <code>@Primary</code> 어노테이션의 작동 방식을 오해하고 있었기 때문이었다. 결론부터 말하자면 <code>@Primary</code> 어노테이션은 동일한 타입의 다른 bean을 덮어쓰는 것이 아니다. Bean scanning에 의해 발견되는 모든 bean은 <code>@Primary</code> 어노테이션과는 무관하게 일단 <code>ApplicationContext</code>에 등록이 된다. 이 때문에 <code>SomeBatchJob</code>과 <code>SomeBatchJobMock</code>의 <code>start()</code>가 둘 다 실행된 것이다. 이는 <code>SomeBatchJob</code>과 <code>SomeBatchJobMock</code>의 <code>start()</code>에 break point를 걸고 디버깅 모드로 실행해서 알게 된 사실이다.<br><br /></p>
+<p>그러면 <code>@Primary</code> 어노테이션의 역할은 무엇일까? 이는 docs를 보면 금방 알 수 있다.</p>
+<blockquote>
+<p>Indicates that a bean should be given preference when multiple candidates are qualified to autowire a single-valued dependency. If exactly one ‘primary’ bean exists among the candidates, it will be the autowired value.</p>
+</blockquote>
+<p>즉, 위의 예제에 대입해서 설명하면, 다른 bean에서 <code>SomeBatchJob</code> 타입의 bean을 주입받으면 항상 <code>SomeBatchJobMock</code>이 주입된다는 의미이다. 따라서 당연히 <code>@Primary</code> 어노테이션으로는 <code>@PostConstruct</code> hook을 막을 수는 없다.<br><br/></p>
+<h2 id="Dependency를-바꿔서-해결"><a href="#Dependency를-바꿔서-해결" class="headerlink" title="Dependency를 바꿔서 해결"></a>Dependency를 바꿔서 해결</h2><p>일단 bean이 등록이 되면 <code>@PostConstruct</code>는 반드시 실행이 된다. 따라서 mock 하려는 기능은 애초에 bean scanning 단계에서 걸리지 않는 bean에 있거나, bean scanning에 걸린다면 <code>@PostConstruct</code> 어노테이션이 붙은 메소드 안에 있으면 안 된다.<br><br /></p>
+<p>그러면 어떻게 해야할까? 크게 두 가지 방법이 있다.</p>
+<ol>
+<li>기존의 bean은 bean scanning에 걸리지 않게 설정하고, <code>start()</code>와 <code>end()</code>를 아무 동작도 하지 않도록 override한 mock bean을 하나 만들어 테스트에서 사용한다.</li>
+<li><code>@PostConstruct</code>를 사용하지 않는다. 대신, 해당 bean을 주입받은 다른 bean에서 <code>start()</code>와 <code>end()</code>를 호출한다. 즉, <code>A.a()</code>를 mock 하려면 <code>A</code>를 주입받는 <code>B</code>라는 bean을 만들고 <code>@PostConstruct</code>가 붙은 <code>B.b()</code>에서 <code>A.a()</code>를 호출한다. 이후 테스트에서는 <code>B.b()</code>를 아무 동작도 하지 않도록 mock 한다.<br><br /></li>
+</ol>
+<p>필자는 이미 수많은 테스트가 작성된 프로젝트에서 작업을 하고 있었기 때문에, 테스트 설정을 바꾸는 1번 대신 2번 방법을 선택했다. 최종적으로 바뀐 의존성을 먼저 보여주자면 아래 그림과 같다.</p>
+<p><img src="/images/spring_junit_disable_postconstruct_in_test/bean_dependency_graphs.png" alt="의존성 변화"></p>
+<p>원래는 <code>SomeBatchJob</code>의 <code>start()</code>에 batch job을 띄우는 로직이 있었다. 근데 <code>SomeBatchJob</code>을 mock 할 수는 없다. 왜냐면 만약 <code>SomeBatchJob</code>에 다른 의존성이 있을 경우 <code>SomeBatchJob</code>을 mock 하면 다른 의존성이 주입이 안 되면서 <code>run()</code> 메소드가 제대로 돌아가지 않을 것이기 때문이다. 따라서 <code>run()</code> 로직에 대해 제대로 테스트를 돌릴 수 없을 것이다.<br><br /></p>
+<p>그래서 일단 테스트 할 batch job의 비즈니스 로직과 “batch job을 띄운다”는 로직을 서로 다른 bean이 가지도록 분리시켰다. <code>start()</code>와 <code>end()</code>는 <code>BatchJobExecutor</code>의 <code>executeJobs()</code>와 <code>shutdownJobs()</code>로 로직을 옮기고 <code>BatchJobExecutor</code>가 <code>SomeBatchJob</code>을 주입받아 <code>executeJobs()</code>에서 <code>SomeBatchJob</code>을 띄우도록 했다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface BatchJob &#123;</span><br><span class="line">    fun run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">class SomeBatchJob : BatchJob &#123;</span><br><span class="line">    override fun run() &#123;</span><br><span class="line">        // do some batch job</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">class BatchJobExecutor(</span><br><span class="line">    private val batchJobs: List&lt;BatchJob&gt;</span><br><span class="line">) &#123;</span><br><span class="line">    private val executor = Executors.newSingleThreadScheduledExecutor()</span><br><span class="line"></span><br><span class="line">    fun executeJobs() &#123;</span><br><span class="line">        batchJobs.forEach &#123;</span><br><span class="line">            executor.scheduleWithFixedDelay(&#123;</span><br><span class="line">                it.run()</span><br><span class="line">            &#125;, 0, 60L, TimeUnit.MINUTES)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @PreDestroy</span><br><span class="line">    fun shutdownJobs() &#123;</span><br><span class="line">        executor.shutdown()</span><br><span class="line">        executor.awaitTermination(60L, TimeUnit.MINUTES)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>문제는 <code>BatchJobExecutor.executeJobs()</code>에다가 <code>@PostConstruct</code>를 달아도 안 된다. Mock을 한다고 해도 bean이 <code>ApplicationContext</code>에 등록돼서 job이 뜰 것이기 때문이다.<br><br /></p>
+<p>그래서 bean을 하나 더 만들었다. <code>BatchJobExecutor</code>을 주입받아서 <code>executeJobs()</code>를 실행시켜주는 <code>BatchJobExecutorRunner</code>을 새로 정의했다. <code>BatchJobExecutorRunner</code>는 생성될 때 <code>BatchJobExecutor.executeJobs()</code>를 호출해준다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">class SampleApplication &#123;</span><br><span class="line">    @Bean</span><br><span class="line">    fun batchJobExecutorRunner(batchJobExecutor: BatchJobExecutor): BatchJobExecutor &#123;</span><br><span class="line">        batchJobExecutor.executeJobs()</span><br><span class="line">        return batchJobExecutor</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>이제 테스트를 돌릴 때 <code>BatchJobExecutor</code>을 mock 해주고 <code>executeJobs()</code>와 <code>shutdownJobs()</code>를 아무 동작도 하지 않도록 override 해주면 batch job이 뜨지 않는다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">class BatchJobExecutorMock(</span><br><span class="line">    private val batchJobs: List&lt;BatchJob&gt;</span><br><span class="line">) : BatchJobExecutor(batchJobs) &#123;</span><br><span class="line">    override fun executeJobs() &#123;&#125;</span><br><span class="line">    override fun shutdownJobs() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">class TestConfiguration &#123;</span><br><span class="line">    @Primary</span><br><span class="line">    @Bean</span><br><span class="line">    fun batchJobExecutorMock(batchJobExecutorMock: BatchJobExecutorMock): BatchJobExecutor &#123;</span><br><span class="line">        return batchJobExecutorMock</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner::class)</span><br><span class="line">@SpringBootTest(</span><br><span class="line">    classes = [TestConfiguration::class]</span><br><span class="line">)</span><br><span class="line">class SomeBatchJobTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    fun test() &#123;</span><br><span class="line">        // test logic here</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br/></p>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><ul>
+<li><code>@Primary</code>는 bean을 덮어쓰는게 아니다. <code>@Primary</code>의 존재 여부와는 관계 없이 모든 bean은 우선 bean scanning을 통해 <code>ApplicationContext</code>에 등록된다.</li>
+<li>특정 타입의 bean을 주입할 때 같은 타입의 bean이 여러 개 있을 경우, <code>@Primary</code> 어노테이션이 붙은 bean이 우선순위를 가지고 주입된다.</li>
+<li>프레임워크가 평소에 잘 돌아간다고 아무 생각 없이 막 갖다 쓰지 말고 docs 한 번쯤은 읽어보자.</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/12/25/spring-data-jpa-projection-tips/">
+        <span class="nav-arrow">← </span>
+        
+          Spring Data JPA - Projection 이모저모
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/02/06/difference-between-junior-and-senior/">
+        
+          3개월 차 주니어가 느끼는 나와 시니어의 차이
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EB%AC%B8%EC%A0%9C-%EC%83%81%ED%99%A9"><span class="toc-nav-text">문제 상황</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Primary-%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98-%EC%9E%91%EB%8F%99-%EB%B0%A9%EC%8B%9D"><span class="toc-nav-text">@Primary 어노테이션 작동 방식</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Dependency%EB%A5%BC-%EB%B0%94%EA%BF%94%EC%84%9C-%ED%95%B4%EA%B2%B0"><span class="toc-nav-text">Dependency를 바꿔서 해결</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-nav-text">결론</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2018/12/30/spring-junit-disable-postconstruct-in-test/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Spring + JUnit - 테스트에서 @PostConstruct 비활성화 하기",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

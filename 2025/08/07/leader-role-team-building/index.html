@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      [라포 회고록] 리더의 역할 - 팀 빌딩
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>[라포 회고록] 리더의 역할 - 팀 빌딩</h2>
+  <p class="post-date">2025-08-07</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><br></p>
+<h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>앞선 글에서 리더의 가장 중요한 역할은 팀의 목표를 정하고 목표 달성률을 추적하는 것이라고 했다.</p>
+<p>팀의 목표는 당연하게도 회사의 맥락에 맞춰서 잘 정해야 하는데, 당연하게도 우리 팀의 현재 역량이나 리소스가 항상 회사에서 팀에게 기대하는 것과 정확히 일치하지는 않는다. 약간 넘칠 때도 있고, 약간 부족할 때도 있다. 혹은 많이 넘치거나 많이 부족할 할 수도 있다. <strong>리더는 팀에 대한 조직적인 기대치와 팀의 실제 역량 및 리소스가 잘 일치치하도록 팀을 잘 빌딩하는 역할을 수행해야 한다.</strong></p>
+<p><br></p>
+<h2 id="채용하기"><a href="#채용하기" class="headerlink" title="채용하기"></a>채용하기</h2><p>팀의 역량이나 리소스가 약간 부족한 시기라면 그냥 야근을 좀 하면 되겠지만, 심각하게 부족한 상황이거나 그러한 상황이 올 것이라고 예상되는 경우 리더는 채용을 해야 한다고 결정하고 이를 회사에 어필할 수 있어야 한다. 자신의 팀이 처한 상황에 대해 가장 잘 이해하는 것은 자기 자신이다. 상위 리더가 내 팀의 역량 및 리소스  부족을 나서서 해결해줄 것이라는 막연한 기대를 품고 가만히 있으면 안 된다.</p>
+<p><br></p>
+<h3 id="일단-JD를-적어라"><a href="#일단-JD를-적어라" class="headerlink" title="일단 JD를 적어라"></a>일단 JD를 적어라</h3><p><strong>채용은 기본적으로 상당한 리스크를 동반하는 행위이다. 새로운 사람이 팀에 합류했을 때 팀의 생산성이 기대만큼 올라가지 않을 요인이 너무나도 많다.</strong> 신규 입사자의 역량이 기대한 것보다 떨어지거나, 문화적으로 맞지 않거나, 다른 구성원과 트러블이 생길 수도 있다. 결정적으로 한국은 고용 유연성이 상당히 떨어지므로 채용은 one way door에 가깝다. 따라서 채용은 매우 신중하게 해야 한다. 우리가 할 수 있는 최선은, 우리 팀이 원하는 역량이 무엇인지를 정확히 정의하고 이를 검증할 수 있는 면접 과정을 잘 설계하는 것뿐이다.</p>
+<p>그런 의미에서, <strong>채용을 하기로 마음먹었을 때 가장 먼저 해야 할 것은 job description(이하 JD)을 적는 것</strong>이다. 이는 마치 API spec을 설계하거나 기획서를 작성하는 것처럼 지원자에 대한 명세를 정의하는 것과 같다. JD는 1. 채용을 하는 팀이 조직도 상 어떤 역할을 하는 팀인지, 2. 지원자에게 어떤 역량을 기대하는지, 3. 합류했을 때 실제로 어떤 일을 하게 되는지 가능한 쉽고 명확하게 표현해야 한다. 이런 내용을 잘 적으려면 당연하게도 조직도에 대한 이해도가 높아야 하고, 조직도 상 팀이 앞으로 1년 정도 해야 할 일에 대해 예상해보고, 우리 팀에 보완이 필요한 역량이 무엇인지 고민해보고, 새로운 팀원이 향후 1년 정도 할 일이 무엇인지를 가늠해봐야 한다. 즉, JD를 잘 쓰려면 결국 팀의 목표를 명확하게 정의하는 것이 선행되어야 한다.</p>
+<p>종종 JD가 애매모호하게 작성되어 있는 경우를 본다. 이런 경우는 크게 두 가지 경우로 나뉜다고 생각한다. 첫 번째는 인바운드 채용에 거의 신경을 쓰지 않는 경우이다. 이런 경우 JD의 역할은 대충 ‘이런 TO가 있다’를 알리는 정도에 머물고, 실제 채용은 주로 아웃바운드를 통해 이뤄진다. 두 번째는 정말로 JD를 별 고민 없이 쓴 경우이다. 첫 번째와 두 번째는 보통 팀의 인재밀도에 대한 소문이나 회사의 네임밸류로 쉽게 구분할 수 있는데, 두 번째 케이스에 속하는 회사는 웬만하면 가지 않는 게 좋다고 생각한다. 고민이 그리 깊지 않은 리더와 일을 하게 될 가능성이 높다. 그리고 이런 식으로 지원자가 회사에 대해 가지는 첫인상을 JD가 결정하기 때문에, 회사 입장에서는 최선을 다해 JD를 적어야 한다.</p>
+<p><br></p>
+<h3 id="채용-인터뷰-설계하기"><a href="#채용-인터뷰-설계하기" class="headerlink" title="채용 인터뷰 설계하기"></a>채용 인터뷰 설계하기</h3><p>JD를 잘 적었으면 이를 기반으로 자연스럽게 인터뷰 과정을 설계할 수 있다. 전화 인터뷰, 코딩 테스트, 문제 은행, 시스템 디자인 인터뷰, 과제 기반 인터뷰 등 다양한 종류의 인터뷰가 있겠지만, <strong>개인적으로 가장 필수적이고 동시에 가장 좋다고 생각하는 질문은 합류 이후에 실제로 하게 될 가장 어려운 업무를 시켜보는 것이다.</strong> 인터뷰 형태는 물어보려는 것에 맞게 결정하면 된다. 시스템 디자인 인터뷰일 수도 있고, 과제를 내는 것일 수도 있고, 그냥 특정 상황을 가정하고 가볍게 질문하는 것일 수도 있다. 이는 지원자가 우리 팀에 합류했을 때 실제로 어떤 방식으로 일할지를 미리 맛볼 수 있는 가장 좋은 방법이다.</p>
+<p><strong>내가 지금까지 많이 썼던 인터뷰 방식은 지원자가 기존에 했던 경험들에 대해 깊이 질문하는 것이었다.</strong> 이는 지원자의 문제 해결력이나 지식을 그럭저럭 파악할 수 있는 가성비 높은 방법이었지만, 여러 차례의 면접 경험을 되돌아보면 <strong>이 방식에는 false positive가 제법 많았다.</strong> 우선 지원자가 설명하는 내용 중 실제로 지원자가 한 일과 다른 동료가 한 일을 구분해낼 방법이 없으므로, 지원자가 문제 해결력이 뛰어난 것인지 아니면 그냥 지식을 잘 배우기만 하는 것인지 정확하게 판단하기 어렵다. 문제를 처음 해결하는 것은 그 해결 과정을 옆에서 보고 외우는 것보다 압도적으로 어렵기 때문에, 이는 매우 중요한 결함이라고 할 수 있겠다. 또한 이전 회사의 시스템은 초기부터 봐서 이해도가 높아서 그 안에서 반복적으로 발생하는 문제는 잘 해결하는데, 새로운 시스템을 파악하고 이에 적응하는 능력은 떨어지는 경우 역시 기존 경험을 질문하는 방식으로는 구분해내기 어렵다. 또한 지원자가 당시에 그러한 선택을 한 이유를 (의도하든 의도하지 않았든) 왜곡해서 이야기하더라도 이를 알아낼 수 없다.</p>
+<p>그러므로 가장 좋은 방식은 실제 하게 될 업무를 어떠한 형태로든 시켜보는 것이긴 한데, 문제는 이러한 방식의 인터뷰가 보통 상당한 피로감을 유발한다는 것이다. 보통 이런 형태의 문제는 시스템 디자인 인터뷰나 과제를 미리 풀어오는 인터뷰 형식이 되는데, 이러면 면접에 드는 리소스가 많아지므로 면접관도 지원자도 상당히 지친다. 그러므로 앞으로 할 일에 대한 질문을 기존에 했던 일에 대한 질문으로 갈음하는 것도 합리적인 선택이라고 본다. 이는 인터뷰에 얼마만큼의 리소스를 투자할지에 대한 트레이드 오프이다.</p>
+<p><br></p>
+<h3 id="면접관이-지치지-않게-하기-스크리닝"><a href="#면접관이-지치지-않게-하기-스크리닝" class="headerlink" title="면접관이 지치지 않게 하기 - 스크리닝"></a>면접관이 지치지 않게 하기 - 스크리닝</h3><p>‘지친다’는 것에 대해 더 이야기해보자면, 면접 과정에서 면접관이 지치지 않도록 보호하는 것은 중요한 일이다. 면접관은 타인의 역량을 평가할 수 있을 만큼 충분히 실력이 있어야 하는데, 이러다 보니 보통 회사에서 제일 일을 잘하는 사람들이 면접관을 맡는다. 즉, 면접관은 자기 일도 많은데 시간을 쪼개서 면접도 봐야 하는 것이다. 면접을 보는 행위 자체도 다른 일에 비해 체력 소모가 심한데, 지원자의 말을 잘 이해하는 데 상당한 집중력이 필요하기 때문이다. 여기에 더해 채용은 단거리 달리기가 아니라 언제 끝날지 모르는 마라톤과 같다. 원하는 수준의 인재를 채용하기가 하늘의 별따기이기 때문이다. 회사의 일잘러가 수 개월 동안 매주 몇 시간씩을 버리고 있어야 하는 게 인터뷰이다.</p>
+<p>그래서 <strong>면접관이 채용에 쓰는 리소스를 최소화시켜줄 필요가 있는데, 여기에서 가장 중요한 것이 스크리닝</strong>이라고 생각한다. 합격할 확률이 높은 사람에 대해서만 위에서 이야기한 대면 인터뷰를 진행하고, 그렇지 않은 사람들은 면접관의 리소스 사용을 최소화하면서 떨어뜨릴 수 있는 방법이 필요하다. 보통 이력서 검토, 문제 은행 방식의 짧은 스크리닝 콜 등이 여기에 활용되는 것 같다. 안타깝게도 스크리닝 단계는 false negative를 줄이는 것이 아니라 false positive를 줄이는 것이 훨씬 중요하기 때문에, 누가 봐도 뛰어난 소수를 제외한 나머지 다수의 지원자에게 불리한 게임이 된다. 회사 입장에서 채용은 one way door이고 면접관의 리소스가 소중하기 때문에 이는 어쩔 수 없는 일이다. 지원자는 지원자 나름대로 최선을 다해 이력서를 적는 것밖에 방법이 없다.</p>
+<p>여담으로, 개인적으로 라포랩스의 면접관 경험을 통해 이력서 검토보다는 스크리닝 콜을 더 선호하게 되었다. 요즘 이력서를 잘 쓰는 방법에 대한 자료가 워낙 많아서 그런지, 느낌상 이전보다 이력서를 기반으로 한 스크리닝의 타율이 상당히 떨어진 것 같다. 이력서에는 보통 어떤 일을 했고 어떤 성과를 냈는지 정도가 간략히 적혀 있는데, 어떤 시스템 구조에서 어떤 문제를 해결하기 위해 어떤 선택을 했는지, 그래서 지금 지원자가 가지고 있는 지식과 문제 해결력의 수준이 어느 정도인지를 파악하기가 어렵다고 느꼈다. 어차피 문제 해결력은 단시간에 알아내기가 어려우므로, 상대적으로 빠르게 확인할 수 있는 지식 쪽을 통해 스크리닝을 하는 게 효과적이라고 생각했다. 그래서 스크리닝 콜에서 우리 팀에서 일할 때 반드시 알아야 한다고 생각하는 지식, 즉 과락 질문을 물어보는 방식을 사용하게 되었고, 지금까지는 적절한 방식이라고 생각하고 있다.</p>
+<p><br></p>
+<h3 id="면접에서의-AI-활용에-대한-생각"><a href="#면접에서의-AI-활용에-대한-생각" class="headerlink" title="면접에서의 AI 활용에 대한 생각"></a>면접에서의 AI 활용에 대한 생각</h3><p>전화 인터뷰를 하는 도중 AI를 활용하는 것처럼 느껴지는 지원자를 만난 적이 가끔 있다. 대면 인터뷰가 아니라서 물증은 없지만, 질문 이후에 답변까지 걸리는 시간이 상당히 오래, 그리고 비교적 일정하게 걸린다는 점, 답변이 무언가를 보고 읽는 듯이 교과서적이라는 점, 꼬리 질문을 했을 때 답변의 품질이 상당히 떨어진다는 점에서 100% 확신하고 있다. 근데 이런 지원자를 반복해서 만나다 보니, 내가 시대에 뒤쳐진 사람이고 오히려 인터뷰 과정에서 AI를 쓰게 허용해주는 게 더 나은가? 하는 의문이 들었다. AI를 활용하는 능력이 중요한 요즘 시대에 오히려 AI를 쓰게 허용해줘야 지원자의 역량을 더 정확하게 파악할 수 있을 것 같다는 생각이었다.</p>
+<p>인터뷰 과정은 JD로부터 출발해야 한다는 내 신념에 비추어 생각해보면, 내가 생각하는 개발자의 가장 어려운 업무에는 보통 AI가 활약할 기회가 상당히 적다. 인터넷에서 검색해도 잘 나오지 않는 버그에 대해 처리할 때, AI가 우리의 사고를 보조해줄 수 있지만 결국 AI에 부어줄 컨텍스트 혹은 observability는 개발자가 직접 결정해야 한다. 가장 어려운 설계를 할 때, AI가 내놓는 일반적인 상황에서 좋은 설계보다는 우리 회사의 복잡한 상황에 맞춘 특수한 설계가 더 좋은 경우가 많다. 이러한 맥락에서, AI를 활용하는 능력은 개발자 인터뷰에서 주요하게 검증하고자 하는 역량이 보통 아닐 가능성이 높다.</p>
+<p>근데 AI 활용 역량이 주요 검증 대상이 아니라고 해서 굳이 AI 사용을 막을 필요가 있는가? 이는 마치 노트와 펜 사용을 막지 않는 것과 비슷할 수 있겠다는 생각이 들었다. 그래서 다음에 인터뷰 경험을 설계할 기회가 있다면 굳이 대면 면접에서 인터넷 및 AI 사용을 막지 않아볼 생각이다. 다만 문제 은행 방식의 인터뷰에서는 사용을 금지해야 한다고 생각하는데, 지식을 이미 충분히 이해하고 있고 이를 잘 활용할 수 있는 상태임을 검증하는 것이 중요하기 때문이다.</p>
+<p><br></p>
+<h3 id="수습-기간에-대한-생각"><a href="#수습-기간에-대한-생각" class="headerlink" title="수습 기간에 대한 생각"></a>수습 기간에 대한 생각</h3><p>많은 회사에서 입사 이후 3개월 ~ 6개월 정도의 수습 기간을 둔다.</p>
+<p>이전에는 수습 기간에 대해 부정적인 입장이었다. 여러모로 신규 입사자에게 불리한 정책이기 때문이다. 우선 수습 기간을 핑계로 스톡옵션이나 사이닝 보너스 등의 계약이 밀리는 것이 가장 열받는 지점이고, 실제로도 신규 입사자가 손해를 보는 부분이다. 여기에 더해 신규 입사자는 수습 과정을 통과하지 못할 수도 있다는 불안감과 빨리 성과를 내야 한다는 심리적인 압박감을 느껴야 한다. 기존 구성원들 입장에서도 마냥 좋지는 않은데, 신규 입사자와 잘 맞아서 친해졌다가 이분이 수습 통과를 못해서 갑자기 퇴사해야 하면 서로의 마음이 불편하다.</p>
+<p>그런데 본격적으로 채용에 관여를 하고, 이런저런 채용 실패 케이스를 경험하다 보니, 수습 기간을 두는 것이 회사 입장에서 불가피하겠다는 생각으로 바뀌었다. 이는 결국 한국의 고용 안정성이 높아 채용의 리스크가 과도하게 높아져서 회사들이 어쩔 수 없이 하는 선택이다. 신규 입사자가 우리 회사와 TO에 어울리는 사람인지를 고작 수 시간 동안의 인터뷰로 검증하는 것은 불가능에 가깝다. 실제로 함께 일해봐야만 이 사람이 우리 조직에 플러스인지 마이너스인지, 플러스라면 얼마만큼 플러스인지를 정확히 판단할 수 있다. 하는 업무가 추상적이고 모호한 제너럴리스트 직군일수록 더더욱 그렇다. 그래서 회사도 신규 입사자도 서로를 검증하는 시간을 필요로 하는데, 문제는 잘 맞지 않는다고 결론이 난 경우 신규 입사자는 퇴사를 하면 되지만 회사는 아무것도 할 수 있는 게 없다. 그래서 회사는 궁여지책으로 수습 기간을 둬서 법적 리스크를 줄이고자 하는 것이다. 이런 관점에서 한국의 고용 안정성이 높은 한 수습 기간을 두는 회사는 앞으로 많아지면 많아졌지, 더 적어지지는 않을 것이라고 생각한다.</p>
+<p><br></p>
+<h2 id="남는-역량과-리소스-관리하기"><a href="#남는-역량과-리소스-관리하기" class="headerlink" title="남는 역량과 리소스 관리하기"></a>남는 역량과 리소스 관리하기</h2><p>채용해야 하는 상황과는 반대로, 팀의 역량과 리소스가 상당히 남는 상황이 발생할 수도 있다. 회사에서 사업적인 우선순위를 바꾸거나 사업을 축소하는 등의 경우 종종 이런 상황이 생긴다. 이렇게 잉여 역량 및 리소스가 생긴 경우, 이를 그냥 방치할 수도 있지만 그러면 당연하게도 좋은 리더가 아닐 것이다. 손이 비는 상황은 회사 입장에서도 아깝고, 팀원 입장에서도 커리어에 아무 도움이 되지 않는다. 이런 경우 크게 두 가지 방향의 해결책이 있다.</p>
+<ol>
+<li><p>일을 더 만들기</p>
+<p> 첫 번째 방법은 팀에서 할 일을 더 만들어내는 것이다. 타 팀을 도와주면서 일을 좀 가져오거나, 새로운 비즈니스 기회를 찾아낼 수도 있다.</p>
+<p> 개인적인 경험에 기반하여, 목적조직 구조의 조직에서는 일시적인 리소스 불균형이 발생하는 경우가 꽤 잦다고 생각한다. 각 팀에 소속된 각 직군별 인원수는 정해져 있는 반면, 팀에서 하는 모든 일이 그 직군별 인원수 비율에 딱 맞는 리소스를 필요로 하지는 않기 때문이다. 그래서 목적조직 구조의 조직이라면 일시적으로 남는 리소스를 잘 활용할 방안이나 문화를 만들어둬야 한다. 예를 들면 직군별 부채를 잘 관리하고 있다가 리소스가 남을 때 해결한다던가, 다른 팀과 리소스를 품앗이하는 것이다.</p>
+</li>
+<li><p>팀원을 다른 팀으로 보내기</p>
+<p> 팀의 역량과 리소스가 과다하게 남는 상황이 지속될 것이라고 예상하는 경우, 팀원 중 일부를 다른 팀으로 이동시킬 수 있다.</p>
+<p> 개인적으로 팀 이동은 여러 측면에서 상당히 좋은 전략이라고 생각한다. 우선 회사의 입장에서 보면, 인재를 적시에 적재적소로 투입하면 매우 강력한 생산성 향상 효과를 볼 수 있다. 또한 만약 구성원이 팀에 불만을 가지고 있는데 그 사람의 능력이 뛰어난 경우, 그 사람이 퇴사하는 것보다는 다른 팀으로 이동해서라도 회사에 남아 있는 것이 훨씬 이득이다. 개인의 입장에서도 적절한 시점의 팀 이동은 달가운 일일 수 있다. 새로운 사람과 새로운 일을 해볼 수 있으므로 경험과 커리어가 확장되고, 만약 기존 팀과 트러블이 있을 경우 이를 회피할 수 있기 때문이다.</p>
+<p> 다만 팀 이동은 매우 신중하게 추진해야 한다. 최종적인 인사권은 회사에게 있고, 월급 받았으면 회사에서 시키는 대로 하는 게 프로다운 태도라고 생각하긴 하지만, 가능하면 회사 - 구성원 - 기존 팀 - 옮겨갈 팀 모두가 윈윈인 것이 좋지 않겠는가? 팀원에게 ‘당신은 우리 팀에서 필요 없으니까 나가주세요’라는 뉘앙스로 느껴지거나, 옮겨갈 팀의 팀원들이 싫어하는 사람을 이동시킨다던가, 기존 팀에서 중요한 사람을 자꾸 빼가는 상황은 피해야 한다. 구성원에게는 회사의 상황을 잘 알려주고, 왜 하필 회사 입장에서 당신이 팀 이동을 해줬으면 하는지, 이동하면 당신의 입장에서 어떤 이득이 있는지를 잘 설명해준다. 기존 팀 및 옮겨갈 팀과는 이 구성원이 이동해도 괜찮을지, 어떤 문제가 예상될지 잘 논의한다.</p>
+<p> 팀 이동을 할 때 면접을 보는 경우가 있는 듯한데, 이는 진리의 케바케로 진행하면 된다고 생각한다. 업무의 성격과 역량에 대한 기대치가 거의 달라지지 않으면 당연히 면접을 볼 필요가 없고, 많이 달라진다면 당연히 면접을 봐야 한다.</p>
+</li>
+</ol>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2025/08/04/what-is-leader/">
+        <span class="nav-arrow">← </span>
+        
+          [라포 회고록] 리더는 무엇을 하는 직군인가?
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2025/08/08/leader-role-better-team/">
+        
+          [라포 회고록] 리더의 역할 - 더 일 잘하는 팀 만들기
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%B1%84%EC%9A%A9%ED%95%98%EA%B8%B0"><span class="toc-nav-text">채용하기</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%9D%BC%EB%8B%A8-JD%EB%A5%BC-%EC%A0%81%EC%96%B4%EB%9D%BC"><span class="toc-nav-text">일단 JD를 적어라</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%B1%84%EC%9A%A9-%EC%9D%B8%ED%84%B0%EB%B7%B0-%EC%84%A4%EA%B3%84%ED%95%98%EA%B8%B0"><span class="toc-nav-text">채용 인터뷰 설계하기</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EB%A9%B4%EC%A0%91%EA%B4%80%EC%9D%B4-%EC%A7%80%EC%B9%98%EC%A7%80-%EC%95%8A%EA%B2%8C-%ED%95%98%EA%B8%B0-%EC%8A%A4%ED%81%AC%EB%A6%AC%EB%8B%9D"><span class="toc-nav-text">면접관이 지치지 않게 하기 - 스크리닝</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EB%A9%B4%EC%A0%91%EC%97%90%EC%84%9C%EC%9D%98-AI-%ED%99%9C%EC%9A%A9%EC%97%90-%EB%8C%80%ED%95%9C-%EC%83%9D%EA%B0%81"><span class="toc-nav-text">면접에서의 AI 활용에 대한 생각</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%88%98%EC%8A%B5-%EA%B8%B0%EA%B0%84%EC%97%90-%EB%8C%80%ED%95%9C-%EC%83%9D%EA%B0%81"><span class="toc-nav-text">수습 기간에 대한 생각</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EB%82%A8%EB%8A%94-%EC%97%AD%EB%9F%89%EA%B3%BC-%EB%A6%AC%EC%86%8C%EC%8A%A4-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0"><span class="toc-nav-text">남는 역량과 리소스 관리하기</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2025/08/07/leader-role-team-building/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "[라포 회고록] 리더의 역할 - 팀 빌딩",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

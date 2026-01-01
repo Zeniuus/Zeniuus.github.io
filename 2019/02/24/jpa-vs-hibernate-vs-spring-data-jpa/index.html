@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      JPA, Hibernate, 그리고 Spring Data JPA의 차이점
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>JPA, Hibernate, 그리고 Spring Data JPA의 차이점</h2>
+  <p class="post-date">2019-02-24</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>Spring 프레임워크는 어플리케이션을 개발할 때 필요한 수많은 강력하고 편리한 기능을 제공해준다. 하지만 많은 기술이 존재하는 만큼 Spring 프레임워크를 처음 사용하는 사람이 Spring 프레임워크에 대한 정확한 이해를 하기는 매우 어렵다.<br><br /></p>
+<p>내가 특히 오랜 기간동안 혼란스러워했던 부분은 JPA와 관련된 개념이었다. JPA 관련 서적을 읽을 때에는 분명 <code>EntityManager</code>를 통해 entity CRUD를 했는데, 실제 어플리케이션 코드를 보니 <code>EntityManager</code>는 찾아볼 수 없고 웬 <code>Repository</code> 인터페이스라는 놈만 쓰이고 있었다. 덕분에 내 안에서는 JPA, Hibernate, Repository에 대한 개념이 뒤섞이게 되었고, 개념을 바로 잡는 데에 꽤나 많은 노력을 기울여야만 했다.<br><br /></p>
+<p>개인적으로 나는 사용하는 기술에 대해 정확한 개념을 가지고 있는 것이 좋은 코드의 시작점이라 생각한다. 그래서 이러한 개념의 혼동을 줄이는 데에 조금이나마 도움이 되기 위해 이번 글에서는 JPA, Hibernate, 그리고 Spring Data JPA(Repository)의 차이점에 대해 서술하였다.<br><br /></p>
+<h2 id="JPA는-기술-명세이다"><a href="#JPA는-기술-명세이다" class="headerlink" title="JPA는 기술 명세이다"></a>JPA는 기술 명세이다</h2><p>JPA는 Java Persistence API의 약자로, <strong>자바 어플리케이션에서 관계형 데이터베이스를 사용하는 방식을 정의한 인터페이스</strong>이다. 여기서 중요하게 여겨야 할 부분은, JPA는 말 그대로 <strong>인터페이스</strong>라는 점이다. JPA는 특정 기능을 하는 <strong>라이브러리가 아니다</strong>. 마치 일반적인 백엔드 API가 클라이언트가 어떻게 서버를 사용해야 하는지를 정의한 것처럼, JPA 역시 자바 어플리케이션에서 관계형 데이터베이스를 어떻게 사용해야 하는지를 정의하는 한 방법일 뿐이다.<br><br /></p>
+<p>JPA는 단순히 명세이기 때문에 구현이 없다. JPA를 정의한 <code>javax.persistence</code> 패키지의 대부분은 <code>interface</code>, <code>enum</code>, <code>Exception</code>, 그리고 각종 <code>Annotation</code>으로 이루어져 있다. 예를 들어, JPA의 핵심이 되는 <code>EntityManager</code>는 아래와 같이 <code>javax.persistence.EntityManager</code> 라는 파일에 <code>interface</code>로 정의되어 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> javax.persistence;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EntityManager</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">persist</span><span class="params">(Object entity)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; T <span class="title function_">merge</span><span class="params">(T entity)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Object entity)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; T <span class="title function_">find</span><span class="params">(Class&lt;T&gt; entityClass, Object primaryKey)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// More interface methods...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><br /></p>
+<h2 id="Hibernate는-JPA의-구현체이다"><a href="#Hibernate는-JPA의-구현체이다" class="headerlink" title="Hibernate는 JPA의 구현체이다"></a>Hibernate는 JPA의 구현체이다</h2><p>Hibernate는 <strong>JPA라는 명세의 구현체</strong>이다. 즉, 위에서 언급한 <code>javax.persistence.EntityManager</code>와 같은 인터페이스를 직접 구현한 라이브러리이다. <strong>JPA와 Hibernate는 마치 자바의 interface와 해당 interface를 구현한 class와 같은 관계</strong>이다.</p>
+<p><img src="/images/jpa_hibernate_repository/jpa_hibernate_relationship.png" alt="JPA와 Hibernate의 상속 및 구현 관계"></p>
+<p>위 사진은 JPA와 Hibernate의 상속 및 구현 관계를 나타낸 것이다. JPA의 핵심인 <code>EntityManagerFactory</code>, <code>EntityManager</code>, <code>EntityTransaction</code>을 Hibernate에서는 각각 <code>SessionFactory</code>, <code>Session</code>, <code>Transaction</code>으로 상속받고 각각 <code>Impl</code>로 구현하고 있음을 확인할 수 있다.<br><br /></p>
+<p>“Hibernate는 JPA의 구현체이다”로부터 도출되는 중요한 결론 중 하나는 <strong>JPA를 사용하기 위해서 반드시 Hibernate를 사용할 필요가 없다</strong>는 것이다. Hibernate의 작동 방식이 마음에 들지 않는다면 언제든지 DataNucleus, EclipseLink 등 다른 JPA 구현체를 사용해도 되고, 심지어 본인이 직접 JPA를 구현해서 사용할 수도 있다. 다만 그렇게 하지 않는 이유는 단지 Hibernate가 굉장히 성숙한 라이브러리이기 때문일 뿐이다.<br><br /></p>
+<h2 id="Spring-Data-JPA는-JPA를-쓰기-편하게-만들어놓은-모듈이다"><a href="#Spring-Data-JPA는-JPA를-쓰기-편하게-만들어놓은-모듈이다" class="headerlink" title="Spring Data JPA는 JPA를 쓰기 편하게 만들어놓은 모듈이다"></a>Spring Data JPA는 JPA를 쓰기 편하게 만들어놓은 모듈이다</h2><p>필자는 Spring으로 개발하면서 단 한 번도 <code>EntityManager</code>를 직접 다뤄본 적이 없다. DB에 접근할 필요가 있는 대부분의 상황에서는 <code>Repository</code>를 정의하여 사용했다. 아마 다른 분들도 다 비슷할 것이라 생각한다. 이 <code>Repository</code>가 바로 Spring Data JPA의 핵심이다.<br><br /></p>
+<p>Spring Data JPA는 Spring에서 제공하는 모듈 중 하나로, 개발자가 JPA를 더 쉽고 편하게 사용할 수 있도록 도와준다. 이는 <strong>JPA를 한 단계 추상화시킨 <code>Repository</code>라는 인터페이스를 제공함으로써 이루어진다</strong>. 사용자가 <code>Repository</code> 인터페이스에 정해진 규칙대로 메소드를 입력하면, Spring이 알아서 해당 메소드 이름에 적합한 쿼리를 날리는 구현체를 만들어서 Bean으로 등록해준다.<br><br /></p>
+<p>Spring Data JPA가 JPA를 추상화했다는 말은, <strong>Spring Data JPA의 <code>Repository</code>의 구현에서 JPA를 사용하고 있다</strong>는 것이다. 예를 들어, <code>Repository</code> 인터페이스의 기본 구현체인 <code>SimpleJpaRepository</code>의 코드를 보면 아래와 같이 내부적으로 <code>EntityManager</code>을 사용하고 있는 것을 볼 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.data.jpa.repository.support;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimpleJpaRepository</span>&lt;T, ID&gt; <span class="keyword">implements</span> <span class="title class_">JpaRepositoryImplementation</span>&lt;T, ID&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EntityManager em;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Optional&lt;T&gt; <span class="title function_">findById</span><span class="params">(ID id)</span> &#123;</span><br><span class="line"></span><br><span class="line">        Assert.notNull(id, ID_MUST_NOT_BE_NULL);</span><br><span class="line"></span><br><span class="line">        Class&lt;T&gt; domainType = getDomainClass();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (metadata == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> Optional.ofNullable(em.find(domainType, id));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">LockModeType</span> <span class="variable">type</span> <span class="operator">=</span> metadata.getLockModeType();</span><br><span class="line"></span><br><span class="line">        Map&lt;String, Object&gt; hints = getQueryHints().withFetchGraphs(em).asMap();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Optional.ofNullable(type == <span class="literal">null</span> ? em.find(domainType, id, hints) : em.find(domainType, id, type, hints));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Other methods...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><br /></p>
+<h2 id="요약-셋을-혼동하지-말고-사용하자"><a href="#요약-셋을-혼동하지-말고-사용하자" class="headerlink" title="요약 - 셋을 혼동하지 말고 사용하자"></a>요약 - 셋을 혼동하지 말고 사용하자</h2><p>아래 사진은 위의 내용을 요약하여 JPA, Hibernate, 그리고 Spring Data JPA의 전반적인 개념을 그림으로 표현한 것이다.</p>
+<p><img src="/images/jpa_hibernate_repository/overall_design.png" alt="JPA, Hibernate, Spring Data JPA의 전반적인 그림"></p>
+<p>특히 JPA와 Spring Data JPA는 똑같이 JPA가 들어가서 처음 접하는 사람은 상당히 헷갈릴 수 있다. 이 세 개념의 차이점을 정확히 인지하고 숙지하고 있으면 개발이 한층 편해질 것이다.<br><br /></p>
+<h2 id="레퍼런스"><a href="#레퍼런스" class="headerlink" title="레퍼런스"></a>레퍼런스</h2><ul>
+<li><a href="http://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html">JBoss Hibernate docs</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/02/06/difference-between-junior-and-senior/">
+        <span class="nav-arrow">← </span>
+        
+          3개월 차 주니어가 느끼는 나와 시니어의 차이
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/03/27/spring-test-context-management-and-caching/">
+        
+          Spring Testing - Context Management and Caching
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#JPA%EB%8A%94-%EA%B8%B0%EC%88%A0-%EB%AA%85%EC%84%B8%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">JPA는 기술 명세이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Hibernate%EB%8A%94-JPA%EC%9D%98-%EA%B5%AC%ED%98%84%EC%B2%B4%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">Hibernate는 JPA의 구현체이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Spring-Data-JPA%EB%8A%94-JPA%EB%A5%BC-%EC%93%B0%EA%B8%B0-%ED%8E%B8%ED%95%98%EA%B2%8C-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%86%93%EC%9D%80-%EB%AA%A8%EB%93%88%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">Spring Data JPA는 JPA를 쓰기 편하게 만들어놓은 모듈이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%9A%94%EC%95%BD-%EC%85%8B%EC%9D%84-%ED%98%BC%EB%8F%99%ED%95%98%EC%A7%80-%EB%A7%90%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%98%EC%9E%90"><span class="toc-nav-text">요약 - 셋을 혼동하지 말고 사용하자</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EB%A0%88%ED%8D%BC%EB%9F%B0%EC%8A%A4"><span class="toc-nav-text">레퍼런스</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2019/02/24/jpa-vs-hibernate-vs-spring-data-jpa/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "JPA, Hibernate, 그리고 Spring Data JPA의 차이점",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Spring Boot Auto-Configuration
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Spring Boot Auto-Configuration</h2>
+  <p class="post-date">2022-11-27</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="Auto-configuration이란"><a href="#Auto-configuration이란" class="headerlink" title="Auto-configuration이란?"></a>Auto-configuration이란?</h2><h3 id="정의"><a href="#정의" class="headerlink" title="정의"></a>정의</h3><p>우선 auto-configuration의 정의부터 살펴보자. <a href="https://docs.spring.io/spring-boot/docs/3.0.0/reference/htmlsingle/#using.auto-configuration">Spring Boot Reference의 Auto-configuration 섹션</a>에서는 auto-configuration에 대해 다음과 같이 설명한다.</p>
+<blockquote>
+<p>Spring Boot auto-configuration attempts to automatically configure your Spring application based on the jar dependencies that you have added. For example, if <code>HSQLDB</code> is on your classpath, and you have not manually configured any database connection beans, then Spring Boot auto-configures an in-memory database.</p>
+</blockquote>
+<p>그리고, Spring Boot 3.0.0부터 추가된 <code>@AutoConfiguration</code>의 javadoc에는 아래와 같이 적혀 있다.</p>
+<blockquote>
+<p>Indicates that a class provides configuration that can be automatically applied by Spring Boot. Auto-configuration classes are regular @Configuration with the exception that Configuration#proxyBeanMethods() proxyBeanMethods is always false.</p>
+</blockquote>
+<p>대충 <code>Spring Boot가 자동(auto)으로 적용해주는 configuration</code> 정도로 요약할 수 있을 것 같다. 좀 더 명확한 정의가 있었으면 좋겠어서 조금 찾아 보았지만, 이것 이상으로 정확한 정의는 찾지 못했다.<br><br /></p>
+<h3 id="Configuration-vs-Auto-configuration"><a href="#Configuration-vs-Auto-configuration" class="headerlink" title="Configuration vs. Auto-configuration"></a>Configuration vs. Auto-configuration</h3><p><code>@Configuration</code>이 이미 존재함에도 불구하고 auto-configuration이라는 개념을 만들어야 했던 이유는 무엇일까? 이는 Spring Boot가 최대한의 기능 지원을 자동으로, 스마트하게 해주기 위함으로 보인다. 일반적인 configuration의 경우, <code>@ComponentScan</code>에 걸리면 무조건 적용되고, 그렇지 않으면 적용되지 않는다. 하지만 Spring Boot가 필요로 했던 기능은 아래와 같은 것들이었다.</p>
+<ul>
+<li>사용자가 RDB를 사용하는 경우, DataSource 타입의 bean이 존재하지 않으면 자동으로 하나 만들어 주고 싶다.</li>
+<li>사용자가 Redis를 사용하는 경우에만 Redis 관련 bean을 application context에 등록하고 싶다.</li>
+</ul>
+<p>즉, <strong>Spring Boot는 조건부로 적용되는 configuration을 원했던 것이다. 그리고 auto-configuration은 정확히 이 기능을 제공한다.</strong></p>
+<p>다음 섹션에서는 auto-configuration이 조건부로 적용되는 원리에 대해 자세하게 파헤쳐 보겠다.<br><br /></p>
+<h2 id="Auto-configuration이-적용되는-원리"><a href="#Auto-configuration이-적용되는-원리" class="headerlink" title="Auto-configuration이 적용되는 원리"></a>Auto-configuration이 적용되는 원리</h2><h3 id="사용법"><a href="#사용법" class="headerlink" title="사용법"></a>사용법</h3><p>위에서 언급한 대로, Spring Boot를 사용하는 어플리케이션에서 일반적인 configuration은 <code>@ComponentScan</code>에 걸리게 설정해야 적용된다. <code>@ComponentScan</code>에 걸리지 않는 패키지 경로에 위치한다면 configuration에서 정의한 bean은 application context에 등록되지 않는다.</p>
+<p>한편, auto-configuration은 <code>@ComponentScan</code>과는 별도의 메커니즘으로 적용된다. auto-configuration은 아래 4개의 조건을 만족하면 적용된다.</p>
+<ol>
+<li>아무 configuration 클래스에 <code>@EnableAutoConfiguration</code>이 적용되어 있다.</li>
+<li><code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code>(Spring Boot 2.6 이하는 <code>META-INF/spring.factories</code>) 파일에 대상 auto-configuration이 적혀 있다.</li>
+<li>대상 auto-configuration이 명시적으로 exclude 되어 있지 않다.</li>
+<li>대상 auto-configuration의 class-level <code>@Conditional</code> 조건들이 만족된다.</li>
+</ol>
+<p>이렇게 적용 대상이 된 auto-configuration의 bean method 중 method-level <code>@Conditional</code>이 만족되는 것들만 application context에 적용된다.<br><br /></p>
+<h3 id="원리"><a href="#원리" class="headerlink" title="원리"></a>원리</h3><p>Auto-configuration이 적용되는 과정은 아래와 같다.</p>
+<ol>
+<li><p><code>@EnableAutoConfiguration</code>이 적용되어 있다면, application context 구성 단계에서 해당 어노테이션에 붙어 있는 <code>@Import(AutoConfigurationImportSelector.class)</code> 메타 어노테이션에 의해 <code>AutoConfigurationImportSelector</code>가 실행된다.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ConfigurationClassParser.doProcessConfigurationClass() */</span></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> SourceClass <span class="title function_">doProcessConfigurationClass</span><span class="params">(</span></span><br><span class="line"><span class="params">    ConfigurationClass configClass, SourceClass sourceClass, Predicate&lt;String&gt; filter)</span></span><br><span class="line">    <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="comment">/* Recursively process any member (nested) classes first */</span></span><br><span class="line">    <span class="comment">/* 코드 생략 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process any @PropertySource annotations */</span></span><br><span class="line">    <span class="comment">/* 코드 생략 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process any @ComponentScan annotations */</span></span><br><span class="line">    <span class="comment">/* 코드 생략 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process any @Import annotations */</span></span><br><span class="line">    processImports(configClass, sourceClass, getImports(sourceClass), filter, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 후략 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <code>sourceClass</code>에 <code>@EnableAutoConfiguration</code>이 달린 configuration(보통 <code>@SpringBootApplication</code>)이 들어오면, <code>getImports(sourceClass)</code>에서 <code>AutoConfigurationImportSelector</code>가 가져와져서 적용된다.</p>
+</li>
+<li><p><code>AutoConfigurationImportSelector</code>는 적용할 auto-configuration 목록을 <code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code> 파일에서 읽어 들인다.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* AutoConfigurationImportSelector.getCandidateConfigurations() */</span></span><br><span class="line"><span class="keyword">protected</span> List&lt;String&gt; <span class="title function_">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> &#123;</span><br><span class="line">    List&lt;String&gt; configurations = ImportCandidates.load(AutoConfiguration.class, getBeanClassLoader())</span><br><span class="line">        .getCandidates();</span><br><span class="line">    Assert.notEmpty(configurations,</span><br><span class="line">        <span class="string">&quot;No auto configuration classes found in &quot;</span></span><br><span class="line">            + <span class="string">&quot;META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports. If you &quot;</span></span><br><span class="line">            + <span class="string">&quot;are using a custom packaging, make sure that file is correct.&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> configurations;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ImportCandidates.load() */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ImportCandidates <span class="title function_">load</span><span class="params">(Class&lt;?&gt; annotation, ClassLoader classLoader)</span> &#123;</span><br><span class="line">    Assert.notNull(annotation, <span class="string">&quot;&#x27;annotation&#x27; must not be null&quot;</span>);</span><br><span class="line">    <span class="type">ClassLoader</span> <span class="variable">classLoaderToUse</span> <span class="operator">=</span> decideClassloader(classLoader);</span><br><span class="line">    <span class="type">String</span> <span class="variable">location</span> <span class="operator">=</span> String.format(LOCATION, annotation.getName()); <span class="comment">/* LOCATION == &quot;META-INF/spring/%s.imports&quot; */</span></span><br><span class="line">    Enumeration&lt;URL&gt; urls = findUrlsInClasspath(classLoaderToUse, location);</span><br><span class="line">    List&lt;String&gt; autoConfigurations = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (urls.hasMoreElements()) &#123;</span><br><span class="line">      <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> urls.nextElement();</span><br><span class="line">      autoConfigurations.addAll(readAutoConfigurations(url));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ImportCandidates</span>(autoConfigurations);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>명시적으로 exclude 된 auto-configuration을 제외시킨다.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* AutoConfigurationImportSelector.getAutoConfigurationEntry() */</span></span><br><span class="line"><span class="keyword">protected</span> AutoConfigurationEntry <span class="title function_">getAutoConfigurationEntry</span><span class="params">(AnnotationMetadata annotationMetadata)</span> &#123;</span><br><span class="line">    <span class="comment">/* 전략 */</span></span><br><span class="line">    List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata, attributes); <span class="comment">/* 2번에서 가져온 auto-configuration 목록 */</span></span><br><span class="line">    configurations = removeDuplicates(configurations);</span><br><span class="line">    Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);</span><br><span class="line">    checkExcludedClasses(configurations, exclusions);</span><br><span class="line">    configurations.removeAll(exclusions);</span><br><span class="line">    <span class="comment">/* 후략 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* AutoConfigurationImportSelector.getExclusions() */</span></span><br><span class="line"><span class="keyword">protected</span> Set&lt;String&gt; <span class="title function_">getExclusions</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> &#123;</span><br><span class="line">    Set&lt;String&gt; excluded = <span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;&gt;();</span><br><span class="line">    excluded.addAll(asList(attributes, <span class="string">&quot;exclude&quot;</span>));</span><br><span class="line">    excluded.addAll(asList(attributes, <span class="string">&quot;excludeName&quot;</span>));</span><br><span class="line">    excluded.addAll(getExcludeAutoConfigurationsProperty());</span><br><span class="line">    <span class="keyword">return</span> excluded;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>class-level <code>@Conditional</code> 어노테이션을 확인하여 조건이 만족되지 않은 auto-configuration을 제외시킨다.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ConfigurationClassParser.processConfigurationClass() */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">processConfigurationClass</span><span class="params">(ConfigurationClass configClass, Predicate&lt;String&gt; filter)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.conditionEvaluator.shouldSkip(configClass.getMetadata(), ConfigurationPhase.PARSE_CONFIGURATION)) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 후략 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ConditionEvaluator.shouldSkip() */</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">shouldSkip</span><span class="params">(<span class="meta">@Nullable</span> AnnotatedTypeMetadata metadata, <span class="meta">@Nullable</span> ConfigurationPhase phase)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (metadata == <span class="literal">null</span> || !metadata.isAnnotated(Conditional.class.getName())) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* 중략 */</span></span><br><span class="line"></span><br><span class="line">    List&lt;Condition&gt; conditions = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* 중략 */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Condition condition : conditions) &#123;</span><br><span class="line">      <span class="type">ConfigurationPhase</span> <span class="variable">requiredPhase</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">if</span> (condition <span class="keyword">instanceof</span> ConfigurationCondition) &#123;</span><br><span class="line">        requiredPhase = ((ConfigurationCondition) condition).getConfigurationPhase();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> ((requiredPhase == <span class="literal">null</span> || requiredPhase == phase) &amp;&amp; !condition.matches(<span class="built_in">this</span>.context, metadata)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>auto-configuration에서 정의한 각 bean을 application context에 등록한다. 이 때 method-level <code>@Conditional</code>이 만족되지 않은 bean은 등록되지 않는다.</p>
+</li>
+</ol>
+<blockquote>
+<p>💡 configuration과 auto-configuration이 적용되는 전체 과정은 <code>ConfigurationClassPostProcessor.processConfigBeanDefinitions()</code> 에서 보다 상세하게 살펴볼 수 있다.</p>
+</blockquote>
+<h3 id="예시-DataSourceAutoConfiguration"><a href="#예시-DataSourceAutoConfiguration" class="headerlink" title="예시 - DataSourceAutoConfiguration"></a>예시 - DataSourceAutoConfiguration</h3><p>Spring Boot Starter에 정의된 auto-configuration 중 하나인 <code>DataSourceAutoConfiguration</code>를 예시로 들어 살펴보자.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.boot.autoconfigure.jdbc;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@link</span> EnableAutoConfiguration Auto-configuration&#125; for &#123;<span class="doctag">@link</span> DataSource&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Dave Syer</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Phillip Webb</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Stephane Nicoll</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Kazuki Shimizu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 1.0.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@AutoConfiguration(before = SqlInitializationAutoConfiguration.class)</span></span><br><span class="line"><span class="meta">@ConditionalOnClass(&#123; DataSource.class, EmbeddedDatabaseType.class &#125;)</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(type = &quot;io.r2dbc.spi.ConnectionFactory&quot;)</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(DataSourceProperties.class)</span></span><br><span class="line"><span class="meta">@Import(DataSourcePoolMetadataProvidersConfiguration.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataSourceAutoConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Configuration(proxyBeanMethods = false)</span></span><br><span class="line">    <span class="meta">@Conditional(EmbeddedDatabaseCondition.class)</span></span><br><span class="line">    <span class="meta">@ConditionalOnMissingBean(&#123; DataSource.class, XADataSource.class &#125;)</span></span><br><span class="line">    <span class="meta">@Import(EmbeddedDataSourceConfiguration.class)</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">EmbeddedDatabaseConfiguration</span> &#123;</span><br><span class="line">  </span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">/* 후략 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Class-level 어노테이션을 살펴보면 아래의 어노테이션이 달려 있다.</p>
+<ul>
+<li><p><code>@AutoConfiguration(before = SqlInitializationAutoConfiguration.class)</code> - 이는 auto-configuration이 적용되는 순서를 지정한 것이다. <code>@AutoConfigureBefore</code> 및 <code>@AutoConfigureAfter</code>와 동일한 효과를 낸다.</p>
+<p>  Auto-configuration이 적용되는 순서가 중요한 이유는, <code>@ConditionalOnMissingBean</code>과 같이 특정 bean이 application context에 등록되어 있는지 여부에 따라 auto-configuration의 실행 여부가 판단될 때가 많기 때문이다. 이는 <a href="/2022/11/27/spring-boot-auto-configuration/#Auto-configuration은-실행되는-순서가-중요하다">Auto-configuration은 실행되는 순서가 중요하다 섹션</a>에서 조금 더 깊이 다룬다.</p>
+</li>
+<li><p><code>@ConditionalOnClass(&#123; DataSource.class, EmbeddedDatabaseType.class &#125;)</code> - 이는 <code>DataSource</code>와 <code>EmbeddedDatabaseType</code> 클래스가 classpath에 존재하는 경우에만 auto-configuration을 적용하겠다는 의미다. 이 조건 덕분에 JDBC를 사용하는 경우에만 이 auto-configuration을 적용시킬 수 있다.</p>
+</li>
+<li><code>@ConditionalOnMissingBean(type = &quot;io.r2dbc.spi.ConnectionFactory&quot;)</code> - 이 조건 덕분에 r2dbc를 사용하는 경우 이 auto-configuration을 적용시키지 않을 수 있다.</li>
+<li><code>@EnableConfigurationProperties(DataSourceProperties.class)</code> - auto-configuration과는 관계 없는 어노테이션이므로 설명을 생략한다.</li>
+<li><p><code>@Import(DataSourcePoolMetadataProvidersConfiguration.class)</code> - 이 auto-configuration이 적용될 수 있는 상황인 경우, <code>DataSourcePoolMetadataProvidersConfiguration</code> 역시 적용한다.</p>
+<p>  이는 동일한 <code>@Conditional</code>을 여러 auto-configuration에 복사해서 적거나 <a href="https://github.com/spring-projects/spring-boot/blob/v3.0.0/spring-boot-project/spring-boot-autoconfigure/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports">META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</a> 파일에 클래스를 적어야 하는 등의 번거로움을 줄여준다.</p>
+</li>
+</ul>
+<p>또한, 위 클래스는 spring-boot-autoconfigure 모듈의 <a href="https://github.com/spring-projects/spring-boot/blob/v3.0.0/spring-boot-project/spring-boot-autoconfigure/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports">META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</a> 파일에 명시되어 있는 것을 확인할 수 있다.<br><br /></p>
+<h3 id="잡담"><a href="#잡담" class="headerlink" title="잡담"></a>잡담</h3><p>Spring Boot 2.7.0부터 <code>@AutoConfiguration</code> 어노테이션이 등장했음에도 <code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code> 파일에서 auto-configuration을 읽어오는 게 이상하다고 생각했는데, 실행 속도를 위해 이런 구조로 만들지 않았을까 싶다. <code>@ComponentScan</code>에 걸리지 않아도 동작해야 하는 auto-configuration 특성 상 이를 scanning으로 찾아내려면 모든 classpath의 클래스를 전부 scan해야 하는데, 이는 너무 비효율적이다. 그래서 적용할 auto-configuration 목록을 명시적으로 제공하는 방법을 택한 듯 하다.<br><br /></p>
+<h2 id="Auto-configuration-사용-시-주의사항"><a href="#Auto-configuration-사용-시-주의사항" class="headerlink" title="Auto-configuration 사용 시 주의사항"></a>Auto-configuration 사용 시 주의사항</h2><p>다음은 auto-configuration 사용 시 일반적으로 주의해야 하는 사항과, 필자가 auto-configuration을 사용하면서 겪은 trouble shooting을 기록한 것이다.</p>
+<h3 id="Auto-configuration은-실행되는-순서가-중요하다"><a href="#Auto-configuration은-실행되는-순서가-중요하다" class="headerlink" title="Auto-configuration은 실행되는 순서가 중요하다"></a>Auto-configuration은 실행되는 순서가 중요하다</h3><p><code>@ConditionalOnBean</code>의 javadoc에는 아래와 같은 내용이 명시되어 있다.</p>
+<blockquote>
+<p>The condition can only match the bean definitions that have been processed by the application context so far and, as such, it is strongly recommended to use this condition on auto-configuration classes only.</p>
+</blockquote>
+<p>이 중 지금 집중해야 하는 부분은 <code>The condition can only match the bean definitions that have been processed by the application context so far</code>이다. 이 내용에 따르면, <code>@ConditionalOnBean</code>과 <code>@ConditionalOnMissingBean</code>의 evalutation 결과는 auto-configuration가 어떤 순서로 처리되느냐에 따라 달라진다. 즉, <strong>동일한 목록의 auto-configuration을 처리하더라도 처리 순서에 따라 application context에 등록되는 bean 목록이 달라질 수 있다는 것</strong>이다.</p>
+<p>따라서, 특히나 custom auto-configuration을 제작하여 사용하는 경우, auto-configuration의 처리 순서를 신중하게 제어해야 한다. 아래의 어노테이션을 통해 auto-configuration의 처리 순서를 제어할 수 있다.</p>
+<ul>
+<li><code>@AutoConfiguration</code>, <code>@AutoConfigureBefore</code>, <code>@AutoConfigureAfter</code></li>
+<li><code>@AutoConfigureOrder</code><br><br /></li>
+</ul>
+<h3 id="Auto-configuration은-ComponentScan에-걸리면-안-된다"><a href="#Auto-configuration은-ComponentScan에-걸리면-안-된다" class="headerlink" title="Auto-configuration은 @ComponentScan에 걸리면 안 된다"></a>Auto-configuration은 @ComponentScan에 걸리면 안 된다</h3><p><code>Auto-configuration은 실행되는 순서가 중요하다</code>와 이어지는 내용이다. auto-configuration은 애플리케이션 개발자가 구성한 application context의 형태에 따라 조건부로 적용되는 것이 매우 중요하다. 따라서, <strong>auto-configuration은 애플리케이션 개발자가 정의한 bean이 모두 application context에 등록된 이후에 처리되어야만 한다.</strong> 위에서 살펴 본 <code>ConfigurationClassParser.doProcessConfigurationClass()</code>의 pseudo code를 다시 살펴 보자.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ConfigurationClassParser.doProcessConfigurationClass() */</span></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> SourceClass <span class="title function_">doProcessConfigurationClass</span><span class="params">(</span></span><br><span class="line"><span class="params">    ConfigurationClass configClass, SourceClass sourceClass, Predicate&lt;String&gt; filter)</span></span><br><span class="line">    <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="comment">/* Recursively process any member (nested) classes first */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process any @PropertySource annotations */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process any @ComponentScan annotations */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process any @Import annotations */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process any @ImportResource annotations */</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* Process individual @Bean methods */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Process default methods on interfaces */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 후략 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>이 코드에 따르면, 애플리케이션 개발자가 정의한 <code>@Component</code> / <code>@Configuration</code>이 <code>@ComponentScan</code> 어노테이션 처리 단계에서 먼저 처리되고(<code>@Configuration</code> 역시 <code>@Component</code> 메타 어노테이션이 달려 있어서 <code>@ComponentScan</code>에 걸린다), 그 다음 <code>@Import</code> 단계에서 <code>AutoConfigurationImportSelector</code>에 의해 auto-configuration이 처리됨을 알 수 있다. 이 덕분에 애플리케이션 개발자가 정의한 bean이 application context에 모두 등록된 이후에 auto-configuration이 처리되는 것을 보장할 수 있다.</p>
+<p>하지만 만약 auto-configuration이 <code>@ComponentScan</code>에 걸리는 패키지 경로에 존재하면 어떻게 될까? auto-configuration이 애플리케이션 개발자가 정의한 bean들과 뒤섞여서 처리되기 때문에 <code>@ConditionalOnBean</code>과 <code>@ConditionalOnMissingBean</code>이 잘못 evaluate 될 수 있다. 이로 인해 중복된 타입의 bean이 존재하거나 반대로 실행되어야 하는 코드가 실행되지 않는 등 application context가 의도와는 다르게 잘못 구성될 수 있다.</p>
+<p><code>@SpringBootApplication</code>의 메타 어노테이션으로 달려 있는 <code>@ComponentScan</code>에는 기본적으로 <code>AutoConfigurationExcludeFilter</code>가 적용되어 있다. 이로 인해 auto-configuration이 <code>@ComponentScan</code>에 걸리는 문제를 방지할 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 전략 */</span></span><br><span class="line"><span class="meta">@ComponentScan(excludeFilters = &#123; @Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),</span></span><br><span class="line"><span class="meta">    @Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) &#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SpringBootApplication &#123;</span><br><span class="line">    <span class="comment">/* 생략 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>하지만 만약 별도의 <code>@ComponentScan</code>을 사용하는 경우, 특히나 custom auto-configuration이 <code>@ComponentScan</code>에 걸리지 않게 해야 한다. 이는 <a href="https://docs.spring.io/spring-boot/docs/3.0.0/reference/htmlsingle/#features.developing-auto-configuration.locating-auto-configuration-candidates">Spring Boot Reference에도 주의사항으로 명시되어 있다.</a></p>
+<blockquote>
+<p>Auto-configurations must be loaded <em>only</em> by being named in the imports file. Make sure that they are defined in a specific package space and that they are never the target of component scanning. Furthermore, auto-configuration classes should not enable component scanning to find additional components. Specific <code>@Import</code>s should be used instead.</p>
+</blockquote>
+<p>개인적인 의견으로, <code>@ComponentScan</code>에 <code>AutoConfigurationExcludeFilter</code>가 default로 적용되어 있어야 하는 게 아닌가 싶다.<br><br /></p>
+<h3 id="EnableAutoConfiguration을-auto-configuration에-달면-안-된다"><a href="#EnableAutoConfiguration을-auto-configuration에-달면-안-된다" class="headerlink" title="@EnableAutoConfiguration을 auto-configuration에 달면 안 된다"></a><code>@EnableAutoConfiguration</code>을 auto-configuration에 달면 안 된다</h3><p>Spring Boot Reference를 보면, <a href="https://docs.spring.io/spring-boot/docs/3.0.0/reference/htmlsingle/#using.auto-configuration.disabling-specific">특정 auto-configuration을 disable하기 위해 <code>@EnableAutoConfiguration</code>의 <code>exclude</code> / <code>excludeName</code> attribute를 사용할 수 있다</a>고 한다. 이때 <code>@EnableAutoConfiguration(exclude = [...])</code>를 auto-configuration에 달면 cyclic dependency가 발생한다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class.java])</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyDataSourceAutoConfiguration</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>위와 같이 정의한 경우, 아래와 같이 cyclic dependency가 발생한다.</p>
+<ol>
+<li><code>@SpringBootApplication</code>에 달려 있는 <code>@EnableAutoConfiguration</code>에 의해 <code>AutoConfigurationImportSelector</code>가 실행됨.</li>
+<li><code>AutoConfigurationImportSelector</code>에 의해 <code>MyDataSourceAutoConfiguration</code>가 처리됨.</li>
+<li><p><code>MyDataSourceAutoConfiguration</code>에 달려 있는 <code>@EnableAutoConfiguration</code>에 의해 <code>AutoConfigurationImportSelector</code>가 실행됨.</p>
+<p> → 2번 과정으로 되돌아감.</p>
+</li>
+</ol>
+<p>따라서, 한 auto-configuration이 다른 auto-configuration을 disable 시키고 싶은 경우, <code>@ImportAutoConfiguration</code>을 사용하도록 하자. <code>@ImportAutoConfiguration</code>은 <code>AutoConfigurationImportSelector</code>를 실행시키지 않아서 cyclic dependency가 발생하지 않는다.</p>
+<h3 id="Spring-Boot-2-7-이상-버전에서-하위-호환이-깨지는-문제"><a href="#Spring-Boot-2-7-이상-버전에서-하위-호환이-깨지는-문제" class="headerlink" title="Spring Boot 2.7 이상 버전에서 하위 호환이 깨지는 문제"></a>Spring Boot 2.7 이상 버전에서 하위 호환이 깨지는 문제</h3><p>마지막은 특정 버전에서만 발생하는 문제이다. 많은 기술들이 Spring Boot integration을 제공하기 위해 auto-configuration을 사용한다. 이때, 이 integration이 지원하는 버전이 2.7 이상인지 미만인지를 잘 살펴봐야 한다. 2.7 이전과 이후를 기점으로 auto-configuration 목록을 조회하는 방법이 달라졌기 때문이다.</p>
+<ul>
+<li>~ 2.6 - <code>META-INF/spring.factories</code></li>
+<li>2.7~ - <code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code></li>
+</ul>
+<p>따라서, 라이브러리가 제공하는 auto-configuration이 잘 동작하지 않는다 싶다면 자신이 사용하는 Spring Boot 버전과 라이브러리가 지원하는 Spring Boot 버전이 맞는지를 잘 확인해 보자.<br><br></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://docs.spring.io/spring-boot/docs/3.0.0/reference/htmlsingle">https://docs.spring.io/spring-boot/docs/3.0.0/reference/htmlsingle</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2022/01/21/Kotlin-coroutine-structured-concurrency/">
+        <span class="nav-arrow">← </span>
+        
+          Kotlin Coroutine의 Structured Concurrency 구현 상세
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2023/01/01/goodbye-2022-1/">
+        
+          2022년 회고 - (1)
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Auto-configuration%EC%9D%B4%EB%9E%80"><span class="toc-nav-text">Auto-configuration이란?</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%A0%95%EC%9D%98"><span class="toc-nav-text">정의</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Configuration-vs-Auto-configuration"><span class="toc-nav-text">Configuration vs. Auto-configuration</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Auto-configuration%EC%9D%B4-%EC%A0%81%EC%9A%A9%EB%90%98%EB%8A%94-%EC%9B%90%EB%A6%AC"><span class="toc-nav-text">Auto-configuration이 적용되는 원리</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%82%AC%EC%9A%A9%EB%B2%95"><span class="toc-nav-text">사용법</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%9B%90%EB%A6%AC"><span class="toc-nav-text">원리</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%98%88%EC%8B%9C-DataSourceAutoConfiguration"><span class="toc-nav-text">예시 - DataSourceAutoConfiguration</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%9E%A1%EB%8B%B4"><span class="toc-nav-text">잡담</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Auto-configuration-%EC%82%AC%EC%9A%A9-%EC%8B%9C-%EC%A3%BC%EC%9D%98%EC%82%AC%ED%95%AD"><span class="toc-nav-text">Auto-configuration 사용 시 주의사항</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Auto-configuration%EC%9D%80-%EC%8B%A4%ED%96%89%EB%90%98%EB%8A%94-%EC%88%9C%EC%84%9C%EA%B0%80-%EC%A4%91%EC%9A%94%ED%95%98%EB%8B%A4"><span class="toc-nav-text">Auto-configuration은 실행되는 순서가 중요하다</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Auto-configuration%EC%9D%80-ComponentScan%EC%97%90-%EA%B1%B8%EB%A6%AC%EB%A9%B4-%EC%95%88-%EB%90%9C%EB%8B%A4"><span class="toc-nav-text">Auto-configuration은 @ComponentScan에 걸리면 안 된다</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#EnableAutoConfiguration%EC%9D%84-auto-configuration%EC%97%90-%EB%8B%AC%EB%A9%B4-%EC%95%88-%EB%90%9C%EB%8B%A4"><span class="toc-nav-text">@EnableAutoConfiguration을 auto-configuration에 달면 안 된다</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Spring-Boot-2-7-%EC%9D%B4%EC%83%81-%EB%B2%84%EC%A0%84%EC%97%90%EC%84%9C-%ED%95%98%EC%9C%84-%ED%98%B8%ED%99%98%EC%9D%B4-%EA%B9%A8%EC%A7%80%EB%8A%94-%EB%AC%B8%EC%A0%9C"><span class="toc-nav-text">Spring Boot 2.7 이상 버전에서 하위 호환이 깨지는 문제</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Reference"><span class="toc-nav-text">Reference</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2022/11/27/spring-boot-auto-configuration/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Spring Boot Auto-Configuration",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      JDK Virtual Thread 살펴보기
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>JDK Virtual Thread 살펴보기</h2>
+  <p class="post-date">2023-06-17</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><ul>
+<li><p>Virtual thread가 아닌 일반 JVM thread의 쓰레딩 모델은 아래와 같다.</p>
+<p><img src="/images/jdk-virtual-thread/jvm-thread-model.png" alt="JVM Thread Model"><br>(출처: <a href="https://perfectacle.github.io/2022/12/29/look-over-java-virtual-threads/">https://perfectacle.github.io/2022/12/29/look-over-java-virtual-threads/</a>)</p>
+<p>JVM 쓰레드(platform thread)와 OS thread가 1대 1이다. 그래서 JVM 쓰레드의 컨텍스트 스위칭 = OS 쓰레드의 컨텍스트 스위칭이고, 컨텍스트 스위칭 시 OS 차원에서 스택을 완전히 재로딩해야 하므로 컨텍스트 스위칭의 비용이 크다.</p>
+</li>
+<li><p>반면 virtual thread는 아래와 같은 구조로 실행된다.</p>
+<p><img src="/images/jdk-virtual-thread/jvm-virtual-thread-model.png" alt="JVM Virtual Thread Model"><br>(출처: <a href="https://perfectacle.github.io/2022/12/29/look-over-java-virtual-threads/">https://perfectacle.github.io/2022/12/29/look-over-java-virtual-threads/</a>)</p>
+<ul>
+<li>OS 쓰레드와 1대1 대응이 되는 carrier 쓰레드가 있고, 이들은 쓰레드 풀을 형성하여 ForkJoinPool에 submit 된 task를 virtual thread로 실행한다.</li>
+<li>virtual thread를 실행하기 위한 carrier thread는 CPU 코어 개수에 비례하여 JVM이 자동으로 생성한다.</li>
+<li>한 carrier thread는 최대 1개의 virtual thread를 실행할 수 있다.</li>
+<li>virtual thread에서 blocking I/O가 발생하면 이를 실행하고 있던 carrier thread는 다른 virtual thread를 실행시킨다.<br><br /></li>
+</ul>
+</li>
+</ul>
+<h1 id="Why-is-virtual-thread-needed-motivation"><a href="#Why-is-virtual-thread-needed-motivation" class="headerlink" title="Why is virtual thread needed? (motivation)"></a>Why is virtual thread needed? (motivation)</h1><h2 id="What-was-the-problem-of-JVM-thread"><a href="#What-was-the-problem-of-JVM-thread" class="headerlink" title="What was the problem of JVM thread?"></a>What was the problem of JVM thread?</h2><blockquote>
+<p>Before I go into virtual threads, I need to revisit classic threads or, what I will call them from here on out, <em>platform threads</em>.<br>&nbsp;<br>The JDK implements platform threads as thin wrappers around operating system (OS) threads, which are costly, so you cannot have too many of them. <strong>In fact, the number of threads often becomes the limiting factor long before other resources, such as CPU or network connections, are exhausted.</strong><br>&nbsp;<br>In other words, platform threads often cap an application’s throughput to a level well below what the hardware could support.<br>&nbsp;<br>- <a href="https://blogs.oracle.com/javamagazine/post/java-loom-virtual-threads-platform-threads">https://blogs.oracle.com/javamagazine/post/java-loom-virtual-threads-platform-threads</a></p>
+</blockquote>
+<p>JVM 쓰레드는 OS 쓰레드를 얇게 감싸놓은 구조이다. 따라서 JVM 쓰레드를 늘리려면 OS 쓰레드가 늘어나야 하는데, OS 쓰레드를 추가하는 비용은 너무 높다. 얼마나 심각하냐면, CPU나 network connection 등 하드웨어가 제공하는 다른 리소스를 다 쓰기도 전에 JVM 쓰레드(= OS 쓰레드)의 수가 작업 성능의 병목이 될 때가 상당히 많다. OS 쓰레드는 생성도 느리고, 컨텍스트 스위칭도 느리고, 메모리도 많이 잡아먹는다.</p>
+<p>위와 같은 문제를 해결하기 위해 virtual thread가 도입되었다.</p>
+<h2 id="What-is-the-goal-of-virtual-thread"><a href="#What-is-the-goal-of-virtual-thread" class="headerlink" title="What is the goal of virtual thread?"></a>What is the goal of virtual thread?</h2><blockquote>
+<p><strong>Goals</strong></p>
+<ul>
+<li>Enable server applications written in the simple thread-per-request style to scale with near-optimal hardware utilization.</li>
+<li>Enable existing code that uses the <code>java.lang.Thread</code> API to adopt virtual threads with minimal change.</li>
+<li>Enable easy troubleshooting, debugging, and profiling of virtual threads with existing JDK tools.</li>
+</ul>
+<p><strong>Non-Goals</strong></p>
+<ul>
+<li>It is not a goal to remove the traditional implementation of threads, or to silently migrate existing applications to use virtual threads.</li>
+<li>It is not a goal to change the basic concurrency model of Java.</li>
+<li>It is not a goal to offer a new data parallelism construct in either the Java language or the Java libraries. The <a href="https://docs.oracle.com/en/java/javase//docs/api/java.base/java/util/stream/package-summary.html">Stream API</a> remains the preferred way to process large data sets in parallel.</li>
+</ul>
+<p>- <a href="https://openjdk.org/jeps/444">https://openjdk.org/jeps/444</a></p>
+</blockquote>
+<p>몇 가지 중요한 키워드는 아래와 같다.</p>
+<ul>
+<li>hardware utilization을 최대한으로 끌어 올린다.</li>
+<li>기존 JDK의 쓰레딩 모델에 대해 <strong>하위 호환</strong>을 지켜야 한다.</li>
+<li>디버깅 / 프로파일링이 쉬워야 한다.</li>
+</ul>
+<h2 id="Why-not-coroutine-virtual-thread-vs-coroutine"><a href="#Why-not-coroutine-virtual-thread-vs-coroutine" class="headerlink" title="Why not coroutine? virtual thread vs. coroutine?"></a>Why not coroutine? virtual thread vs. coroutine?</h2><p>필자가 아는 coroutine이 kotlin coroutine 밖에 없어서, kotlin coroutine을 기준으로 설명한다.</p>
+<p>coroutine도 위의 <a href="/2023/06/17/jdk-virtual-thread/#Overview">Overview</a>에서 설명한 virtual thread와 비슷하게 blocking I/O가 발생한 시점에 제어권을 thread pool(dispatcher)에 yield 함으로써 소수의 쓰레드만으로도 다수의 작업을 처리할 수 있다. 그렇다면 왜 JDK는 다른 언어에 이미 많이 도입된 coroutine 대신 virtual thread라는 새로운 개념을 설계하고 도입했을까?</p>
+<p>이는 JEP 444에 정확히 명시되어 있다.</p>
+<blockquote>
+<p><strong>Alternatives</strong></p>
+<ul>
+<li>Add syntactic stackless coroutines (i.e., async/await) to the Java language. These are easier to implement than user-mode threads and would provide a unifying construct representing the context of a sequence of operations.<br>&nbsp;<br>That construct would be new, however, and separate from threads, similar to them in many respects yet different in some nuanced ways. It would split the world between APIs designed for threads and APIs designed for coroutines, and would require the new thread-like construct to be introduced into all layers of the platform and its tooling. This would take longer for the ecosystem to adopt, and would not be as elegant and harmonious with the platform as user-mode threads.<br>&nbsp;<br>Most languages that have adopted syntactic coroutines have done so due to an inability to implement user-mode threads (e.g., Kotlin), legacy semantic guarantees (e.g., the inherently single-threaded JavaScript), or language-specific technical constraints (e.g., C++). These limitations do not apply to Java.</li>
+</ul>
+<p>- <a href="https://openjdk.org/jeps/444#Alternatives">https://openjdk.org/jeps/444#Alternatives</a></p>
+</blockquote>
+<p>의역을 많이 섞자면, function coloring 문제로 인해 기존 코드에 대한 하위 호환성이 거의 지켜지지 않아 adopting 기간이 매우 길어지기 때문에 coroutine을 사용하지 않았다고 한다.</p>
+<p>그러면 왜 다른 언어는 virtual thread 대신 coroutine을 도입했는가? 언어마다 다양한 이유가 있는데,</p>
+<ul>
+<li>Kotlin - user-mode thread를 직접 구현할 수 없었다…라고 하는데, 아마 JVM에 실행을 의존하기 때문에 JVM에서 virtual thread를 지원하지 않는 한 자체적으로 구현할 수 없다는 의미로 보인다.</li>
+<li>JavaScript - 언어 설계 상 본질적으로 single-threaded에 adopting 된 구조여서 굳이 breaking change를 도입하지 않더라도 괜찮은 경우</li>
+<li>C++ - 언어에 한정된 기술적인 제약…이라고 하는데, C++을 사용하지 않아서 정확히 어떤 제약인지는 모르겠다.</li>
+</ul>
+<p>추측을 하나 얹자면, coroutine의 경우 stack trace가 제대로 남지 않아(continuation 방식이므로 가장 마지막으로 yield한 시점 전의 stack trace가 전혀 남지 않는다) 디버깅이 어려운 문제도 있다. 이는 virtual thread의 non-goal 중 하나이다.<br><br /></p>
+<h1 id="Internals"><a href="#Internals" class="headerlink" title="Internals"></a>Internals</h1><h2 id="기본적인-동작-방식"><a href="#기본적인-동작-방식" class="headerlink" title="기본적인 동작 방식"></a>기본적인 동작 방식</h2><ul>
+<li>여러 개의 carrier thread가 있고, 여기에 virtual thread를 ‘mount’ 시키면 carrier thread가 자신에게 mount 된 virtual thread을 실행하는 구조이다. mount란, carrier thread에 해당 carrier thread가 실행할 virtual thread를 배정하는 것을 의미한다.</li>
+<li>carrier thread가 virtual thread를 실행하는 동안 결국 두 쓰레드는 하나의 OS thread를 공유하는 셈인데, 이 사실이 코드 상으로는 드러나지 않는다. 다른 말로 하면, carrier thread와 이 carrier thread에서 실행되는 virtual thread는 서로 독립된 stack trace와 ThreadLocal을 가진다.</li>
+<li>mounting을 구현하기 위해 JDK는 내부적으로 virtual thread 실행을 위한 ForkJoinPool을 들고 있다. 이 ForkJoinPool의 사이즈는 기본적으로 CPU core의 개수를 따라가고, 시스템 프로퍼티를 통해 변경할 수 있다.<ul>
+<li>이 쓰레드풀은 common pool과는 독립적으로 구성된다.</li>
+</ul>
+</li>
+<li>blocking I/O 등으로 인해 ‘unmount’된 virtual thread의 stack frame은 heap에 저장된다. 다시 mount 하고 싶을 때는 stack frame을 heap에서 읽어 stack으로 로딩하기만 하면 된다.<br>→ context switch가 OS 차원이 아니라 JVM 차원에서 이루어지기 때문에 훨씬 빠르다.</li>
+<li>blocking이 끝나서 virtual thread의 이후 작업을 다시 실행할 수 있게 되면, blocking operation은 다시 virtual thread를 ForkJoinPool에 던진다. ForkJoinPool은 FIFO queue이므로, 해당 virtual thread는 자기 순서가 다가오면 다시 mount 되어 실행된다.</li>
+</ul>
+<h2 id="What-is-and-why-ForkJoinPool"><a href="#What-is-and-why-ForkJoinPool" class="headerlink" title="What is, and why ForkJoinPool?"></a>What is, and why ForkJoinPool?</h2><p>일반적인 executorService는 한 task가 여러 task를 던지고 그 결과를 기다리는 식의 작업을 처리할 때 쓰레드 경합이 발생할 수 있다.<br>반면, ForkJoinPool은 work-stealing 한 특성을 가지고 있다.</p>
+<blockquote>
+<p>As with any <code>ExecutorService</code> implementation, the fork/join framework distributes tasks to worker threads in a thread pool. T*<em>he fork/join framework is distinct because it uses a </em>work-stealing* algorithm. Worker threads that run out of things to do can steal tasks from other threads that are still busy.<br>&nbsp;<br>- <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html">https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html</a></p>
+</blockquote>
+<p>예시를 통해 두 executorService의 동작 방식의 차이를 알아보자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> forkJoinPool = ForkJoinPool(<span class="number">1</span>)</span><br><span class="line">    forkJoinPool.submit &#123;</span><br><span class="line">        println(<span class="string">&quot;main task 1 started at <span class="subst">$&#123;Thread.currentThread()&#125;</span>&quot;</span>)</span><br><span class="line">        forkJoinPool.submit &#123;</span><br><span class="line">            println(<span class="string">&quot;subtask 1-1 finished at <span class="subst">$&#123;Thread.currentThread()&#125;</span>&quot;</span>)</span><br><span class="line">        &#125;.<span class="keyword">get</span>()</span><br><span class="line">        println(<span class="string">&quot;main task 1 finished at <span class="subst">$&#123;Thread.currentThread()&#125;</span>&quot;</span>)</span><br><span class="line">    &#125;.<span class="keyword">get</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> executorService = Executors.newSingleThreadExecutor()</span><br><span class="line">    executorService.submit &#123;</span><br><span class="line">        println(<span class="string">&quot;main task 2 started at <span class="subst">$&#123;Thread.currentThread()&#125;</span>&quot;</span>)</span><br><span class="line">        executorService.submit &#123;</span><br><span class="line">            println(<span class="string">&quot;subtask 2-1 finished at <span class="subst">$&#123;Thread.currentThread()&#125;</span>&quot;</span>)</span><br><span class="line">        &#125;.<span class="keyword">get</span>()</span><br><span class="line">        println(<span class="string">&quot;main task 2 finished at <span class="subst">$&#123;Thread.currentThread()&#125;</span>&quot;</span>)</span><br><span class="line">    &#125;.<span class="keyword">get</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>위 코드를 실행했을 때의 출력 결과는 아래와 같다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">main task 1 started at Thread[ForkJoinPool-1-worker-1,5,main]</span><br><span class="line">subtask 1-1 finished at Thread[ForkJoinPool-1-worker-1,5,main]</span><br><span class="line">main task 1 finished at Thread[ForkJoinPool-1-worker-1,5,main]</span><br><span class="line">main task 2 started at Thread[pool-1-thread-1,5,main]</span><br><span class="line">// 무한 pending</span><br></pre></td></tr></table></figure>
+<p>executorService는 쓰레드가 부족해서 subtask 2-1을 실행하지 못한 반면, forkJoinPool은 work-stealing 방식으로 동작하기 때문에 subtask 1-1의 실행에 성공한 것을 확인할 수 있다. <strong>따라서, ForkJoinPool은 하나의 task가 여러 subtask를 spawn하는 divide-and-conquer 방식의 코드를 적은 수의 thread로 지원하는 데 적합하다.</strong></p>
+<p>virtual thread에서 ForkJoinPool을 사용한 이유는, virtual thread 실행 시 위와 같이 thread pool 고갈로 인한 blocking을 방지하기 위함으로 보인다.</p>
+<ul>
+<li>만약 일반적인 ForkJoinPool이 아닌 일반적인 executorService로 virtual thread를 구현했다면, 한 virtual thread에서 매우 많은 virtual thread를 실행하고 결과를 기다리면 carrier thread가 고갈되어 무한히 blocking 될 수 있다.</li>
+<li>반면 위에서 보았듯, ForkJoinPool을 사용하면 work-stealing 방식으로 동작하기 때문에 이러한 blocking이 발생하지 않는다. <strong>유저 입장에서는 virtual thread가 내부적으로 한정된 숫자의 carrier thread pool에 의해 실행된다는 내부 구현을 모르고, 새로운 thread가 생성되어 실행되는 것처럼 인식한다. 따라서 thread pool 고갈로 인한 blocking 문제가 발생해서는 안 된다.</strong> 그렇기 때문에 일반적인 executorService를 사용하면 안 되고, ForkJoinPool을 사용하는 것이 적합하다.</li>
+</ul>
+<h2 id="How-does-virtual-thread-yield-on-blocking-call"><a href="#How-does-virtual-thread-yield-on-blocking-call" class="headerlink" title="How does virtual thread yield on blocking call?"></a>How does virtual thread yield on blocking call?</h2><p><code>java.util.concurrent.LockSupport</code>, <code>java.net</code>, <code>java.nio.channels</code>, <code>java.io</code> 등 blocking이 발생할 수 있는 JDK 코드를 재작성하여, blocking이 발생하는 경우 platform thread가 다른 일을 할 수 있도록 release 하고, blocking이 끝난 경우 virtual thread를 re-schedule한다.</p>
+<blockquote>
+<p>Parking a virtual thread releases the underlying platform thread to do other work, and unparking a virtual thread schedules it to continue. This change to <code>LockSupport</code> enables all APIs that use it (<code>Lock</code>s, <code>Semaphore</code>s, blocking queues, etc.) to park gracefully when invoked in virtual threads.<br>&nbsp;<br>- <a href="https://openjdk.org/jeps/444#java-util-concurrent">https://openjdk.org/jeps/444#java-util-concurrent</a></p>
+</blockquote>
+<p>이때 blocking call의 내부 구현은 대략 아래와 같은 흐름으로 이루어진다.</p>
+<ol>
+<li><p>JDK는 blocking call이 발생하는 경우, <code>unmount()</code> 호출 뒤 <code>Continuation.yield()</code>를 호출한다.</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JDK core code</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">yieldContinuation</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">notifyJvmti</span> <span class="operator">=</span> notifyJvmtiEvents;</span><br><span class="line">    <span class="comment">// unmount</span></span><br><span class="line">    <span class="keyword">if</span> (notifyJvmti) notifyJvmtiUnmountBegin(<span class="literal">false</span>);</span><br><span class="line">    unmount();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Continuation.<span class="keyword">yield</span>(VTHREAD_SCOPE);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="comment">// re-mount</span></span><br><span class="line">        mount();</span><br><span class="line">        <span class="keyword">if</span> (notifyJvmti) notifyJvmtiMountEnd(<span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> native method가 많아서 정확한 동작은 모르겠으나(debugger도 제대로 동작하지 않는다… finally 문에 debug point를 찍어둬도 멈추질 않는다), <strong>몇 가지 실험에 따르면 <code>Continuation.yield()</code> 함수는 park에 성공할 경우 virtual thread의 stack frame을 저장하고, 제어 흐름을 carrier thread에 넘겨주며, virtual thread의 실행을 멈추는 것으로 보인다</strong>. park에 실패할 경우(e.g. synchronized block 안에서 실행; 아래의 <a href="/2023/06/17/jdk-virtual-thread/#pinning-문제">pinning 문제</a> 섹션 참고)에는 즉시 false를 리턴한다.</p>
+</li>
+<li><p>blocking이 끝나야 하는 시점에 다른 곳에서 unpark()를 호출한다.</p>
+<p> unpark를 호출하는 방법에는 여러가지가 있는데, 예를 들어 <code>Thread.sleep()</code>은 park 하기 전 unparking을 scheduling 해둔다(<code>scheduleUnpark()</code>).</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">parkNanos</span><span class="params">(<span class="type">long</span> nanos)</span> &#123;</span><br><span class="line">    <span class="keyword">assert</span> Thread.currentThread() == <span class="built_in">this</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// complete immediately if parking permit available or interrupted</span></span><br><span class="line">    <span class="keyword">if</span> (getAndSetParkPermit(<span class="literal">false</span>) || interrupted)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// park the thread for the waiting time</span></span><br><span class="line">    <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">startTime</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line"></span><br><span class="line">        <span class="type">boolean</span> yielded;</span><br><span class="line">        Future&lt;?&gt; unparker = scheduleUnpark(<span class="built_in">this</span>::unpark, nanos);</span><br><span class="line">        setState(PARKING);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            yielded = yieldContinuation();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">assert</span> (Thread.currentThread() == <span class="built_in">this</span>)</span><br><span class="line">                &amp;&amp; (state() == RUNNING || state() == PARKING);</span><br><span class="line">            cancel(unparker);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// park on carrier thread for remaining time when pinned</span></span><br><span class="line">        <span class="keyword">if</span> (!yielded) &#123;</span><br><span class="line">            <span class="type">long</span> <span class="variable">deadline</span> <span class="operator">=</span> startTime + nanos;</span><br><span class="line">            <span class="keyword">if</span> (deadline &lt; <span class="number">0L</span>)</span><br><span class="line">                deadline = Long.MAX_VALUE;</span><br><span class="line">            parkOnCarrierThread(<span class="literal">true</span>, deadline - System.nanoTime());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>다시 <code>yieldContinuation()</code> 함수의 <code>return Continuation.yield(VTHREAD_SCOPE);</code> 라인부터 실행이 시작된다. <code>mount()</code>가 호출되어 carrier thread에 자기 자신을 mounting 한 뒤, 남은 작업을 실행한다.</p>
+</li>
+</ol>
+<h2 id="하위호환성"><a href="#하위호환성" class="headerlink" title="하위호환성"></a>하위호환성</h2><ul>
+<li>virtual thread는 coroutine 등의 asynchronous style로 동작하지 않는다. 대신 virtual thread는 기본적으로 <code>java.lang.Thread</code>의 확장 클래스이다. 따라서 JDK가 기존부터 오랜 기간 제공하던 많은 모니터링 도구들에 대한 하위호환이 완벽하게 지원된다. e.g. Java debugger, JDK Flight Recorder(JFR) 등.</li>
+<li>ThreadLocal 역시 virtual thread 별로 격리된 공간이 제공된다. 다만, virtual thread는 기존 platform thread와는 달리 수백만 개까지 생성되는 시나리오를 지원하는 것이 목적인데, 무분별하게 ThreadLocal을 남용하면 메모리를 많이 잡아먹을 수 있으니 조심해야 한다.</li>
+<li>virtual thread에서의 blocking call은 대부분의 상황에서 carrier thread를 block 시키지 않지만, 일부 상황에서는 block 시킨다. <strong>이런 케이스에 해당하는 구현이 있다면 구현을 수정한 뒤 virtual thread를 도입해야 한다.</strong> carrier thread를 block 시키는 상황에 대한 자세한 설명은 <a href="/2023/06/17/jdk-virtual-thread/#pinning-문제">pinning 문제</a> 참고.<br><br \></li>
+</ul>
+<h1 id="이슈"><a href="#이슈" class="headerlink" title="이슈"></a>이슈</h1><h2 id="pinning-문제"><a href="#pinning-문제" class="headerlink" title="pinning 문제"></a>pinning 문제</h2><p><strong>native method call, synchronized block 호출 등 virtual thread가 unmount 되기를 기대하는 상황 중 일부에서는 virtual thread가 carrier thread에 계속 할당된 상태로 남아 있어서 carrier thread를 block 하는 이슈가 있다</strong>. 이러한 상황에 처한 virtual thread의 상태를 pinning 상태라고 부른다.</p>
+<p>이를 해결하려면 synchronized block 대신 ReentranceLock 등을 사용해야 한다.<br><br \></p>
+<h1 id="마무리"><a href="#마무리" class="headerlink" title="마무리"></a>마무리</h1><p>개인적으로는 Kotlin coroutine보다 JDK virtual thread의 설계가 마음에 드는데, 크게 두 가지 포인트에서 더 낫다고 생각한다.</p>
+<ol>
+<li>하위호환성 - 하위호환을 지키는 것은 생각보다 매우 중요하다. coroutine이나 여타 유사한 시스템을 도입할 때 개인적으로 가장 어렵다고 느끼는 것은 function coloring 문제로 인해 기존 코드를 상당히 많이 바꿔야 한다는 점이다. virtual thread를 도입할 때는 pinning 문제만 고려하면 되기 때문에 기존 코드를 거의 수정하지 않고도 매우 손쉽게 공짜 점심을 얻을 수 있다.</li>
+<li>stack trace 유지 - Reactive programming이나 coroutine의 경우 stack trace가 제대로 보이지 않아서 디버깅이 피곤했었는데, virtual thread는 yield 후 re-mount 되어 재실행되더라도 stack trace가 제대로 유지되기 때문에 이러한 피곤함이 발생하지 않을 것이다.</li>
+</ol>
+<p>추가적으로, virtual thread의 장점이라기보다는 언어 자체에서 지원하냐 마냐의 차이로 인해 발생하는 이점인데, unexpected blocking call으로 인한 위험이 거의 없을 것이라는 점도 마음에 든다. Kotlin coroutine 입장에서는 좀 억울할 수 있지만, virtual thread의 경우 JDK 차원에서 blocking call을 yield 하도록 재구현했기 때문에 unexpected blocking call로 인해 thread가 오래 blocking 될 걱정을 하지 않아도 된다.</p>
+<h1 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h1><ul>
+<li><a href="https://perfectacle.github.io/2022/12/29/look-over-java-virtual-threads/">https://perfectacle.github.io/2022/12/29/look-over-java-virtual-threads/</a></li>
+<li><a href="https://blogs.oracle.com/javamagazine/post/java-loom-virtual-threads-platform-threads">https://blogs.oracle.com/javamagazine/post/java-loom-virtual-threads-platform-threads</a></li>
+<li><a href="https://openjdk.org/jeps/444">https://openjdk.org/jeps/444</a></li>
+<li><a href="https://blog.rockthejvm.com/ultimate-guide-to-java-virtual-threads/">https://blog.rockthejvm.com/ultimate-guide-to-java-virtual-threads/</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html">https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2023/01/01/goodbye-2022-2/">
+        <span class="nav-arrow">← </span>
+        
+          2022년 회고 - (2)
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2025/07/09/rapportlabs-memoir-intro/">
+        
+          [라포 회고록] 들어가며 - 3년간 배운 것들
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Overview"><span class="toc-nav-text">Overview</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Why-is-virtual-thread-needed-motivation"><span class="toc-nav-text">Why is virtual thread needed? (motivation)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#What-was-the-problem-of-JVM-thread"><span class="toc-nav-text">What was the problem of JVM thread?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#What-is-the-goal-of-virtual-thread"><span class="toc-nav-text">What is the goal of virtual thread?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Why-not-coroutine-virtual-thread-vs-coroutine"><span class="toc-nav-text">Why not coroutine? virtual thread vs. coroutine?</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Internals"><span class="toc-nav-text">Internals</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B8%B0%EB%B3%B8%EC%A0%81%EC%9D%B8-%EB%8F%99%EC%9E%91-%EB%B0%A9%EC%8B%9D"><span class="toc-nav-text">기본적인 동작 방식</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#What-is-and-why-ForkJoinPool"><span class="toc-nav-text">What is, and why ForkJoinPool?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#How-does-virtual-thread-yield-on-blocking-call"><span class="toc-nav-text">How does virtual thread yield on blocking call?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%95%98%EC%9C%84%ED%98%B8%ED%99%98%EC%84%B1"><span class="toc-nav-text">하위호환성</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EC%9D%B4%EC%8A%88"><span class="toc-nav-text">이슈</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#pinning-%EB%AC%B8%EC%A0%9C"><span class="toc-nav-text">pinning 문제</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EB%A7%88%EB%AC%B4%EB%A6%AC"><span class="toc-nav-text">마무리</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Refs"><span class="toc-nav-text">Refs</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2023/06/17/jdk-virtual-thread/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "JDK Virtual Thread 살펴보기",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      [라포 회고록] 조직적인 관점에서의 플랫폼 팀에 대한 생각
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>[라포 회고록] 조직적인 관점에서의 플랫폼 팀에 대한 생각</h2>
+  <p class="post-date">2025-07-21</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><br></p>
+<h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>나는 VCNC에서는 기능조직 구조의 서버팀에서 3년간 일했고, 라포랩스에서는 목적조직 구조의 플랫폼 팀에서 3년 정도 일을 했다. 수 년간 몇 가지 형태의 조직에서 서버 개발자로 일하면서 들었던 생각은, 플랫폼 조직의 필요성, 역할, 목적이 꽤나 모호하고, 저마다 다르게 해석한다는 점이었다. 이번 글에서는 조직적인 관점에서 플랫폼 팀에 대한 내 생각을 정리해두려고 한다.</p>
+<p><br></p>
+<h2 id="막간-조직-구조에-대하여"><a href="#막간-조직-구조에-대하여" class="headerlink" title="막간 - 조직 구조에 대하여"></a>막간 - 조직 구조에 대하여</h2><p>이전에 대기업은 서로 조직도를 숨기고 경쟁사의 조직도를 알아내기 위해 노력한다는 이야기를 어디선가 들은 적이 있다. 당시에는 조직도가 왜 중요하지 싶었는데, 몇 년간의 회사 생활을 하면서 이 말을 이해하게 됐다. 조직 구조는 회사가 어떤 문제에 인적 리소스를 얼마만큼 쏟을 것인지에 대한 선언적 정의이다. 이는 마치 예산안을 짜는 것과 같다. 조직도는 특히나 IT 프로덕트를 개발하는 팀에서 더욱 중요한데, 전통적인 제조업과는 달리 ‘프로덕트’, 즉 상품 생산에 관여하는 것이 사실상 인적 리소스밖에 없기 때문이다. 노션을 생각해보자. 노션이 더 나은 ‘프로덕트’가 되기 위해 노션의 경영진이 할 수 있는 일은 두 가지밖에 없다. 1. 더 좋은 제품 로드맵을 제시하거나, 2. 더 나은 제품팀 조직을 꾸리는 것뿐이다.</p>
+<p><br></p>
+<h2 id="플랫폼-팀의-목적은-무엇인가"><a href="#플랫폼-팀의-목적은-무엇인가" class="headerlink" title="플랫폼 팀의 목적은 무엇인가?"></a>플랫폼 팀의 목적은 무엇인가?</h2><p><strong>플랫폼 팀은 비즈니스 가치를 달성하기 위해 제품 개발을 하는 동료들을 지원하기 위해 존재한다.</strong> 사업 초창기나 조직이 작은 시점에는 이러한 역할을 하는 조직에 대한 니즈를 느끼기 어렵다. 하지만 조직과 사업이 점점 커짐에 따라 일을 하는 데 필요한 프로세스나 도구가 점점 더 많아지면, 이를 각 팀에서 파편적으로 만들고 관리하는 대신 하나의 조직에서 중앙집중적으로 만들고 재사용하고 싶어진다. 이런 니즈가 커져서 제품 개발 리소스를 일부 떼어내어 별도의 조직을 두는 것이 더 이득이 된다고 판단하는 시점이 오면 플랫폼 팀이 탄생한다.</p>
+<p>각 조직에서 어떤 플랫폼 팀이 어떤 순서로 탄생하는지, 그리고 플랫폼 팀에게 기대하는 역할이 무엇인지는 조직마다 꽤나 다른 것으로 보인다. 구체적으로 이야기하면, ‘서버 개발팀’이라고 하면 대충 뭘 하는지 이해되는 반면 ‘서버 플랫폼 팀’이라고 하면 뭘 하는지 짐작하기가 보다 어렵다. 여기에는 두 가지 요소가 영향을 미친다.</p>
+<ol>
+<li><p>각 조직의 업무 프로세스, 도구, 개발 환경에 따라 필요한 플랫폼 개발이 다르다.</p>
+<p> IT 프로덕트를 개발할 때 필요로 하는 요소들은 대부분 비슷하다. 기획하고, 디자인하고, 개발하고, QA하고, 데이터 분석을 한다. 하지만 각 조직에서 선택하는 업무 프로세스, 도구, 개발 환경 등은 꽤나 다르고, 플랫폼 팀의 역할은 여기에 종속적이다. 어떤 회사는 피그마와 자동화를 적극적으로 활용해서 피그마 플러그인을 활발히 개발할 수도 있고, 어떤 회사는 그렇지 않을 수도 있다. 두 회사의 플랫폼 팀은 아마 상당히 다른 일을 하게 될 것이다.</p>
+</li>
+<li><p>사업 및 조직 규모에 따라 필요한 플랫폼 개발이 다르다.</p>
+<p> 사업과 조직의 규모가 커질수록 더욱 복잡하고 정교한 플랫폼 개발이 필요해진다. 이는 제품 개발의 복잡성이 사업 규모에 비례해서 높아지는 것과 동일하다. 사업이 고도화되고 확장될수록 서버는 더 높은 트래픽을 받고 더 복잡한 정책을 관리해야 한다. 플랫폼 개발도 마찬가지다. 플랫폼 팀이 사내에 제공하는 ‘제품’을 쓰는 인원이 많아지고 조직의 업무 프로세스가 복잡해질수록 플랫폼 팀에 들어오는 요구사항이 점점 다양해지고 깊어진다.</p>
+</li>
+</ol>
+<p>조직 규모가 커지고 플랫폼 팀이 고도화될수록 결국 플랫폼 팀은 제품 개발 팀에 가까워지는 것 같다. facebook의 react, 토스의 튜바 등 어떤 도구가 더 정교한 제품이 되어갈수록 플랫폼 팀 안에서 제품팀과 유사한 마인드셋과 조직구조가 파생될 것이라고 예상한다.</p>
+<p>세부적으로 하는 업무가 조직마다 다르긴 하겠지만, 처음으로 돌아가면 어쨌든 다양한 형태의 플랫폼 팀의 목적은 동일하다. 제품팀이 더욱 생산적으로 일할 수 있도록 서포트하는 것이다.</p>
+<p><br></p>
+<h2 id="플랫폼-팀이-제품팀과-멀어지지-않도록-주의해야-한다"><a href="#플랫폼-팀이-제품팀과-멀어지지-않도록-주의해야-한다" class="headerlink" title="플랫폼 팀이 제품팀과 멀어지지 않도록 주의해야 한다"></a>플랫폼 팀이 제품팀과 멀어지지 않도록 주의해야 한다</h2><p>플랫폼 팀에서 몇 년간 일하면서 느낀 점은, <strong>플랫폼 팀이 제품팀에서 떨어져 나온 지 오래될수록 플랫폼 팀 본연의 목적인 ‘제품팀이 더욱 생산적으로 일할 수 있도록 서포트하는 것’을 효과적으로 수행하기 어려워진다는 것이다.</strong> 여기에는 크게 두 가지 이유가 있다.</p>
+<ol>
+<li><p>제품팀이 어떻게 일하는지 직접 경험하지 못하므로 제품팀의 애로사항을 뾰족하게 파악하지 못한다.</p>
+<p> 플랫폼 팀이 조직적으로 발전하면 점점 제품 개발 프로세스에서 멀어져서 독자적인 업무 프로세스를 갖추게 된다. 이러면 현재 제품 개발 프로세스에 대한 개밥먹기가 되지 않으므로 어떤 부분을 개선해야 할지 정확히 캐치하기 어려워진다.</p>
+<p> ‘개밥먹기가 어렵다’는 것은 어드민 개발 조직에서도 동일하게 겪는 어려움이지만, 플랫폼 팀에 더 큰 악영향을 미친다고 생각한다. 어드민 조직에는 보통 PO가 있어서 어드민 사용자에 대한 유저 인터뷰를 진행하거나 데이터를 기반으로 의사결정하는 것이 자연스러운 반면, 플랫폼 팀은 보통 개발자나 QA 등 ‘유저의 니즈를 파악하는 것이 메인 롤이 아닌 단일직군’으로만 구성되기 때문이다.</p>
+</li>
+<li><p>유지보수하는 플랫폼 제품이 많아지면서 사고가 플랫폼 제품에 매몰되기 쉬워진다.</p>
+<p> 플랫폼 팀은 제품팀이 더욱 생산적으로 일할 수 있도록 여러가지 도구, 혹은 ‘플랫폼 제품’을 개발해서 제품팀에 제공한다. 흔히 볼 수 있는 플랫폼 제품에는 배포 파이프라인, 어떤 기술을 더욱 안전하고 생산적으로 사용하기 위한 라이브러리, 모니터링 도구, 개발 컨벤션 등이 있다.</p>
+<p> 플랫폼 팀이 소유하고 유지보수하는 제품의 수가 많아지면, 제품팀의 실제 니즈나 문제를 해결하는 대신 이 플랫폼 제품 자체를 고도화해야 한다는 착각에 빠지기 쉬워진다고 생각한다. 예를 들어 ‘이 도구 쓸 때 이런 것도 있으면 좋겠지?’, ‘이 기술 쓸 때 이 정도는 필수지!’라는 생각에 제품팀이 실제로는 필요로 하지 않는 기능을 개발하는 것이다.</p>
+</li>
+</ol>
+<p>제품팀의 실제 니즈와 플랫폼 팀의 생각 사이의 괴리를 해소하는 방법은 상황마다 다를 듯 하다. 조직 규모가 작을 때는 제품 개발을 하는 팀과 인원을 주기적으로 스왑하거나 겸직을 시키는 것이 가장 효과적이라고 생각한다. 이러면 제품 개발 프로세스 개밥먹기가 되는 인원이 플랫폼 팀에 지속적으로 유입된다. 큰 조직을 경험해본 적은 없지만, 큰 플랫폼 팀에는 TPM / PM 등의 직군을 두는 것이 효과적일 것으로 예상한다. 플랫폼 팀의 TPM / PM은 유저 인터뷰나 데이터 분석을 통해 제품팀의 니즈를 보다 뾰족하게 캐치하는 역할을 맡게 될 것이다.</p>
+<p><br></p>
+<h2 id="플랫폼-팀의-규모는-최소화되어야-한다"><a href="#플랫폼-팀의-규모는-최소화되어야-한다" class="headerlink" title="플랫폼 팀의 규모는 최소화되어야 한다"></a>플랫폼 팀의 규모는 최소화되어야 한다</h2><p>위에서 조직 구조를 회사가 어떤 문제에 인적 리소스를 얼마만큼 쏟을 것인지에 대한 선언적 정의라고 했다. 이러한 관점에서, <strong>플랫폼 팀은 냉정하게 말하면 비즈니스 임팩트를 내는 팀이 아니기 때문에 가능한 작으면 좋다는 것이 개인적인 의견이다. 플랫폼 팀을 만들 필요가 없으면 만들지 않고, 최대한 늦게 만들고, 만든다면 그 규모는 최소화되어야 한다.</strong> 일시적으로 업무가 몰릴 수 있겠지만, 부족한 인원은 TF나 겸직으로 대체할 수 있다. </p>
+<p>개발자 경험은 의도하든 의도하지 않았든 하나의 제품이므로, 각 조직의 리더는 플랫폼 개발에 대한 니즈를 민감하게 캐치하고 추적해야 한다. 그렇게 찾아낸 플랫폼 태스크는 자연스럽게 회사 업무 플로우에 녹여내서 처리하거나, TF를 꾸리거나, 겸직으로 이루어진 소규모 조직을 운영해서 해결할 수 있다. TF나 겸직의 형태는 개밥먹기가 잘 된다는 추가적인 이점까지 있다. 지속적으로 2~3명 이상의 리소스가 필요할만큼 플랫폼 개발의 필요성이 커진 경우, 그제서야 리소스를 효율적으로 격리시키기 위해 독립적인 플랫폼 팀을 출범시킨다. 하지만 여전히 플랫폼 개발의 필요성을 과하게 산정하지 않도록 비즈니스 요구사항과 플랫폼 개발 요구사항 사이의 우선순위를 냉정하게 판단해야 한다.</p>
+<p>위에서 이야기한 것처럼 플랫폼 팀의 출범 자체가 리스크이므로, 플랫폼 팀의 출범 시점은 최대한 늦춰져야 한다. <strong>이를 위해 가장 좋은 것은 플랫폼 개발이 필요한 상황 자체를 안 만드는 것이다.</strong> 업무 프로세스나 백엔드 / 프론트엔드 시스템을 가능한 간단하게 유지하므로써 플랫폼 개발이 필요한 상황을 최소화할 수 있다. 모든 코드는 배포되는 순간부터 부채가 되며, 이는 플랫폼 제품도 예외가 아님을 잘 인지해야 한다.</p>
+<p>위 이야기가 제품 개발 과정의 불편함을 인내하고 방치하자는 의견은 당연히 아니다. 다만, <strong>1. 사업팀이 PMF를 찾고 제품팀이 유저 인터뷰와 데이터 분석으로부터 유저의 니즈를 파악하려는 것처럼 플랫폼 조직도 제품팀의 실제 니즈와 비즈니스 임팩트를 기반으로 일할 수 있도록 치열하게 고민해야 하며, 2. 사업 규모를 키우거나 제품팀 규모를 키우는 것이 리스크를 지는 투자인 것처럼 플랫폼 팀을 키우는 것 역시 리스크를 지는 투자임을 인지하자는 것이다.</strong></p>
+<p><br></p>
+<h2 id="플랫폼-팀과-제품-개발팀-사이의-R-amp-R이-불분명한-문제에-대하여"><a href="#플랫폼-팀과-제품-개발팀-사이의-R-amp-R이-불분명한-문제에-대하여" class="headerlink" title="플랫폼 팀과 제품 개발팀 사이의 R&amp;R이 불분명한 문제에 대하여"></a>플랫폼 팀과 제품 개발팀 사이의 R&amp;R이 불분명한 문제에 대하여</h2><p>목적조직 구조든 기능조직 구조든, <strong>플랫폼 조직을 운영할 때 가장 어려운 부분 중 하나는 제품 개발 조직과 플랫폼 조직 사이의 R&amp;R을 나누는 것</strong>이라고 생각한다.</p>
+<p>이는 어찌보면 자연스럽고 당연한 어려움인데, 특정 프로세스나 도구의 활용이 조직 내에서 종종 점진적으로 확장되기 때문이다. 검색 엔진을 예로 들어보자. 처음에는 검색이 필요한 유즈 케이스가 하나여서 해당 조직에서 검색 엔진을 관리할 것이다. 그러다가 데이터가 많아지고 검색이 필요한 상황이 다양해지면 여러 팀에서 검색 엔진을 활용하고 싶어진다. 그 결과 자연스럽게 ‘검색 플랫폼 팀’이 출현할 수 있다. 하지만 검색 엔진을 쓰고 싶은 팀이 딱 두 팀이라면? 검색 플랫폼 팀을 따로 떼어내기가 애매하다.</p>
+<p>위의 검색 엔진의 예시처럼 ‘특정 프로세스나 도구를 플랫폼으로써 제공할 것인가?’라는 질문을 라포랩스에서 많이 경험했는데, 팀을 리딩하는 입장에서 상당히 골치 아픈 질문이었다. 이 문제가 발생하는 메커니즘 상 이는 라포랩스에서만 발생하는 문제라기보다는 작은 조직이 성장할 때 흔히 겪는 성장통일 것이라고 생각한다. 회사가 작으면 플랫폼 팀을 만든다는 선택지가 없을 것이고, 회사가 크면 이미 웬만한 종류의 플랫폼 팀이 존재할 것이기 때문이다.</p>
+<p>보통 이런 상황에서 크게 두 가지 선택을 하는 것 같다.</p>
+<ol>
+<li>원래 해당 도구를 잘 운영하던 구성원/팀에게 일시적으로 지원을 부탁한다.</li>
+<li><p>보통 이 정도 고민을 하는 회사 규모라면 서버 플랫폼 팀 등 플랫폼 조직이 하나쯤 있을 것이므로, 해당 팀에 R&amp;R을 이관한다.</p>
+<p> 이 과정에서 기존에 해당 도구를 운영하던 구성원을 조직 이동 시킬 수도 있다.</p>
+</li>
+</ol>
+<p>여기에 대한 내 생각은, 각 질문에 대해 어떤 상황에서 어떻게 결정을 해야한다는 정해진 원칙을 두기보다는 이런 질문 ‘묶음’을 얼마나 밸런스 있게, 조직적인 리스크를 최소화하면서 처리하는지가 중요하다는 것이다.</p>
+<p>위 고민의 근본적인 원인은 조직이 하고 싶은 일에 비해 조직이 가진 리소스가 충분하지 않다는 점이다. 조직이 어떤 일을 더 하려고 할 때 - 이를테면 새로운 도메인에 검색 엔진을 사용하고 싶을 때 - 누군가는 이 새로운 일에 대한 오너십을 가져야만 한다. 하지만 원하는 시점에 원하는 능력을 갖춘 사람을 채용하는 것은 거의 불가능하다. 따라서 조직 내의 누군가는 (최소한 일시적으로는) 일을 더 많이 하게 되고, 본인이 바라는 것보다 더 많은 책임을 져야 하고, 손해를 본다고 느낄 수 있다. 그렇기에 <strong>오히려 조직이 이 ‘손해 보는 상황’을 기꺼이 감수하고 싶어하는 장치들을 마련하는 게 훨씬 중요하다고 본다.</strong> 이 장치는 보상이 될 수도 있고, 조직의 문화가 될 수도 있고, 리더의 카리스마 넘치는 설득이 될 수도 있고, 조직 간의 (업무적 측면에서) 거래가 될 수도 있겠다. 이런 장치들을 잘 마련하면 플랫폼 팀의 R&amp;R에 대한 고민이나 소모적인 논쟁이 자연스럽게 줄어들 것이라고 생각한다.</p>
+<p><br></p>
+<h2 id="플랫폼-팀도-OKR을-가져야-한다"><a href="#플랫폼-팀도-OKR을-가져야-한다" class="headerlink" title="플랫폼 팀도 OKR을 가져야 한다"></a>플랫폼 팀도 OKR을 가져야 한다</h2><p>OKR은 특히 한국 IT 스타트업에서 널리 쓰이는 목표 및 성과 관리 도구일 텐데, 플랫폼 조직에서 OKR을 도입해야 하는지에 대해서는 의견이 분분하다고 들었다. OKR이 있는 플랫폼 팀을 3년 정도 경험해본 결과, 나는 플랫폼 팀에도 OKR, 혹은 팀의 성과를 측정할 수 있는 다른 도구가 반드시 있어야 한다고 생각하게 되었다.</p>
+<p>플랫폼 팀의 OKR 도입에 반대하는 측의 주장에 대해 내가 이해하고 있는 내용을 정리하면 아래와 같다.</p>
+<ol>
+<li>장애 대응 및 재발 방지 처리 등 예상하기 어려운 운영/지원 업무가 플랫폼 팀의 업무 중 상당 부분을 차지하기 때문에 수 개월치 업무를 미리 플래닝하기가 어렵다.</li>
+<li>OKR이 존재하는 경우, 긴급한 운영/지원 업무가 들어오더라도 이미 정해둔 OKR이 있으므로 업무간 우선순위를 올바르게 판단하기가 어려워진다.</li>
+<li>제품팀의 생산성이 개선된 정도나 운영/지원 업무가 얼마만큼의 사업적 성과를 나타냈는지 등을 수치적으로 측정하기 어렵다.</li>
+</ol>
+<p>플랫폼 팀에서 일을 해보았기 때문에, 나 역시 이러한 어려움에는 모두 공감한다. 하지만 <strong>도입이 어렵다고 해서 OKR을 도입하지 않는 것은 주객이 전도된 상황이다. 팀의 목표를 적절한 수준으로 정하고, 목표가 잘 달성됐는지 측정하는 방법을 고민하는 것은 팀의 리더가 반드시 해야 하는 일이다.</strong> </p>
+<p><strong>OKR은 해당 팀과 그 팀의 상위 리더 사이의 커뮤니케이션 인터페이스이다.</strong> 상위 리더가 해당 팀에 기대하는 역할이자 방향성이자 기대치이다. 이게 있어야만 상위 리더는 해당 팀이 회사에 필요한 팀이 맞는지, 해당 팀이 현재 적절한 규모인지, 보상을 얼마만큼 줘야 하는지 등 조직 관리에 필요한 일을 할 수 있다.</p>
+<p>또한, 팀의 목표가 있어야 팀을 더 잘 운영할 수 있기도 하다. 개개인의 능력을 estimate 하고, 실제로 수행해보고, 잘 되거나 잘 되지 않았을 때 그 이유에 대해 회고하는 것은 개인의 성장과 팀의 성장 모두에 아주 중요한 요소이다. 하지만 목표나 기대치가 없는 상황에서 하는 회고는 그리 유효하지 않다고 생각한다.</p>
+<p>그러므로 목표 설정과 성과 측정은 팀 입장에서 반드시 해야 하는 일이다. 그 과정에 어려움이 있다면 이를 어떻게든 해결하고 우회하는 것까지가 해당 팀 리더의 책임에 포함된다.</p>
+<hr>
+<p>플랫폼 팀의 OKR을 세울 때 발생하는 여러가지 어려움을 극복하는 데 개인적으로 도움이 됐던 몇 가지 팁을 정리해보았다.</p>
+<ol>
+<li><p>OKR은 언제든 바꿔도 된다.</p>
+<p> 긴급한 운영/지원 업무로 인해 우선순위 판단이 어려워진다면, 그건 그만큼 그 일이 중요하다는 의미일 것이다. 이렇게 고민이 되는 상황이라면 OKR 변경을 고려해볼 수 있다. 상대적으로 우선순위가 낮은 업무를 OKR에서 제외하고, 고민하는 그 일을 새 OKR로 추가하면 된다. <strong>OKR은 고정적인 것이 아니다. OKR은 그저 커뮤니케이션 인터페이스일 뿐이므로 충분한 맥락만 덧붙인다면 언제든 수정할 수 있고, 또 그런 방식으로 운영되어야만 한다.</strong> 작은 회사일수록 회사의 우선순위나 상황이 빠르게 변할 것이므로, OKR 기간 도중에 OKR이 변경되는 것은 전혀 이상하지 않다.</p>
+</li>
+<li><p>지원 업무는 미리 예상 가능하다.</p>
+<p> 다른 팀의 OKR과 그 KR을 달성하기 위해 어떤 액션들을 취할 것인지 계획에 관심을 가지면, OKR 기간 동안 플랫폼 조직으로 어떤 요청이 얼마만큼 들어올지를 미리 예상해볼 수 있다. 중요한 지원 업무라면 이를 KR로 미리 잡아서 리소스 room을 확보할 수 있다.</p>
+</li>
+<li><p>운영 업무를 위한 리소스 room을 잡아둔다.</p>
+<p> OKR을 세울 때 예상치 못한 운영 업무에 할당할 리소스 room을 미리 비워두고 적절히 축소된 양의 목표를 잡거나, 아예 ‘이런이런 운영 업무 하기’를 OKR 중 하나로 잡을 수 있다.</p>
+<p> 어느 정도 room을 남겨둬야 할지는 과거에 어느 정도 수준의 운영 업무가 있었는지를 가늠해보면 된다. 팀에서 처리하는 운영 업무의 양을 추적하는 것은 OKR을 세우는 것뿐만 아니라 플랫폼 팀의 퍼포먼스를 관리하는 데도 큰 도움이 되는데, 자동화를 통해 운영 업무의 양을 적당한 수준으로 관리해야만 플랫폼 팀이 운영 업무에 잠식되는 것을 방지할 수 있기 때문이다.</p>
+<p> 또 다른 이야기로, ‘이런이런 운영 업무 하기’를 명시적인 OKR로 잡았을 때의 부가적인 이점은 운영 업무 처리를 성과라고 명시적으로 인정할 수 있다는 점이다. 일반적으로 운영 업무를 반복적으로 처리하다 보면 의욕이 떨어지곤 하는데, 리더가 명시적으로 OKR에 운영 업무 관련 항목을 집어넣으면 ‘당신은 우리 팀에 꼭 필요한 일을 하고 있고, 당신이 처리하는 운영 업무를 성과라고 인정하고 있습니다’라는 메세지를 팀원에게 줄 수 있다.</p>
+</li>
+<li><p>수치가 아닌 task 단위의 KR을 잡는다.</p>
+<p> <strong>플랫폼 팀의 성과를 수치로 측정하는 것은 어렵다기보다는 가성비가 안 나오는 작업이라고 생각한다.</strong> 나는 일반적인 IT 프로덕트와 비슷한 방법론을 통해 플랫폼 팀이 제공하는 다양한 플랫폼의 수치적 성과를 측정할 수 있다고 믿는다. 다만 유저가 사내에 있기도 하고, 개밥먹기도 비교적 어렵지 않다 보니, 생산성 향상을 수치적으로 측정할 수 있는 이벤트 로깅 시스템이나 데이터 분석을 할 필요성을 못 느끼는 것 뿐이다.</p>
+<p> 이렇게 ROI 때문에 어떤 작업의 성과를 느낌적인 느낌으로 측정하고 싶은 경우, 그 느낌의 수준을 상위 리더와 싱크하기만 하면 task 단위의 KR도 충분히 의미가 있다고 본다. 즉, 상위 리더가 성과를 이해하고 가늠할 수 있기만 하면 어떤 형태의 KR도 괜찮다는 뜻이다.</p>
+</li>
+</ol>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2025/07/13/devex-as-implicit-product/">
+        <span class="nav-arrow">← </span>
+        
+          [라포 회고록] 개발자 경험은 의도하든 의도하지 않았든 하나의 제품이다
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2025/07/24/platform-team-lesson-learns/">
+        
+          [라포 회고록] 플랫폼 팀 업무에 대한 생각 조각 모음
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EB%A7%89%EA%B0%84-%EC%A1%B0%EC%A7%81-%EA%B5%AC%EC%A1%B0%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC"><span class="toc-nav-text">막간 - 조직 구조에 대하여</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%8C%80%EC%9D%98-%EB%AA%A9%EC%A0%81%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80"><span class="toc-nav-text">플랫폼 팀의 목적은 무엇인가?</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%8C%80%EC%9D%B4-%EC%A0%9C%ED%92%88%ED%8C%80%EA%B3%BC-%EB%A9%80%EC%96%B4%EC%A7%80%EC%A7%80-%EC%95%8A%EB%8F%84%EB%A1%9D-%EC%A3%BC%EC%9D%98%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-nav-text">플랫폼 팀이 제품팀과 멀어지지 않도록 주의해야 한다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%8C%80%EC%9D%98-%EA%B7%9C%EB%AA%A8%EB%8A%94-%EC%B5%9C%EC%86%8C%ED%99%94%EB%90%98%EC%96%B4%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-nav-text">플랫폼 팀의 규모는 최소화되어야 한다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%8C%80%EA%B3%BC-%EC%A0%9C%ED%92%88-%EA%B0%9C%EB%B0%9C%ED%8C%80-%EC%82%AC%EC%9D%B4%EC%9D%98-R-amp-R%EC%9D%B4-%EB%B6%88%EB%B6%84%EB%AA%85%ED%95%9C-%EB%AC%B8%EC%A0%9C%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC"><span class="toc-nav-text">플랫폼 팀과 제품 개발팀 사이의 R&amp;R이 불분명한 문제에 대하여</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%8C%80%EB%8F%84-OKR%EC%9D%84-%EA%B0%80%EC%A0%B8%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-nav-text">플랫폼 팀도 OKR을 가져야 한다</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2025/07/21/what-is-platform-team/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "[라포 회고록] 조직적인 관점에서의 플랫폼 팀에 대한 생각",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

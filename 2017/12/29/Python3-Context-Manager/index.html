@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Python3 Context Manager
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Python3 Context Manager</h2>
+  <p class="post-date">2017-12-29</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>안녕하세요, 이번 시간에는 Python3의 context manager라는 것을 배워보도록 하겠습니다.</p>
+<h2 id="Python에서-파일-사용"><a href="#Python에서-파일-사용" class="headerlink" title="Python에서 파일 사용"></a>Python에서 파일 사용</h2><p>아마 여러분들은 이미 Python에서 파일을 열고, 읽거나 쓰고, 다시 닫는 데에 굉장히 익숙하실 것입니다. 바로 아래와 같은 코드를 통해 Python에서 파일에 대한 작업을 수행할 수 있습니다.</p>
+<pre><code>f = open(&apos;file_name&apos;, &apos;w&apos;) # &apos;쓰기&apos; 버전으로 파일 열기
+
+f.write(&apos;The first line!&apos;) # &apos;file_name&apos;이라는 파일에 쓰기
+
+f.close() # 파일 닫기
+</code></pre><p>여기서 주의할 점은 파일의 사용이 끝나면 반드시 <strong>파일을 닫아야 한다는 점</strong>입니다. 그렇지 않으면 리소스가 낭비되고 파일에 예측 불가능한 작업이 이루어질 수도 있죠. 하지만, 프로젝트의 규모가 커지고 로직이 복잡해질수록 연 모든 파일을 관리하며 닫는 일은 쉽지 않은 일입니다.</p>
+<h2 id="Context-manager를-활용해-파일-자동-닫기"><a href="#Context-manager를-활용해-파일-자동-닫기" class="headerlink" title="Context manager를 활용해 파일 자동 닫기"></a>Context manager를 활용해 파일 자동 닫기</h2><p>그래서 있는 것이 바로 Python의 context manager라는 것입니다. 백문이불여일견이니 아래의 코드를 보면서 설명해드리도록 하겠습니다.</p>
+<pre><code>with open(&apos;file_name&apos;, &apos;w&apos;) as f:
+    f.write(&apos;The first line!&apos;)
+</code></pre><p>짜잔~ 이 코드는 아까 처음에 보여드렸던 <code>open()</code>과 <code>close()</code>로 둘러쌓인 코드와 ‘거의’ 같은 일을 합니다. <strong><code>with</code>의 scope를 벗어나는 순간 <code>f</code>를 자동으로 닫아줍니다.</strong> 하지만, 위 코드는 단순히 파일을 닫아주는 것 이상의 역할을 합니다. 사실, 위의 코드는 아래와 동등한 코드입니다.</p>
+<pre><code>f = open(&apos;file_name&apos;, &apos;w&apos;)
+try:
+    f.write(&apos;The first line!&apos;)
+finally:
+    f.close()
+</code></pre><p>이와 같이 ‘with’와 ‘open()’을 함께 사용한다면 <strong><code>f.write()</code>를 할 때의 예외처리</strong>도 함께 할 수 있게 됩니다.</p>
+<p>이와 같이 <strong>특정 작업(여기서는 <code>f</code>에 대한 작업)의 context(<code>f</code>를 열고 닫기 또는 예외처리)를 관리해주는 object</strong>을 <strong>context manager</strong>라고 부릅니다. Python3 공식 documentation에서의 context manager에 대한 설명은 아래와 같습니다.</p>
+<blockquote>
+<p>A context manager is an object that defines the runtime context to be established when executing a with statement. The context manager handles the entry into, and the exit from, the desired runtime context for the execution of the block of code.</p>
+</blockquote>
+<p>즉, 특정 행동을 할 때 항상 일정한 런타임 환경을 만들어주기 위해 특정 행동에의 진입과 종료를 관리해주는 친구가 바로 context manager이라는 것이죠.</p>
+<p>제가 구글링을 하다 본 가장 마음에 드는 설명은 context manager를 아래와 같이 표현한 것이었습니다.</p>
+<blockquote>
+<p>Of all of the most commonly used Python constructs, context managers are neck-and-neck with decorators in a “Things I use but don’t really understand how they work” contest.</p>
+</blockquote>
+<h2 id="Context-manager-만들기"><a href="#Context-manager-만들기" class="headerlink" title="Context manager 만들기"></a>Context manager 만들기</h2><p>만약 파일에 대한 작업과 같이 어떤 작업을 하기 전후에 항상 실행되어야 하는 일이 있을 경우 <code>open()</code>과 같이 여러분들만의 context manager을 만들어서 사용하시면 이를 자동으로 처리할 수 있습니다.</p>
+<p>Context manager을 만드는 방법에는 크게 두 가지 방법이 있는데, 첫 번째는 바로 <strong><code>Class</code>를 만들고 <code>__enter__</code>와 <code>__exit__</code>을 정의하는 것</strong>입니다.</p>
+<pre><code>Class MyContextManager(object):
+    def __enter__(self):
+        pre_processing()
+        return something
+    def __exit__(self):
+        post_processing()
+
+with MyContextManager() as something:
+    # pre_processing() is already executed
+    do_your_work()
+# post_processing() executes
+# right after escaping the
+# scope of with statement
+</code></pre><p><code>with</code> 문과 같이 사용하면 <code>with</code> 문에 진입할 때 <code>__enter__</code>가 실행되면서 <code>__enter__</code> 함수의 리턴 값을 <code>as</code>로 받을 수 있습니다. 또한, <code>with</code> 문 안쪽이 실행되는 동안 예외가 발생하거나 <code>with</code> 문을 탈출하면 <code>__exit__</code>이 실행됩니다.</p>
+<p>두 번째 방법은 <strong><code>contextlib</code>라는 Python의 built-in library를 사용하는 것</strong>입니다.</p>
+<pre><code>from contextlib import contextmanager
+
+@contextmanager
+def my_context_manager():
+    pre_processing()
+    yield something
+    post_processing()
+
+with my_context_manager() as something:
+    # pre_processing() is already executed
+    do_your_work()
+# post_processing() executes
+# right after escaping the
+# scope of with statement
+</code></pre><p>특정 함수에 <code>contextlib</code> 모듈의 <code>@contextmanager</code> decorator를 사용하고 <code>yield</code>를 사용하면 <code>yield</code> 전은 <code>with</code> 문에 진입할 때, <code>yield</code> 후는 <code>with</code> 문을 탈출할 때 실행됩니다.</p>
+<p>저는 Python에서 <code>sqlite3</code> 모듈의 <code>connection</code>을 관리하는 용도로 context manager를 처음 사용했는데, 확실히 개발자로 하여금 로직에 집중하게 해주고 코드가 간결해지는 효과를 느꼈습니다. 여러분들도 항상 작업의 context를 관리할 필요가 있을 때에는 context manager을 사용하길 권장해드립니다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2017/06/26/jekyll-blog-customizing-example/">
+        <span class="nav-arrow">← </span>
+        
+          Jekyll 블로그 커스터마이징 예시
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/01/13/Python3-Useful-Tips-1/">
+        
+          Python3 Useful Tips - 1
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Python%EC%97%90%EC%84%9C-%ED%8C%8C%EC%9D%BC-%EC%82%AC%EC%9A%A9"><span class="toc-nav-text">Python에서 파일 사용</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Context-manager%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%B4-%ED%8C%8C%EC%9D%BC-%EC%9E%90%EB%8F%99-%EB%8B%AB%EA%B8%B0"><span class="toc-nav-text">Context manager를 활용해 파일 자동 닫기</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Context-manager-%EB%A7%8C%EB%93%A4%EA%B8%B0"><span class="toc-nav-text">Context manager 만들기</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2017/12/29/Python3-Context-Manager/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Python3 Context Manager",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

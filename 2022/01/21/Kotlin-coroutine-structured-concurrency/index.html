@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Kotlin Coroutine의 Structured Concurrency 구현 상세
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Kotlin Coroutine의 Structured Concurrency 구현 상세</h2>
+  <p class="post-date">2022-01-21</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>Kotlin coroutine의 structured concurrency의 동작 방식을 다시 살펴보자.</p>
+<ul>
+<li>parent가 어떤 이유로든 취소되면, parent의 모든 children이 취소된다.</li>
+<li>child에서 exception이 던져져서 취소되면, exception은 parent로 전파되어서 parent를 취소시킨다. child가 명시적인 취소로 인해 취소되면 parent로 취소가 전파되지 않는다.</li>
+</ul>
+<p>이 글은 Kotlin coroutine에서 위와 같은 structured concurrency를 어떻게 구현했는지를 설명하는 글이다. coroutine의 API와 동작 방식에 대해 어느 정도 익숙하다는 전제 하에 작성된 글이어서, 글의 내용이 이해가 되지 않는다면 <a href="https://github.com/Kotlin/KEEP/blob/master/proposals/coroutines.md">Kotlin coroutine proposal</a>과 <a href="https://kotlinlang.org/docs/coroutines-guide.html">공식 가이드 문서</a>를 먼저 읽는 것이 도움이 될 것이다.</p>
+<p>이 글에서 참고한 코드는 Kotlin 1.5.30 버전과 kotlinx coroutines core 1.5.2 버전을 사용하였다.<br><br></p>
+<h2 id="structured-concurrency를-위한-트리-구성"><a href="#structured-concurrency를-위한-트리-구성" class="headerlink" title="structured concurrency를 위한 트리 구성"></a>structured concurrency를 위한 트리 구성</h2><p>structured concurrency의 동작 방식을 보면, coroutine이 내부적으로 트리 구조(부모-자식)의 형태로 관리가 되고 있음을 추측할 수 있다. 이 트리 구조가 무엇으로 구성되어 있고, 또 어떤 방식으로 구성되는지 알아보자.</p>
+<p>실제 내부 구현을 까보면, structured concurrency를 구현하기 위한 기반 요소는 크게 두 가지이다.</p>
+<ul>
+<li><code>Job</code>(interface) - structured concurrency에서 가장 중요한 요소로, 보통 <strong>coroutine과 1대1로 형성되어 위에서 언급한 트리 구조를 형성한다.</strong> 각 job은 취소의 전파에 따라 자신과 대응되는 coroutine을 적절히 취소시킨다.</li>
+<li><p><code>CoroutineScope</code>(interface) - CoroutineScope.coroutineContext에는 coroutine의 실행을 위한 여러가지 정보가 담기지만, <strong>가장 중요한 것은 coroutine의 <code>Job</code>을 저장하는 것이다. <code>Job</code>은 하나의 <code>CoroutineContext.Element</code>이고, <code>CoroutineScope.coroutineContext</code>에는 반드시 <code>Job</code>이 포함되어 있어야만 한다.</strong> 이는 아래와 같이 javadoc에도 명시되어 있다.</p>
+<p>  <em>“…By convention, the context of a scope should contain an instance of a job to enforce the discipline of structured concurrency with propagation of cancellation.”(CoroutineScope.kt)</em></p>
+</li>
+</ul>
+<p>이제 coroutine 시작 시 <code>Job</code>의 트리가 어떤 과정을 통해 구성되는지 알아보자. 아래는 각종 coroutine 클래스의 기반 구현을 제공하는 <code>AbstractCoroutine</code>의 구현 중 일부이다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@InternalCoroutinesApi</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractCoroutine</span>&lt;<span class="type">in T</span>&gt;(</span><br><span class="line">    parentContext: CoroutineContext, <span class="comment">/* ---- (1) */</span></span><br><span class="line">    initParentJob: <span class="built_in">Boolean</span>,</span><br><span class="line">    active: <span class="built_in">Boolean</span></span><br><span class="line">) : JobSupport, ... &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span> &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Setup parent-child relationship between the parent in the context and the current coroutine.</span></span><br><span class="line"><span class="comment">         * It may cause this coroutine to become _cancelling_ if the parent is already cancelled.</span></span><br><span class="line"><span class="comment">         * It is dangerous to install parent-child relationship here if the coroutine class</span></span><br><span class="line"><span class="comment">         * operates its state from within onCancelled or onCancelling</span></span><br><span class="line"><span class="comment">         * (with exceptions for rx integrations that can&#x27;t have any parent)</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (initParentJob) initParentJob(parentContext[Job]) <span class="comment">/* ---- (2) */</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Deprecated(level = DeprecationLevel.ERROR, message = <span class="string">&quot;This is internal API and may be removed in the future releases&quot;</span>)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">open</span> <span class="keyword">class</span> <span class="title class_">JobSupport</span> <span class="keyword">constructor</span>(active: <span class="built_in">Boolean</span>) : Job &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">fun</span> <span class="title">initParentJob</span><span class="params">(parent: <span class="type">Job</span>?)</span></span> &#123;</span><br><span class="line">        assert &#123; parentHandle == <span class="literal">null</span> &#125;</span><br><span class="line">        <span class="keyword">if</span> (parent == <span class="literal">null</span>) &#123;</span><br><span class="line">            parentHandle = NonDisposableHandle</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        parent.start() <span class="comment">/* make sure the parent is started */</span></span><br><span class="line">        <span class="meta">@Suppress(<span class="string">&quot;DEPRECATION&quot;</span>)</span></span><br><span class="line">        <span class="keyword">val</span> handle = parent.attachChild(<span class="keyword">this</span>) <span class="comment">/* ---- (3) */</span></span><br><span class="line">        parentHandle = handle</span><br><span class="line">        <span class="comment">/* now check our state _after_ registering (see tryFinalizeSimpleState order of actions) */</span></span><br><span class="line">        <span class="keyword">if</span> (isCompleted) &#123;</span><br><span class="line">            handle.dispose()</span><br><span class="line">            parentHandle = NonDisposableHandle <span class="comment">/* release it just in case, to aid GC */</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>coroutine이 실행될 때 발생하는 일을 간단하게 정리하면 다음과 같다.</p>
+<ol>
+<li>coroutine 객체가 생성될 때, constructer param으로 “부모의 coroutine context”(<code>parentContext</code>)를 받는다.</li>
+<li><code>parentContext</code>에서 부모의 Job을 빼온다(<code>parentContext[Job]</code>).</li>
+<li>자신의 job을 부모의 child로 붙인다(<code>val handle = parent.attachChild(this)</code>).</li>
+</ol>
+<p><strong>즉, 자식 coroutine이 생성될 때 자신의 Job을 부모의 Job에 자식으로 붙이는 방식을 통해 트리 구조가 형성된다.</strong></p>
+<p>위의 동작 자체는 간단하지만, 이 코드만 봐서는 structured concurrency의 자세한 동작에 대해 알 수 없는 중요한 요소가 두 가지 있다.</p>
+<ol>
+<li>“부모의 coroutine context”인 <code>parentContext</code>에는 어떤 값이 주입되는가? - <code>parentContext[Job]</code>에 무엇이 담겨 있느냐에 따라서 부모 <code>Job</code>이 무엇인지가 달라지고, 결과적으로 <code>Job</code> 트리의 구성이 달라질 수 있다.</li>
+<li><code>Job</code> 트리에서 각 <code>Job</code>의 실행 순서는 어떻게 결정되는가? - 예를 들어 <code>launch &#123;&#125;</code>는 자신의 내부에서 실행된 coroutine의 종료를 기다리지 않는 반면, <code>coroutineScope &#123;&#125;</code>는 자신의 내부에서 실행된 coroutine이 모두 종료될 때까지 다음 코드를 실행하지 않는다. 둘의 동작 방식의 차이는 어디서 비롯되는가?</li>
+</ol>
+<p>이 두 가지에 본격적으로 알아보기 전에, Kotlin에서 coroutine과 <code>Job</code>, <code>CoroutineScope</code>과의 관계를 어떻게 추상화했는지를 살펴보도록 하자. 내부 코드를 읽고 이해하는 데 큰 도움을 준다.<br><br></p>
+<h2 id="AbstractCoroutine-coroutine은-CoroutineScope이며-Job이다"><a href="#AbstractCoroutine-coroutine은-CoroutineScope이며-Job이다" class="headerlink" title="AbstractCoroutine - coroutine은 CoroutineScope이며 Job이다"></a>AbstractCoroutine - coroutine은 CoroutineScope이며 Job이다</h2><p>coroutine 클래스의 기반 클래스인 <code>AbstractCoroutine</code>의 구현을 보자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractCoroutine</span>&lt;<span class="type">in T</span>&gt;(</span><br><span class="line">    parentContext: CoroutineContext,</span><br><span class="line">    initParentJob: <span class="built_in">Boolean</span>,</span><br><span class="line">    active: <span class="built_in">Boolean</span></span><br><span class="line">) : JobSupport(active), Job, Continuation&lt;T&gt;, CoroutineScope</span><br></pre></td></tr></table></figure>
+<p>코드를 보면 <code>AbstractCoroutine</code>이 <code>Job</code>과 <code>CoroutineScope</code> 인터페이스를 모두 구현하고 있음을 알 수 있다. 이것의 의미는 아래와 같다.</p>
+<ul>
+<li><strong><code>CoroutineScope</code> - coroutine은 자기 자신이 scope가 되어 자신의 code block 안에서 자식 coroutine을 실행할 수 있다. 또한, 자신의 coroutine context를 자식 coroutine에게 전달할 수 있다(e.g. 위에서 본 <code>parentContext</code> 주입 등).</strong></li>
+<li><strong><code>Job</code> - coroutine은 structured concurrency를 위한 트리의 노드 그 자체이다.</strong></li>
+</ul>
+<p>즉, 위에서 언급했던 coroutine의 structured concurrency를 위한 모든 동작을 사실은 coroutine이 전부 수행하고 있는 것이다. 이 추상화는 <code>Job</code> 객체나 <code>CoroutineScope</code> 객체를 별도로 관리해야 할 필요를 없애기 때문에 코드를 훨씬 단순하게 만든다. 예를 들어, 위에서 보았던 <code>val handle = parent.attachChild(this)</code> 코드를 보자. <code>AbstractCoroutine</code>은 별도의 <code>Job</code>을 만들어서 parent에 전달하는 대신, 자기 자신(<code>this</code>)을 parent에게 붙일 수 있다.</p>
+<p>어차피 coroutine에 모든 역할을 때려 넣을 거면 애초부터 <code>Job</code>과 <code>CoroutineScope</code>이라는 개념을 만들지 않아도 되었던 것 아니냐고 생각할 수 있다. 그럴 수도 있는데, 이러한 구현은 복잡한 시스템이 자기 자신을 보다 분명하게 표현하도록 도와준다. <code>Job</code>과 <code>CoroutineScope</code>라는 인터페이스 없이 <code>AbstractCoroutine</code>에 모든 구현을 때려 넣었다면 structured concurrency를 위한 tree라는 개념과 coroutine 실행의 scope이라는 개념이 코드 상에 제대로 드러나지 않았을 것이고, 각 개념을 달성하기 위한 코드가 한데 뒤섞여 코드를 이해하기 매우 어려웠을 것이다. <code>Job</code>과 <code>JobSupport</code> mixin, 그리고 <code>CoroutineScope</code>을 통해 명시적으로 개념을 분리하고, 이를 구현의 편의를 위해 하나로 다시 합친 덕분에 코드가 훨씬 깔끔해졌다.<br><br></p>
+<h2 id="coroutine-tree의-구성"><a href="#coroutine-tree의-구성" class="headerlink" title="coroutine tree의 구성"></a>coroutine tree의 구성</h2><p>이제 본론으로 돌아가서, 우선 <code>parentContext</code>가 무엇인지, 그리고 coroutine 실행 시 coroutine tree(이제부터 <code>Job</code> tree 대신 coroutine tree라고 하겠다)가 어떻게 구성되는지로 돌아가보자.</p>
+<p>Kotlin에서 제공하는 primitive coroutine builder에는 크게 3가지가 있는데, 아래와 같이 분류할 수 있다.</p>
+<ul>
+<li><code>CoroutineScope</code>의 extension function - <code>launch &#123;&#125;</code>, <code>async &#123;&#125;</code> 등</li>
+<li>suspending function - <code>withContext &#123;&#125;</code>, <code>coroutineScope &#123;&#125;</code> 등</li>
+<li>root coroutine builder - <code>runBlocking &#123;&#125;</code> 등</li>
+</ul>
+<p>위 3가지 종류의 coroutine builder는 구현이 서로 다르기 때문에, 각각의 구현을 살펴보아야 한다.<br><br></p>
+<h3 id="CoroutineScope의-extension-function인-coroutine-builder"><a href="#CoroutineScope의-extension-function인-coroutine-builder" class="headerlink" title="CoroutineScope의 extension function인 coroutine builder"></a>CoroutineScope의 extension function인 coroutine builder</h3><p><code>launch &#123;&#125;</code>와 <code>async &#123;&#125;</code>는 반환하는 객체가 <code>Job</code>인지 <code>Deferred</code>인지를 제외하고는 구현이 비슷해서, <code>launch &#123;&#125;</code>의 구현만 살펴보겠다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> CoroutineScope.<span class="title">launch</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    context: <span class="type">CoroutineContext</span> = EmptyCoroutineContext,</span></span></span><br><span class="line"><span class="params"><span class="function">    start: <span class="type">CoroutineStart</span> = CoroutineStart.DEFAULT,</span></span></span><br><span class="line"><span class="params"><span class="function">    block: <span class="type">suspend</span> <span class="type">CoroutineScope</span>.() -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: Job &#123;</span><br><span class="line">    <span class="keyword">val</span> newContext = newCoroutineContext(context) <span class="comment">/* ---- (1) */</span></span><br><span class="line">    <span class="keyword">val</span> coroutine = <span class="keyword">if</span> (start.isLazy)</span><br><span class="line">        LazyStandaloneCoroutine(newContext, block) <span class="keyword">else</span></span><br><span class="line">        StandaloneCoroutine(newContext, active = <span class="literal">true</span>) <span class="comment">/* ---- (2) */</span></span><br><span class="line">    coroutine.start(start, coroutine, block) <span class="comment">/* ---- (3)*/</span></span><br><span class="line">    <span class="keyword">return</span> coroutine</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">open</span> <span class="keyword">class</span> <span class="title class_">StandaloneCoroutine</span>(</span><br><span class="line">    parentContext: CoroutineContext, <span class="comment">/* ---- (4) */</span></span><br><span class="line">    active: <span class="built_in">Boolean</span></span><br><span class="line">) : AbstractCoroutine&lt;<span class="built_in">Unit</span>&gt;(parentContext, initParentJob = <span class="literal">true</span>, active = active) &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">handleJobException</span><span class="params">(exception: <span class="type">Throwable</span>)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">        handleCoroutineException(context, exception)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>새 coroutine에 사용할 context를 만든다.</li>
+<li>1의 coroutine context를 사용하여 새로운 <code>StandaloneCoroutine</code> 객체를 만든다.</li>
+<li>2의 coroutine을 시작한다.</li>
+</ol>
+<p>여기서 <code>parentContext</code>, 즉 (4)에는 어떤 값이 담겨 있는가? (2)를 보면 <code>newContext</code>가 <code>parentContext</code>로 넘어오는 것을 알 수 있다. 이제 <code>newCoroutineContext()</code> 구현을 살펴보자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ExperimentalCoroutinesApi</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">actual</span> <span class="function"><span class="keyword">fun</span> CoroutineScope.<span class="title">newCoroutineContext</span><span class="params">(context: <span class="type">CoroutineContext</span>)</span></span>: CoroutineContext &#123;</span><br><span class="line">    <span class="keyword">val</span> combined = coroutineContext + context <span class="comment">/* ---- (5) */</span></span><br><span class="line">    <span class="keyword">val</span> debug = <span class="keyword">if</span> (DEBUG) combined + CoroutineId(COROUTINE_ID.incrementAndGet()) <span class="keyword">else</span> combined</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (combined !== Dispatchers.Default &amp;&amp; combined[ContinuationInterceptor] == <span class="literal">null</span>)</span><br><span class="line">        debug + Dispatchers.Default <span class="keyword">else</span> debug</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>launch &#123;&#125;</code> 호출 시 <code>context</code> param에 아무것도 넘겨주지 않는다면, (5)에서 더해지는 두 context의 내용물은 다음과 같다.</p>
+<ul>
+<li><code>coroutineContext</code> - <code>launch &#123;&#125;</code>의 receiver <code>CoroutineScope</code>의 <code>coroutineContext</code></li>
+<li><code>context</code> - <code>EmptyCoroutineContext</code></li>
+</ul>
+<p>즉, <strong><code>parentContext</code>는 <code>launch &#123;&#125;</code>의 receiver <code>CoroutineScope</code>의 <code>coroutineContext</code>이다.</strong></p>
+<p>그렇다면 “<code>launch &#123;&#125;</code>의 receiver <code>CoroutineScope</code>“은 어떻게 결정되는가? 이는 (3)의 <code>start()</code>가 어떻게 구현되어 있는지를 통해 확인할 수 있다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* AbstractCoroutine.start()의 구현 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;R&gt;</span> <span class="title">start</span><span class="params">(start: <span class="type">CoroutineStart</span>, receiver: <span class="type">R</span>, block: <span class="type">suspend</span> <span class="type">R</span>.() -&gt; <span class="type">T</span>)</span></span> &#123; <span class="comment">/* ---- (6) */</span></span><br><span class="line">    start(block, receiver, <span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(6)을 보면 (3)에서 전달한 coroutine이 block의 receiver <code>CoroutineScope</code>이 되는 것을 알 수 있다. 즉, <code>launch &#123;&#125;</code>의 인자로 넘긴 block의 receiver는 <code>launch &#123;&#125;</code>로 인해 생성된 coroutine 그 자체이다. 부모 coroutine이 이 구현과 동일한 방법으로 시작되었다고 가정하면, “<code>launch &#123;&#125;</code>의 receiver <code>CoroutineScope</code>”는 부모 coroutine이 된다. <strong>따라서 <code>parentContext</code>는 부모 coroutine의 context가 된다.</strong></p>
+<p>이제 결론까지 마지막 한 가지만 남았다. 부모 coroutine의 <code>context[Job]</code> 에는 무엇이 들어 있는가? 이는 <code>AbstractCoroutine</code>의 구현을 보면 알 수 있다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@InternalCoroutinesApi</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractCoroutine</span>&lt;<span class="type">in T</span>&gt;(</span><br><span class="line">    parentContext: CoroutineContext,</span><br><span class="line">    initParentJob: <span class="built_in">Boolean</span>,</span><br><span class="line">    active: <span class="built_in">Boolean</span></span><br><span class="line">) : JobSupport(active), Job, Continuation&lt;T&gt;, CoroutineScope &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The context of this coroutine that includes this coroutine as a [Job].</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Suppress(<span class="string">&quot;LeakingThis&quot;</span>)</span></span><br><span class="line">    **<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">override</span> <span class="keyword">val</span> context: CoroutineContext = parentContext + <span class="keyword">this</span> <span class="comment">/* ---- (7) */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The context of this scope which is the same as the [context] of this coroutine.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    **<span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">val</span> coroutineContext: CoroutineContext <span class="keyword">get</span>() = context <span class="comment">/* ---- (8) */</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(7)의 <code>val context: CoroutineContext = parentContext + this</code>에서 <code>this</code>는 <code>Job</code>으로의 <code>this</code>이다. 그리고 (8)에서 <code>coroutineContext</code>에 이 <code>context</code>를 그대로 노출하는 것을 알 수 있다. 즉, <strong><code>coroutineContext[Job]</code>에는 coroutine 자기 자신이 들어 있다.</strong></p>
+<p>이제 위의 내용들을 다시 정리해보자.</p>
+<ol>
+<li>자식 coroutine은 <code>parentContext[Job]</code>에 자기 자신을 자식으로 붙인다.</li>
+<li>자식 coroutine은 <code>parentContext</code> param으로 <code>launch &#123;&#125;</code>의 receiver <code>CoroutineScope.coroutineContext</code>을 받는다.</li>
+<li><code>launch &#123;&#125;</code>의 receiver <code>CoroutineScope</code>는 부모 coroutine이다.</li>
+<li><code>AbstractCoroutine.coroutineContext[Job]</code>에는 자기 자신이 담겨 있다.</li>
+</ol>
+<p>따라서, <strong><code>launch &#123;&#125;</code>로 coroutine을 실행하면 부모 - 자식 관계 그대로 coroutine tree가 형성된다.</strong> 결론은 매우 직관적이고, 간단하다.</p>
+<p>예시를 통해 확인해보자. 아래는 coroutine 코드 예제와 해당 예제를 coroutine tree로 치환한 것이다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">runBlocking &#123; <span class="comment">/* coroutine 1 */</span></span><br><span class="line">    launch &#123; <span class="comment">/* coroutine 2 */</span></span><br><span class="line">        launch &#123; <span class="comment">/* coroutine 3 */</span></span><br><span class="line">            launch &#123; <span class="comment">/* coroutine 4 */</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        launch &#123; <span class="comment">/* coroutine 5 */</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/kotlin-coroutine-structured-concurrency/coroutine-tree.png" alt="coroutine tree" style="width: 400px;"/><br><br></p>
+<h3 id="suspending-function인-coroutine-builder"><a href="#suspending-function인-coroutine-builder" class="headerlink" title="suspending function인 coroutine builder"></a>suspending function인 coroutine builder</h3><p>다음은 suspending function인 <code>withContext &#123;&#125;</code>와 <code>coroutineScope &#123;&#125;</code>이다. 둘 역시 구현이 비슷한데, 여기서는 구현이 간단한 <code>coroutineScope &#123;&#125;</code>만 살펴보겠다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Note: CoroutineScope의 extension function이 아님을 기억하자. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;R&gt;</span> <span class="title">coroutineScope</span><span class="params">(block: <span class="type">suspend</span> <span class="type">CoroutineScope</span>.() -&gt; <span class="type">R</span>)</span></span>: R &#123;</span><br><span class="line">    contract &#123;</span><br><span class="line">        callsInPlace(block, InvocationKind.EXACTLY_ONCE)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> suspendCoroutineUninterceptedOrReturn &#123; uCont -&gt;</span><br><span class="line">        <span class="keyword">val</span> coroutine = ScopeCoroutine(uCont.context, uCont) <span class="comment">/* ---- (1) */</span></span><br><span class="line">        coroutine.startUndispatchedOrReturn(coroutine, block) <span class="comment">/* ---- (2) */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">open</span> <span class="keyword">class</span> <span class="title class_">ScopeCoroutine</span>&lt;<span class="type">in T</span>&gt;(</span><br><span class="line">    context: CoroutineContext, <span class="comment">/* ---- (3) */</span></span><br><span class="line">    <span class="meta">@JvmField</span> <span class="keyword">val</span> uCont: Continuation&lt;T&gt; <span class="comment">/* unintercepted continuation */</span></span><br><span class="line">) : AbstractCoroutine&lt;T&gt;(context, <span class="literal">true</span>, <span class="literal">true</span>), CoroutineStackFrame &#123; <span class="comment">/* ---- (4) */</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>핵심 구현 자체는 매우 간단하다.</p>
+<ol>
+<li>coroutine을 만든다.</li>
+<li>coroutine을 실행한다.</li>
+</ol>
+<p>(1), (3), (4)를 보면 <code>uCont.context</code>가 <code>parentContext</code>가 됨을 알 수 있다. 그렇다면 <code>uCont</code>는 무엇인가? <code>suspendCoroutineUninterceptedOrReturn()</code>의 구현을 보자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Obtains the current continuation instance inside suspend functions and either suspends</span></span><br><span class="line"><span class="comment"> * currently running coroutine or returns result immediately without suspension.</span></span><br><span class="line"><span class="comment"> * ...</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SinceKotlin(<span class="string">&quot;1.3&quot;</span>)</span></span><br><span class="line"><span class="meta">@InlineOnly</span></span><br><span class="line"><span class="meta">@Suppress(<span class="string">&quot;UNUSED_PARAMETER&quot;</span>, <span class="string">&quot;RedundantSuspendModifier&quot;</span>)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">suspend</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">suspendCoroutineUninterceptedOrReturn</span><span class="params">(<span class="keyword">crossinline</span> block: (<span class="type">Continuation</span>&lt;<span class="type">T</span>&gt;) -&gt; <span class="type">Any</span>?)</span></span>: T &#123;</span><br><span class="line">    contract &#123; callsInPlace(block, InvocationKind.EXACTLY_ONCE) &#125;</span><br><span class="line">    <span class="keyword">throw</span> NotImplementedError(<span class="string">&quot;Implementation of suspendCoroutineUninterceptedOrReturn is intrinsic&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>구현이 intrinsic이라 볼 수는 없지만, javadoc을 통해 <code>uCont</code>가 부모 coroutine임을 유추할 수 있다.* 즉, <code>launch &#123;&#125;</code>와 동일하게 부모 coroutine의 <code>context</code>를 <code>parentContext</code>로 받는다. 따라서, <code>coroutineScope &#123;&#125;</code>에서도 <code>launch &#123;&#125;</code>와 동일하게 부모 - 자식 관계를 그대로 유지하며 coroutine tree가 구성된다.</p>
+<p>* 이 부분을 보다 잘 이해하기 위해서는 1. <a href="https://github.com/Kotlin/KEEP/blob/master/proposals/coroutines.md#continuation-passing-style">Kotlin coroutine이 내부적으로 CPS로 동작하는 메커니즘</a>과 2. <code>AbstractCoroutine</code>이 <code>Continuation</code>의 역할도 맡는다는 것을 알아야 한다. 이 부분을 설명하기에는 글이 너무 길어질 듯하여 생략한다.<br><br></p>
+<h3 id="runBlocking-의-동작"><a href="#runBlocking-의-동작" class="headerlink" title="runBlocking {}의 동작"></a>runBlocking {}의 동작</h3><p>그렇다면 <code>runBlocking &#123;&#125;</code>과 같은 함수로 인해 실행되는 root coroutine은 어떤 <code>Job</code>의 자식으로 실행되는가? <code>runBlocking &#123;&#125;</code>의 구현을 보자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Throws(InterruptedException::class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> <span class="title">runBlocking</span><span class="params">(context: <span class="type">CoroutineContext</span> = EmptyCoroutineContext, block: <span class="type">suspend</span> <span class="type">CoroutineScope</span>.() -&gt; <span class="type">T</span>)</span></span>: T &#123;</span><br><span class="line">    contract &#123;</span><br><span class="line">        callsInPlace(block, InvocationKind.EXACTLY_ONCE)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> currentThread = Thread.currentThread()</span><br><span class="line">    <span class="keyword">val</span> contextInterceptor = context[ContinuationInterceptor]</span><br><span class="line">    <span class="keyword">val</span> eventLoop: EventLoop?</span><br><span class="line">    <span class="keyword">val</span> newContext: CoroutineContext</span><br><span class="line">    <span class="keyword">if</span> (contextInterceptor == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="comment">/* create or use private event loop if no dispatcher is specified */</span></span><br><span class="line">        eventLoop = ThreadLocalEventLoop.eventLoop</span><br><span class="line">        newContext = GlobalScope.newCoroutineContext(context + eventLoop)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">/* See if context&#x27;s interceptor is an event loop that we shall use (to support TestContext) */</span></span><br><span class="line">        <span class="comment">/* or take an existing thread-local event loop if present to avoid blocking it (but don&#x27;t create one) */</span></span><br><span class="line">        eventLoop = (contextInterceptor <span class="keyword">as</span>? EventLoop)?.takeIf &#123; it.shouldBeProcessedFromContext() &#125;</span><br><span class="line">            ?: ThreadLocalEventLoop.currentOrNull()</span><br><span class="line">        newContext = GlobalScope.newCoroutineContext(context)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> coroutine = BlockingCoroutine&lt;T&gt;(newContext, currentThread, eventLoop)</span><br><span class="line">    coroutine.start(CoroutineStart.DEFAULT, coroutine, block)</span><br><span class="line">    <span class="keyword">return</span> coroutine.joinBlocking()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>보면 <code>newContext</code>가 <code>GlobalScope.newCoroutineContext()</code>에 의해 만들어지는 것을 알 수 있다. 이 함수의 구현은 위에서 살펴본 적이 있다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ExperimentalCoroutinesApi</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">actual</span> <span class="function"><span class="keyword">fun</span> CoroutineScope.<span class="title">newCoroutineContext</span><span class="params">(context: <span class="type">CoroutineContext</span>)</span></span>: CoroutineContext &#123;</span><br><span class="line">    <span class="keyword">val</span> combined = coroutineContext + context</span><br><span class="line">    <span class="keyword">val</span> debug = <span class="keyword">if</span> (DEBUG) combined + CoroutineId(COROUTINE_ID.incrementAndGet()) <span class="keyword">else</span> combined</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (combined !== Dispatchers.Default &amp;&amp; combined[ContinuationInterceptor] == <span class="literal">null</span>)</span><br><span class="line">        debug + Dispatchers.Default <span class="keyword">else</span> debug</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>이 두 함수의 구현을 토대로 역추적을 해보면, <code>newContext</code>에는 <code>eventLoop</code> element 밖에 없는 것을 알 수 있다. 즉, <code>Job</code>이 없는 것이다. 실제로 <code>runBlocking &#123;&#125;</code>으로 만들어진 <code>BlockingCoroutine</code>의  parent를 디버거로 찍어 보면 null임을 알 수 있다. 대신, <code>runBlocking &#123;&#125;</code>으로 만들어진 <code>BlockingCoroutine</code>은 <code>eventLoop</code>의 종료로 관리된다. 이는 <code>BlockingCoroutine.joinBlocking()</code> 함수의 구현을 보면 알 수 있다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Suppress(<span class="string">&quot;UNCHECKED_CAST&quot;</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">joinBlocking</span><span class="params">()</span></span>: T &#123;</span><br><span class="line">    registerTimeLoopThread()</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        eventLoop?.incrementUseCount()</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="meta">@Suppress(<span class="string">&quot;DEPRECATION&quot;</span>)</span></span><br><span class="line">                <span class="keyword">if</span> (Thread.interrupted()) <span class="keyword">throw</span> InterruptedException().also &#123; cancelCoroutine(it) &#125;</span><br><span class="line">                <span class="keyword">val</span> parkNanos = eventLoop?.processNextEvent() ?: <span class="built_in">Long</span>.MAX_VALUE</span><br><span class="line">                <span class="comment">/* note: process next even may loose unpark flag, so check if completed before parking */</span></span><br><span class="line">                <span class="keyword">if</span> (isCompleted) <span class="keyword">break</span></span><br><span class="line">                parkNanos(<span class="keyword">this</span>, parkNanos)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123; <span class="comment">/* paranoia */</span></span><br><span class="line">            eventLoop?.decrementUseCount()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123; <span class="comment">/* paranoia */</span></span><br><span class="line">        unregisterTimeLoopThread()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* now return result */</span></span><br><span class="line">    <span class="keyword">val</span> state = <span class="keyword">this</span>.state.unboxState()</span><br><span class="line">    (state <span class="keyword">as</span>? CompletedExceptionally)?.let &#123; <span class="keyword">throw</span> it.cause &#125;</span><br><span class="line">    <span class="keyword">return</span> state <span class="keyword">as</span> T</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>while문 안 쪽을 잘 보면 <code>isCompleted</code>가 true일 때, 즉 event loop의 queue가 비었을 때 종료됨을 알 수 있다. 즉, <code>runBlocking &#123;&#125;</code>으로 실행된 coroutine은 부모 coroutine 없이(따라서 부모 <code>Job</code> 없이) 실행된다.<br><br></p>
+<h2 id="coroutine-tree에서-각-coroutine이-실행되는-순서"><a href="#coroutine-tree에서-각-coroutine이-실행되는-순서" class="headerlink" title="coroutine tree에서 각 coroutine이 실행되는 순서"></a>coroutine tree에서 각 coroutine이 실행되는 순서</h2><p>이제 coroutine tree가 어떻게 구성되는지를 확인했으니, 만들어진 tree를 기반으로 coroutine이 어떤 순서로 실행되는지를 알아보자.</p>
+<p>여기서도 tree 구성 방식 때와 유사하게 coroutine builder를 두 가지로 나누어서 보아야 한다.</p>
+<ul>
+<li><code>CoroutineScope</code>의 extension function - <code>launch &#123;&#125;</code>, <code>async &#123;&#125;</code> 등</li>
+<li>suspending function - <code>withContext &#123;&#125;</code>, <code>coroutineScope &#123;&#125;</code> 등<br><br></li>
+</ul>
+<h3 id="CoroutineScope의-extension-function-fire-and-forget"><a href="#CoroutineScope의-extension-function-fire-and-forget" class="headerlink" title="CoroutineScope의 extension function - fire-and-forget"></a>CoroutineScope의 extension function - fire-and-forget</h3><p><strong><code>launch &#123;&#125;</code>나 <code>async &#123;&#125;</code>는 fire-and-forget 방식으로 동작한다.</strong> 아래의 <code>launch &#123;&#125;</code> 구현을 보자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">fun</span> CoroutineScope.<span class="title">launch</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    context: <span class="type">CoroutineContext</span> = EmptyCoroutineContext,</span></span></span><br><span class="line"><span class="params"><span class="function">    start: <span class="type">CoroutineStart</span> = CoroutineStart.DEFAULT,</span></span></span><br><span class="line"><span class="params"><span class="function">    block: <span class="type">suspend</span> <span class="type">CoroutineScope</span>.() -&gt; <span class="type">Unit</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: Job &#123;</span><br><span class="line">    <span class="keyword">val</span> newContext = newCoroutineContext(context)</span><br><span class="line">    <span class="keyword">val</span> coroutine = <span class="keyword">if</span> (start.isLazy)</span><br><span class="line">        LazyStandaloneCoroutine(newContext, block) <span class="keyword">else</span></span><br><span class="line">        StandaloneCoroutine(newContext, active = <span class="literal">true</span>)</span><br><span class="line">    **coroutine.start(start, coroutine, block) <span class="comment">// not a suspending function**</span></span><br><span class="line">    <span class="keyword">return</span> coroutine</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>함수 구현에 blocking call이 없고, <code>launch &#123;&#125;</code> 자체가 suspending function이 아니기 때문에 suspending point도 없다. 따라서 coroutine을 실행시킨 뒤에 멈추지 않고 이후의 코드를 실행한다. 이 coroutine이 실행되는 것을 기다리거나 적절히 종료시키는 것은 이 coroutine의 조상 중 누군가의 책임이 된다. 예를 들어, <code>runBlocking &#123;&#125;</code>을 사용한다면 <code>runBlocking &#123;&#125;</code>의 event loop가 해당 책임을 지게 된다.<br><br></p>
+<h3 id="suspending-function-자식-coroutine이-끝날-때까지-suspend"><a href="#suspending-function-자식-coroutine이-끝날-때까지-suspend" class="headerlink" title="suspending function - 자식 coroutine이 끝날 때까지 suspend"></a>suspending function - 자식 coroutine이 끝날 때까지 suspend</h3><p>한편, <code>withContext &#123;&#125;</code>나 <code>coroutineScope &#123;&#125;</code>은 suspending function이다. <strong>이 둘은 자식 coroutine이 모두 종료될 때까지 기다리도록(suspend 하도록) 구현되어 있다.</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;R&gt;</span> <span class="title">coroutineScope</span><span class="params">(block: <span class="type">suspend</span> <span class="type">CoroutineScope</span>.() -&gt; <span class="type">R</span>)</span></span>: R &#123;</span><br><span class="line">    contract &#123;</span><br><span class="line">        callsInPlace(block, InvocationKind.EXACTLY_ONCE)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> suspendCoroutineUninterceptedOrReturn &#123; uCont -&gt;</span><br><span class="line">        <span class="keyword">val</span> coroutine = ScopeCoroutine(uCont.context, uCont)</span><br><span class="line">        coroutine.startUndispatchedOrReturn(coroutine, block) <span class="comment">/* ---- (1) */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>여기서 (1)의 구현을 보자.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> ScopeCoroutine<span class="type">&lt;T&gt;</span>.<span class="title">startUndispatchedOrReturn</span><span class="params">(receiver: <span class="type">R</span>, block: <span class="type">suspend</span> <span class="type">R</span>.() -&gt; <span class="type">T</span>)</span></span>: Any? &#123;</span><br><span class="line">    <span class="keyword">return</span> undispatchedResult(&#123; <span class="literal">true</span> &#125;) &#123;</span><br><span class="line">        block.startCoroutineUninterceptedOrReturn(receiver, <span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> ScopeCoroutine<span class="type">&lt;T&gt;</span>.<span class="title">undispatchedResult</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    shouldThrow: (<span class="type">Throwable</span>) -&gt; <span class="type">Boolean</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    startBlock: () -&gt; <span class="type">Any</span>?</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>: Any? &#123;</span><br><span class="line">    <span class="keyword">val</span> result = <span class="keyword">try</span> &#123;</span><br><span class="line">        startBlock()</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e: Throwable) &#123;</span><br><span class="line">        CompletedExceptionally(e)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * We&#x27;re trying to complete our undispatched block here and have three code-paths:</span></span><br><span class="line"><span class="comment">     * (1) Coroutine is suspended.</span></span><br><span class="line"><span class="comment">     * Otherwise, coroutine had returned result, so we are completing our block (and its job).</span></span><br><span class="line"><span class="comment">     * (2) If we can&#x27;t complete it or started waiting for children, we suspend.</span></span><br><span class="line"><span class="comment">     * (3) If we have successfully completed the coroutine state machine here,</span></span><br><span class="line"><span class="comment">     *     then we take the actual final state of the coroutine from makeCompletingOnce and return it.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * shouldThrow parameter is a special code path for timeout coroutine:</span></span><br><span class="line"><span class="comment">     * If timeout is exceeded, but withTimeout() block was not suspended, we would like to return block value,</span></span><br><span class="line"><span class="comment">     * not a timeout exception.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (result === COROUTINE_SUSPENDED) <span class="keyword">return</span> COROUTINE_SUSPENDED <span class="comment">/* (1) */</span></span><br><span class="line">    <span class="keyword">val</span> state = makeCompletingOnce(result)</span><br><span class="line">    <span class="keyword">if</span> (state === COMPLETING_WAITING_CHILDREN) <span class="keyword">return</span> COROUTINE_SUSPENDED <span class="comment">/* (2) */</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">if</span> (state <span class="keyword">is</span> CompletedExceptionally) &#123; <span class="comment">/* (3) */</span></span><br><span class="line">        <span class="keyword">when</span> &#123;</span><br><span class="line">            shouldThrow(state.cause) -&gt; <span class="keyword">throw</span> recoverStackTrace(state.cause, uCont)</span><br><span class="line">            result <span class="keyword">is</span> CompletedExceptionally -&gt; <span class="keyword">throw</span> recoverStackTrace(result.cause, uCont)</span><br><span class="line">            <span class="keyword">else</span> -&gt; result</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        state.unboxState()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>필자도 정확한 메커니즘을 파악하진 못했지만, 함수 내부의 javadoc의 (2)를 보면 children을 기다리고 있으면 suspend 한다는 내용이 언급되어 있다. 이를 신뢰한다면 <code>coroutineScope &#123;&#125;</code>은 자식 coroutine이 모두 종료될 때까지 suspend 되는 것을 알 수 있다. <code>withContext &#123;&#125;</code> 역시 <code>ScopeCoroutine</code>이나 <code>ScopeCoroutine</code>을 상속받은 <code>DispatchedCoroutine</code>을 사용하므로 <code>coroutineScope &#123;&#125;</code>와 동일하게 동작함을 알 수 있다.<br><br></p>
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><p>이 글에서 알아본 내용을 정리하면 다음과 같다.</p>
+<ol>
+<li>coroutine == <code>CoroutineScope</code> == <code>Job</code></li>
+<li>structured concurrency를 구현하기 위해 coroutine을 실행할 때 job의 tree(== coroutine의 tree)를 만들어 관리한다.</li>
+<li>coroutine 내에서 coroutine builder(<code>launch &#123;&#125;</code>, <code>async &#123;&#125;</code>, <code>coroutineScope &#123;&#125;</code>, <code>withContext &#123;&#125;</code>)를 통해 coroutine을 실행하면 부모 - 자식 형태 그대로 coroutine tree가 생성된다. <code>runBlocking &#123;&#125;</code>은 특수하게 parent <code>Job</code> 없이 실행되고, 대신 event loop를 통해 자기 자신과 자식 coroutine의 실행을 추적하고 관리한다.</li>
+<li><code>launch &#123;&#125;</code>와 <code>async &#123;&#125;</code>로 실행된 coroutine은 별다른 실행 순서가 없다. 반면, <code>coroutineScope &#123;&#125;</code>, <code>withContext &#123;&#125;</code>로 실행된 coroutine은 자식 coroutine이 모두 종료될 때까지 suspend 된다.</li>
+</ol>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/05/16/refactoring-databases/">
+        <span class="nav-arrow">← </span>
+        
+          Refactoring Databases
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2022/11/27/spring-boot-auto-configuration/">
+        
+          Spring Boot Auto-Configuration
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#structured-concurrency%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%8A%B8%EB%A6%AC-%EA%B5%AC%EC%84%B1"><span class="toc-nav-text">structured concurrency를 위한 트리 구성</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#AbstractCoroutine-coroutine%EC%9D%80-CoroutineScope%EC%9D%B4%EB%A9%B0-Job%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">AbstractCoroutine - coroutine은 CoroutineScope이며 Job이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#coroutine-tree%EC%9D%98-%EA%B5%AC%EC%84%B1"><span class="toc-nav-text">coroutine tree의 구성</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#CoroutineScope%EC%9D%98-extension-function%EC%9D%B8-coroutine-builder"><span class="toc-nav-text">CoroutineScope의 extension function인 coroutine builder</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#suspending-function%EC%9D%B8-coroutine-builder"><span class="toc-nav-text">suspending function인 coroutine builder</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#runBlocking-%EC%9D%98-%EB%8F%99%EC%9E%91"><span class="toc-nav-text">runBlocking {}의 동작</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#coroutine-tree%EC%97%90%EC%84%9C-%EA%B0%81-coroutine%EC%9D%B4-%EC%8B%A4%ED%96%89%EB%90%98%EB%8A%94-%EC%88%9C%EC%84%9C"><span class="toc-nav-text">coroutine tree에서 각 coroutine이 실행되는 순서</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#CoroutineScope%EC%9D%98-extension-function-fire-and-forget"><span class="toc-nav-text">CoroutineScope의 extension function - fire-and-forget</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#suspending-function-%EC%9E%90%EC%8B%9D-coroutine%EC%9D%B4-%EB%81%9D%EB%82%A0-%EB%95%8C%EA%B9%8C%EC%A7%80-suspend"><span class="toc-nav-text">suspending function - 자식 coroutine이 끝날 때까지 suspend</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%A0%95%EB%A6%AC"><span class="toc-nav-text">정리</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2022/01/21/Kotlin-coroutine-structured-concurrency/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Kotlin Coroutine의 Structured Concurrency 구현 상세",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

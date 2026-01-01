@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Refactoring - Martin Fowler
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Refactoring - Martin Fowler</h2>
+  <p class="post-date">2021-02-09</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>2021년 읽은 두 번째 개발 서적. &lt;디자인 패턴&gt; 다음 이 책을 고른 이유는 지금 서버 코드를 리팩토링할 필요성을 느꼈기 때문이다. 지금이 바로 회사에서 서버팀의 사이즈가 늘어날(혹은 늘어나야만 하는) 타이밍인데, 개인적으로 지금의 서버 코드는 이에 대비가 되어 있지 않은 것 같다고 생각했다. 무언가 수정을 해야 할 때 어디를 수정해야 하는지 알기 어렵고, 수정했을 때 다른 부분에 영향이 없다는 확신을 주기 어렵다. 지금까지는 개인의 능력(기억력?)에 의존하여 이런 어려움을 해결하고 있었지만, 앞으로 새로운 사람이 많이 들어온다면 분명히 팀의 scalability에 악영향을 미칠 것이라고 생각했다. 그래서 리팩토링의 필요성을 느꼈고, 리팩토링을 잘하고 싶었다.</p>
+<p>이 책은 크게 두 부분으로 나뉘는데, 앞의 3분의 1 정도는 리팩토링에 대한 전반적인 설명이고 나머지 부분은 구체적인 리팩토링 기법에 대해 설명한다. 뒷부분이 너무 상세했기 때문에 개인적으로 뒷부분은 그리 유용하지 않았고, 대충 어떤 기법들이 있는지 정도만 훑어 읽었다. 반면 앞부분은 꽤나 재미있었다. 리팩토링의 정의, 언제/왜 리팩토링을 해야 하는지, 리팩토링을 할 때 고려해야 하는 문제를 상세하게 기술했는데, “리팩토링”이라는 어렴풋한 느낌의 단어를 구체적이고 단단한 실물로 만들어주는 느낌이다.</p>
+<p>하지만 이 책을 읽으면서 가장 좋았던 포인트는 따로 있다. 바로 책 전반에 녹아 있는 프로그래밍에 대한 저자의 태도와 가치관이다. 책을 읽다보면 수많은 실패와 고민으로부터 나온 듯한, wow가 절로 나오는 문장을 마주친다. 이러한 문장을 책에 나오는 순서대로 정리해보았다.</p>
+<ul>
+<li>컴퓨터가 이해하는 코드는 바보도 작성할 수 있다. 사람이 이해하도록 작성하는 프로그래머가 진정한 실력자다.</li>
+<li>간결함이 지혜의 정수일지 몰라도, 프로그래밍에서만큼은 명료함이 진화할 수 있는 소프트웨어의 정수다.</li>
+<li>좋은 코드를 가늠하는 확실한 방법은 ‘얼마나 수정하기 쉬운가’다.</li>
+<li>“난 뛰어난 프로그래머가 아니에요. 단지 뛰어난 습관을 지닌 괜찮은 프로그래머일 뿐이에요.”</li>
+<li>우리는 주석을 달아야 할 만한 부분은 무조건 함수로 만든다. 그 함수 본문에는 원래 주석으로 설명하려던 코드가 담기고, 함수 이름은 동작 방식이 아닌 의도가 드러나게 짓는다. 이렇게 함수로 묶는 코드는 여러 줄일 수도 있고 단 한 줄일 수도 있다. 심지어 원래 코드보다 길어지더라도 함수로 뽑는다. 단, 함수 이름에 코드의 목적을 드러내야 한다. 여기서 핵심은 함수의 길이가 아닌, 함수의 목적(의도)와 구현 코드의 괴리가 얼마나 큰가다. 즉, ‘무엇을 하는지’를 코드가 잘 설명해주지 못할수록 함수로 만드는 게 유리하다.</li>
+<li>프로그램의 상당 부분이 동작을 구현하는 코드로 이뤄지지만 프로그램의 진짜 힘은 데이터 구조에서 나온다.</li>
+<li>프로젝트를 진행할수록 우리는 문제 도메인과 데이터 구조에 대해 더 많은 것을 배우게 된다. 그래서 오늘까지는 합리적이고 올바랐던 설계가 다음 주가 되면 잘못된 것으로 판명되곤 한다. 현재 데이터 구조가 적절치 않음을 깨닫게 되면 곧바로 수정해야 한다. 고치지 않고 데이터 구조에 남겨진 흠들은 우리 머릿속을 혼란스럽게 하고 훗날 작성하게 될 코드를 더욱 복잡하게 만들어버린다.</li>
+<li>역할이 둘 이상인 변수가 있다면 쪼개야 한다. 예외는 없다. 역할 하나당 변수 하나다.</li>
+<li>“데이터 테이블 없이 흐름도만 보여줘서는 나는 여전히 혼란스러울 것이다. 하지만 데이터 테이블을 보여준다면 흐름도는 웬만해선 필요조차 없을 것이다. 테이블만으로 명확하기 때문이다.”</li>
+<li>하지만 유연성은 (언제나 그렇듯) 복잡성을 키우고 얻는 대가임을 잊지 말아야 한다.</li>
+<li>데이터가 어떻게 수정되는지를 추적하는 일은 코드에서 이해하기 가장 어려운 부분 중 하나다.</li>
+</ul>
+<p>이런 말에 공감이 될 만큼 내 경험이 쌓여가고 있다는 건 참 다행이고, 뿌듯한 일인 것 같다.</p>
+<p>이 책을 읽으면서 좋은 습관을 하나 배워가는 것 같다. 바로 작업의 단위를 줄이는 것이다. 이는 멀티태스킹을 할 때 TODO list를 만들고 한 번에 한 개의 업무만 처리하는 방식과 비슷하다. 한 번에 한 가지 목적만 가지고 코드를 수정하고, 수정하면 커밋한다. 이는 리팩토링에서 저자가 코딩하는 방식을 따라해본 건데, 생각보다 훨씬 효과가 좋다.</p>
+<p>이 방식을 적용하고 느낀 장점은 여러가지인데, 우선 코드를 작성하다가 꼬이는 일이 줄어들고, 꼬이더라도 롤백이 비교적 쉬워진다. 한 가지 작업을 하더라도 이것저것 코드를 고치다가 망하는 일이 왕왕 있는데, 이런 낭패를 덜 경험할 수 있는 것이다. 그리고 두 번째는 단계별로 고치는 과정에서 코드에 대한 이해도가 올라가고, 더 좋은 구현 방식에 대한 힌트를 얻을 수 있다는 것이다. 고쳐보기 전에는 보이지 않는 것이 확실히 있다.</p>
+<p>한편, 이 책을 읽으면서도 여전히 DB가 걸린다. 예를 들어 필드 옮기기와 같은 중요한 리팩토링은 그 객체가 DB에 저장되어 있는 것이라면 쉽게 시행할 수 없다. 저자의 말대로 프로그램의 진짜 힘은 데이터 구조에서 나오는데, 데이터 구조를 리팩토링하기가 힘든 것이다. 그래서 추후에 이 책에서 언급된 &lt;리팩토링 데이터베이스&gt;라는 책을 읽어볼까 한다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/01/31/gof-design-patterns/">
+        <span class="nav-arrow">← </span>
+        
+          Design Patterns - GoF
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/04/08/implementing-domain-driven-design/">
+        
+          Implementing Domain-Driven Design
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2021/02/09/refactoring-martin-fowler/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Refactoring - Martin Fowler",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

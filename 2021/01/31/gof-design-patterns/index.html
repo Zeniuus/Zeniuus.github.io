@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Design Patterns - GoF
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Design Patterns - GoF</h2>
+  <p class="post-date">2021-01-31</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>다 읽고 나서야 이 책에 부제가 있다는 사실을 알았다. 이 책의 full name은 &lt;Design Patterns: Elements of Reusable Object-Oriented Software&gt;로, 직역하자면 “재사용 가능한 객체지향 소프트웨어의 구성 요소” 정도가 되겠다. 책 내용을 완벽하게 요약한 문장이다. 이 책은 객체지향 소프트웨어를 만들기 위한 레고 블럭을 소개한다. 이 23개의 레고 블럭, 즉 23개의 디자인 패턴을 적재 적소에 사용하여 전체 소프트웨어를 조립할 수 있다.</p>
+<p>기대를 많이 한 책이었는데, 실제로 읽어봤더니 역시 고전이라고 여겨지는 책에는 이유가 있었다. 흔히 이야기하는 이 책의 가치는 사람들이 알음알음 사용했던 것을 명확하게 “정의”하고 “이름”을 붙였다는 것이다. 나도 여기에 동의하지만, 개인적으로 이 책을 읽으면서 가장 좋았던 점은 각 패턴을 정의하는 “과정”이었다. 구체적으로는 다음과 같은 점이 마음에 들었다.</p>
+<ul>
+<li><p>엔지니어링적 사고방식 - 나는 소프트웨어 엔지니어링의 본질이 trade-off와 reasoning에 있다고 생각한다. 무조건 좋은 설계는 없고, 특정한 장점과 단점을 가지는 설계들이 있다. 그리고 우리는 이 중에서 현재 상황에 가장 알맞은 설계를 선택해야 한다. 이 선택에는 정답이 없으며, 선택의 이유가 얼마나 더 합리적으로 들리는지만 존재한다.</p>
+<p>  이 책의 서술 방식에는 이러한 소프트웨어 엔지니어링의 본질, 즉 trade-off와 reasoning이 그대로 담겨 있다. 예를 들어, 23개의 디자인 패턴을 소개할 때 저자들은 이 패턴을 적용했을 때 얻을 수 있는 이점 뿐만이 아니라 한계점을 항상 함께 소개한다. 이런 점이 가장 잘 드러나는 패턴이 visitor 패턴인데, 저자는 이 패턴에 대해 “Element 클래스 계통이 자주 추가되는 상황에서는 유지하기가 상당히 까다롭다. 이때는 각 클래스에 연산을 정의하는 것이 아마 더 쉬울 것이다”라고 명시하고 있다. 덕분에 독자는 디자인 패턴을 맹목적으로 따르는 것이 아니라 이것의 장단점에 대해 생각하고, 어디에 활용할 수 있는지를 고민할 기회를 얻는다. 엔지니어링적 사고 방식에 자연스럽게 익숙해지는 것이다.</p>
+</li>
+<li><p>훌륭한 책의 구조 - 책 내용의 빌드업이 훌륭하다. 책 초반부에는 객체 지향 프로그래밍을 설계할 때 발생하는 어려운 점을 소개한다. 객체를 어떠한 기준으로 쪼갤 것인가? 객체의 인터페이스를 어떻게 설계할 것인가? 그리고 이러한 어려움을 디자인 패턴이 어떻게 해결해줄 수 있는지를 간략하게 설명함으로서 디자인 패턴의 필요성을 보여준다. 또한 객체 지향 프로그래밍의 특성 - 인터페이스, 상속, 합성 등 - 에 대해 설명하면서 디자인 패턴의 동작 원리에 대해 설명한다. 이는 이후에 나오는 23개의 디자인 패턴의 상세 내용을 이해하는 데에 큰 도움이 된다.</p>
+<p>  객체 지향과 디자인 패턴에 대한 기본적인 설명이 끝나면 간단한 텍스트 에디터를 만드는 예시가 나온다. 이 예시를 읽으며 독자는 7~8개의 디자인 패턴을 적용하는 과정을 따라갈 수 있다. 이를 통해 독자는 디자인 패턴에 대한 실제적인 감각을 익히게 되며, 이는 이후의 책 내용을 좀 더 쉽게 받아들이게 하는 애피타이저 역할을 한다.</p>
+<p>  각각의 디자인 패턴을 정의하고 설명하는 부분도 치밀하게 구성되어 있다. 모든 디자인 패턴을 소개할 때 패턴 이름과 분류, 의도, 다른 이름, 동기, 활용성, 구조, 참여자, 협력 방법, 결과, 구현, 예제 코드, 잘 알려진 사용예, 관련 패턴이라는 공통된 포맷을 사용한다. 포맷을 보면 알겠지만, 이 포맷 덕분에 독자는 디자인 패턴을 쉽게 이해하고 비판적으로 받아들일 수 있다.</p>
+</li>
+<li><p>충분한 예제 - 이 책을 읽으면서 많이 느꼈던 것은, 어떤 개념이나 설명을 전달하거나 누군가를 설득할 때 예시가 매우 중요하다는 것이다. 책의 3분의 2 정도가 예시이다. 예시가 이렇게 많은 덕분에 독자는 각 패턴이 무엇을 하고자 하는지, 실제로 어떻게 사용하는지에 대한 감을 훨씬 잘 익힐 수 있다.</p>
+</li>
+</ul>
+<p>패턴 자체에 대해 이야기해보자면, 23개의 패턴의 본질은 separation of concern, 즉 나(=객체)와 관계 없는 것을 모르게 만드는 것이라고 생각한다. 이 “모르게 만드는 것”을 좀 더 자세히 표현하자면, 다른 클래스나 객체에 책임을 전가하는 것이다. 이 “책임”에는 객체 생성, 알고리즘, 상태 저장, 부가 기능 등 다양한 것이 포함된다. 서브클래스에 책임을 전가하면 상속을 사용하게 되고, 다른 객체에 책임을 전가하면 합성을 사용하게 된다. 이로 인해 각 “책임군”은 독립적으로 기능이 변경될 수 있는 자유를 얻는다. 즉, 기능의 추가나 변경을 위해 특정한 클래스군 / 객체군만 변경하면 되고, 코드 변경이 다른 클래스나 객체로 전파되지 않는다는 것이다.</p>
+<p>이런 패턴은 마치 도로를 까는 것과 같다. 특정한 방향성의 변화는 빠르게 수용할 수 있다는 장점이 있지만, 예상하지 못한 방향성의 변화가 발생하면 오히려 도로를 깔아놓은 게 방해가 된다. 이는 아까 위에서 든 visitor 패턴에서 아주 명확히 드러난다. visitor 패턴은 알고리즘의 추가를 빠르게 수용할 수 있지만, element의 추가는 패턴을 적용하지 않았을 때보다 오히려 더 어렵다. 그래서 디자인 패턴을 적용할 때는 앞으로 어떤 변화가 주로 발생할 것인지 예측하는 것이 매우 중요하다.</p>
+<p>각종 패턴에 대한 지식을 얻은 것은 만족스럽지만, 반면 해결되지 않은 갈증도 여전히 있다. 이 책을 읽기 전에는 “이 책을 다 읽으면 적재 적소에 디자인 패턴을 착착 적용하고 응용해서 타다 서버 코드 구조를 더 좋게 만들 수 있겠지”라는 막연한 기대감이 있었는데, 그런 마법같은 일은 역시 일어나지 않았다.</p>
+<p>이 책을 읽으면서 계속 답답했던 점은, 이 책에서 읽은 여러가지 패턴을 타다 서버 코드에 적용할 방법이 잘 생각이 나지 않는다는 것이었다.</p>
+<p>이 책의 대부분의 예시는 컴파일러나 프론트엔드 관련 코드였다. 프론트엔드에는 UI의 재사용성이 매우 높다. 컴파일러는 프로그램을 파싱하여 만든 추상 구문 트리을 공용으로 사용하는 로직이 매우 많다. 한편, 내가 짜는 코드의 대부분은 제품을 위한 비즈니스 로직이다. 과연 비즈니스 로직 코드의 재사용성이 얼마나 필요할까? 비즈니스 로직이 변화하는 방향성을 내가 얼마나 잘 예측할 수 있을까? 물론 종종 패턴을 사용할 일이 있기는 하다. 외부 라이브러리를 사용할 때 adapter 패턴을 쓰고, 대기지 재배치 알고리즘에 대해 strategy 패턴을 사용할 수 있을 것이다. 하지만 비즈니스 로직 코드의 복잡성의 본질이 거기서 오는 것인지 아직은 잘 확신이 들지 않는다.</p>
+<p>조금 생각해봤을 때 서버 코드가 프론트엔드/컴파일러 코드와 다른 본질적인 부분은, 서버 코드에는 데이터베이스가 존재한다는 점이다. 이미 저장된 데이터의 구조는 서비스 중단 점검을 하지 않는 이상 코드보다 변경하기 훨씬 힘들다. 그래서 어플리케이션이 데이터베이스를 활용하는 방식은 매우 신중하게 설계되어야 한다. 내가 경험한 많은 설계 이슈는 기존에 설계된 엔티티의 구조가 새로운 요구사항을 제대로 반영하지 못하는 것에서 발생했다(정보가 잘못된 구조로 분산되어 있다, 필드의 시멘틱이 분명하지 않다 등). 이런 경험을 토대로, 서버 코드에서의 재사용성은 엔티티 구조의 재사용성과 밀접한 관계가 있지 않을까 생각해본다.</p>
+<p>이 생각의 방향성이 맞는지, 맞다면 이 문제를 디자인 패턴에서 배운 것으로 어떻게 해결할 수 있을지는 천천히 고민해보려고 한다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/01/14/kubernetes-ops-components/">
+        <span class="nav-arrow">← </span>
+        
+          쿠버네티스 환경에서 서비스를 운영할 때 필요한 것들
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/02/09/refactoring-martin-fowler/">
+        
+          Refactoring - Martin Fowler
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2021/01/31/gof-design-patterns/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Design Patterns - GoF",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

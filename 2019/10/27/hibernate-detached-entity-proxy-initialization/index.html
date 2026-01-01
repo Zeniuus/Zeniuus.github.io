@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Hibernate Detached 엔티티 프록시의 초기화
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Hibernate Detached 엔티티 프록시의 초기화</h2>
+  <p class="post-date">2019-10-27</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="문제-상황"><a href="#문제-상황" class="headerlink" title="문제 상황"></a>문제 상황</h2><p>Spring + Hibernate + Spring Data JPA 환경에서 다음과 같은 상황이 있었다.<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">doSomeTask</span><span class="params">(transactionTemplate: <span class="type">TransactionTemplate</span>, entityRepository: <span class="type">EntityRepository</span>)</span></span> &#123;</span><br><span class="line">  <span class="keyword">val</span> entity = transactionTemplate.execute &#123;</span><br><span class="line">    entityRepository.findById(entityId)</span><br><span class="line">  &#125;</span><br><span class="line">  serializableTransactionTemplate.execute &#123;</span><br><span class="line">    <span class="comment">/* Do some task */</span></span><br><span class="line">  &#125;</span><br><span class="line">  println(entity.otherEntity.field) <span class="comment">/* LazyInitializtionException? */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>나는 <code>println(entity.otherEntity.field)</code>에서 분명 <code>LazyInitializationException</code>이 뜰 것이라고 기대했다. 왜냐하면 이미 <code>entity</code>를 가져온 <code>EntityManager</code>는 <code>transactionTemplate.execute &#123;&#125;</code>가 끝나는 시점에 닫혔을 것이기 때문이다. 실제로 로그에 남아있는 내용도 내가 예상한 <code>EntityManager</code>의 라이프사이클과 같았다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">2019-10-26 14:29:38.550 DEBUG 84541 --- [  restartedMain] o.s.orm.jpa.JpaTransactionManager        : Opened new EntityManager [SessionImpl(1800396726&lt;open&gt;)] for JPA transaction</span><br><span class="line">2019-10-26 14:29:38.555 DEBUG 84541 --- [  restartedMain] o.s.orm.jpa.JpaTransactionManager        : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@17d82972]</span><br><span class="line">2019-10-26 14:29:39.824 DEBUG 84541 --- [  restartedMain] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1800396726&lt;open&gt;)] for JPA transaction</span><br><span class="line">2019-10-26 14:29:39.825 DEBUG 84541 --- [  restartedMain] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction</span><br><span class="line">Hibernate: </span><br><span class="line">    select</span><br><span class="line">        ...</span><br><span class="line">    from</span><br><span class="line">        entity entiity0_ </span><br><span class="line">    where</span><br><span class="line">        entity0_.id=?</span><br><span class="line">2019-10-26 14:29:40.481 DEBUG 84541 --- [  restartedMain] o.s.orm.jpa.JpaTransactionManager        : Initiating transaction commit</span><br><span class="line">2019-10-26 14:29:40.481 DEBUG 84541 --- [  restartedMain] o.s.orm.jpa.JpaTransactionManager        : Committing JPA transaction on EntityManager [SessionImpl(1800396726&lt;open&gt;)]</span><br><span class="line">2019-10-26 14:29:40.487 DEBUG 84541 --- [  restartedMain] o.s.orm.jpa.JpaTransactionManager        : Closing JPA EntityManager [SessionImpl(1800396726&lt;open&gt;)] after transaction</span><br></pre></td></tr></table></figure></p>
+<p>그러면 <code>entity</code>는 detached 상태가 되고, <code>println</code> 절에서 <code>entity.otherEntity.field</code>에 접근할 때 아직 <code>otherEntity</code>가 초기화되지 않은 상황이기 때문에 <code>LazyInitializationException</code>이 났어야 한다.</p>
+<p>하지만 실제로는 오류가 발생하지 않고 데이터가 잘 가져와졌다. 왜일까?<br><br></p>
+<h2 id="EntityManager의-라이프사이클"><a href="#EntityManager의-라이프사이클" class="headerlink" title="EntityManager의 라이프사이클"></a>EntityManager의 라이프사이클</h2><p><code>TransactionTemplate.execute()</code>은 Spring에서 명시적으로 트랜잭션 범위를 관리할 때 사용하는 도구이다. 이 함수의 구현을 보면 대략 다음과 같이 생겼다 :<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* TransactionTemplate.java */</span></span><br><span class="line"><span class="comment">/* pseudo-code */</span></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; T <span class="title function_">execute</span><span class="params">(TransactionCallback&lt;T&gt; action)</span> <span class="keyword">throws</span> TransactionException &#123;</span><br><span class="line">  <span class="type">TransactionStatus</span> <span class="variable">status</span> <span class="operator">=</span> <span class="built_in">this</span>.transactionManager.getTransaction(<span class="built_in">this</span>);</span><br><span class="line">  T result;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    result = action.doInTransaction(status);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">    rollbackOnException(status, ex);</span><br><span class="line">    <span class="keyword">throw</span> ex;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">this</span>.transactionManager.commit(status);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>정리하면,</p>
+<ol>
+<li><code>PlatformTransactionManager</code>에서 트랜잭션을 하나 가져오고,</li>
+<li>그 안에서 코드를 실행한다.</li>
+<li>성공하면 커밋, 실패하면 롤백한다.</li>
+</ol>
+<p>위 코드를 보면 <code>PlatformTransactionManager</code>의 구현체로 어떤 것을 사용하느냐에 따라 <code>TransactionTemplate.execute()</code>의 동작 방식이 달라진다는 사실을 알 수 있다. 타다 서버에서는 JPA를 사용하고 있기 때문에 이미 Bean 설정으로 <code>PlatformTransactionManager</code>의 구현체를 <code>JpaTransactionManager</code>로 설정해놓은 상황이다. <code>JpaTransactionManager</code>은 트랜잭션이 생성될 때 이미 해당 쓰레드에 바인딩 된 <code>EntityManager</code>가 없을 경우 새로운 <code>EntityManager</code>을 만들어주고, 트랜잭션이 종료(커밋/롤백)될 때 <code>EntityManager</code>을 닫아주는 역할을 한다.</p>
+<p>코드를 통해 좀 더 자세히 들여다보자. 우선 트랜잭션을 열고 <code>EntityManager</code>을 만드는 코드이다. <code>TransactionTemplate.execute()</code>가 호출하는 <code>PlatformTransactionManager.getTransaction()</code>은 <code>JpaTransactionManager.doGetTransaction()</code>과 <code>JpaTransactionManager.doBegin()</code>에게 트랜잭션 생성과 시작을 위임한다. 이 때 <code>JpaTransactionManager.doBegin()</code>은 트랜잭션에 달린 <code>EntityManager</code>가 없으면 새로 만들어준다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* JpaTransactionManager.java */</span></span><br><span class="line"><span class="comment">/* pseudo-code */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doBegin</span><span class="params">(Object transaction, TransactionDefinition definition)</span> &#123;</span><br><span class="line">  <span class="type">JpaTransactionObject</span> <span class="variable">txObject</span> <span class="operator">=</span> (JpaTransactionObject) transaction;</span><br><span class="line">  <span class="keyword">if</span> (!txObject.hasEntityManagerHolder()) &#123;</span><br><span class="line">    <span class="type">EntityManager</span> <span class="variable">newEm</span> <span class="operator">=</span> createEntityManagerForTransaction();</span><br><span class="line">    txObject.setEntityManagerHolder(<span class="keyword">new</span> <span class="title class_">EntityManagerHolder</span>(newEm), <span class="literal">true</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>다음은 <code>EntityManager</code>가 어떻게 닫히는지 살펴보자. <code>TransactionTemplate.execute()</code> 내에서 <code>PlatformTransactionManager.commit()</code>(혹은 <code>rollback()</code>)이 호출되면 최종적으로 <code>JpaTransactionManager.doCleanupAfterCompletion()</code> 함수가 호출된다. 이 함수에서 트랜잭션에 달려있는 <code>EntityManager</code>을 닫게 된다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* JpaTransactionManager.java */</span></span><br><span class="line"><span class="comment">/* pseudo-code */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">doCleanupAfterCompletion</span><span class="params">(Object transaction)</span> &#123;</span><br><span class="line">  <span class="type">JpaTransactionObject</span> <span class="variable">txObject</span> <span class="operator">=</span> (JpaTransactionObject) transaction;</span><br><span class="line">  <span class="keyword">if</span> (txObject.isNewEntityManagerHolder()) &#123;</span><br><span class="line">    <span class="type">EntityManager</span> <span class="variable">em</span> <span class="operator">=</span> txObject.getEntityManagerHolder().getEntityManager();</span><br><span class="line">    EntityManagerFactoryUtils.closeEntityManager(em);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>정리하면, <strong><code>JpaTransactionManager</code>가 <code>EntityManager</code>의 라이프사이클을 트랜잭션과 동일하게 관리해준다</strong>(참고 : 한 쓰레드에서 여러 트랜잭션이 열릴 경우에는 <code>EntityManager</code>의 라이프사이클이 트랜잭션의 라이프사이클과 일치하지 않을 수 있다).</p>
+<ol>
+<li>트랜잭션을 시작할 때 <code>EntityManager</code>을 만들고 트랜잭션에 붙여준다.</li>
+<li>트랜잭션을 종료할 때 트랜잭션에 붙어있는 <code>EntityManager</code>을 제거한다.</li>
+</ol>
+<p>이는 <code>@Transactional</code> 어노테이션을 활용한 선언적 트랜잭션 관리에서도 마찬가지로 적용된다.<br><br></p>
+<h2 id="Detached-엔티티-프록시의-초기화"><a href="#Detached-엔티티-프록시의-초기화" class="headerlink" title="Detached 엔티티 프록시의 초기화"></a>Detached 엔티티 프록시의 초기화</h2><p><code>EntityManager</code>가 닫히면 해당 <code>EntityManager</code>의 persistence context에 들어있는 모든 엔티티가 detached 상태로 변한다고 한다. 이는 맞는 말이다. 하지만 이번 문제를 해결하려고 디버그 모드를 사용하여 이리저리 코드를 탐색한 결과 흥미로운 사실을 발견했다.</p>
+<p>Hibernate의 <code>EntityManager</code> 구현체인 <code>SessionImpl</code>은 내부적으로 <code>StatefulPersistenceContext</code>라는 클래스를 <code>PersistenceContext</code>의 구현체로 사용한다. 방금 전에 살펴보았던 <code>JpaTransactionManager.doCleanupAfterCompletion()</code> 함수에서는 <code>EntityManagerFactoryUtils.closeEntityManager(em)</code>을 호출하는데, 이 함수를 타고 들어가다 보면 <code>SessionImpl.cleanupOnClose()</code>라는 함수를 호출하고, 이 함수는 내부적으로 다시 <code>StatefulPersistenceContext.clear()</code> 함수를 호출한다. 즉, <strong><code>EntityManager</code>가 닫힐 때 persistence context를 clear 한다</strong>는 이야기이다. 그러면 <code>StatefulPersistenceContext.clear()</code>가 어떤 일을 하는지 알아보자.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* StatefulPersistenceContext.java */</span></span><br><span class="line"><span class="comment">/* pseudo-code */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">clear</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> ( Object o : proxiesByKey.values() ) &#123;</span><br><span class="line">    ((HibernateProxy) o).getHibernateLazyInitializer().unsetSession();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>persistence context가 닫힐 때에는 해당 context 내의 아직 initialized 되지 않은 프록시가 있으면 <code>EntityManager</code>을 다 떼어내는 작업을 한다.</strong> 여기서 “떼어내는 작업(<code>((HibernateProxy) o).getHibernateLazyInitializer().unsetSession();</code>)”의 구현을 좀 더 살펴보자.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* AbstractLazyInitializer.java */</span></span><br><span class="line"><span class="comment">/* pseudo-code */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">unsetSession</span><span class="params">()</span> &#123;</span><br><span class="line">  prepareForPossibleLoadingOutsideTransaction();</span><br><span class="line">  session = <span class="literal">null</span>;</span><br><span class="line">  readOnly = <span class="literal">false</span>;</span><br><span class="line">  readOnlyBeforeAttachedToSession = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">prepareForPossibleLoadingOutsideTransaction</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> ( session != <span class="literal">null</span> ) &#123;</span><br><span class="line">    allowLoadOutsideTransaction = session.getFactory().getSessionFactoryOptions().isInitializeLazyStateOutsideTransactionsEnabled();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ( allowLoadOutsideTransaction &amp;&amp; sessionFactoryUuid == <span class="literal">null</span> ) &#123;</span><br><span class="line">      sessionFactoryUuid = session.getFactory().getUuid();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>isInitializeLazyStateOutsideTransactionsEnabled</code> 옵션이 true로 세팅되어 있을 경우, <strong><code>EntityManager</code>을 프록시로부터 떼어낼 때 lazy initializer에게 현재 <code>EntityManagerFactory</code>의 id를 저장</strong>해놓는다. 이렇게 되면 <strong>나중에 transaction 바깥에 있는 detached 상태에서 프록시에 접근하더라도 <code>EntityManagerFactory</code>에서 <code>EntityManager</code>을 만들어 프록시를 초기화할 수 있다.</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* AbstractLazyInitializer.java */</span></span><br><span class="line"><span class="comment">/* pseudo-code */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">initialize</span><span class="params">()</span> <span class="keyword">throws</span> HibernateException &#123;</span><br><span class="line">  <span class="keyword">if</span> ( !initialized ) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( allowLoadOutsideTransaction ) &#123;</span><br><span class="line">      permissiveInitialization();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">permissiveInitialization</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> ( session == <span class="literal">null</span> ) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( sessionFactoryUuid == <span class="literal">null</span> ) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">LazyInitializationException</span>( <span class="string">&quot;could not initialize proxy [&quot;</span> + entityName + <span class="string">&quot;#&quot;</span> + id + <span class="string">&quot;] - no Session&quot;</span> );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">SessionFactoryImplementor</span> <span class="variable">sf</span> <span class="operator">=</span> (SessionFactoryImplementor)</span><br><span class="line">        SessionFactoryRegistry.INSTANCE.getSessionFactory( sessionFactoryUuid );</span><br><span class="line">    <span class="type">SharedSessionContractImplementor</span> <span class="variable">session</span> <span class="operator">=</span> (SharedSessionContractImplementor) sf.openSession();</span><br><span class="line">    session.beginTransaction();</span><br><span class="line">    target = session.immediateLoad( entityName, id );</span><br><span class="line">    session.getTransaction().commit();</span><br><span class="line">    session.close();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>정리하면, <code>EntityManager</code>가 닫힐 때 엔티티 프록시에서 <code>EntityManager</code>가 떨어져 나가는데, 이 때 <code>SessionFactoryOptions.isInitializeLazyStateOutsideTransactionsEnabled()</code>가 true로 설정되어 있으면 <code>EntityManagerFactory</code>에 대한 레퍼런스를 저장해놓는다. 그리고 프록시에 접근이 일어날 때 해당 <code>EntityManagerFactory</code>에서 새로운 <code>EntityManager</code>와 트랜잭션을 만들고, 그 안에서 프록시를 초기화한다.</p>
+<p><code>SessionFactoryOptions.isInitializeLazyStateOutsideTransactionsEnabled()</code>는 Hibernate의 <code>hibernate.enable_lazy_load_no_trans</code> property를 통해 조절할 수 있다. 내가 문제 상황의 코드를 실행했던 환경에서는 위 설정이 true로 되어있었기 때문에 <code>LazyInitializationException</code>이 발생하지 않았던 것이다. 실제로 <code>hibernate.enable_lazy_load_no_trans</code> 설정을 false로 변경한 후 다시 실행시켜보았더니 <code>LazyInitializationException</code>이 발생했다.<br><br></p>
+<h2 id="enable-lazy-load-no-trans-설정은-안티-패턴이다"><a href="#enable-lazy-load-no-trans-설정은-안티-패턴이다" class="headerlink" title="enable_lazy_load_no_trans 설정은 안티 패턴이다"></a>enable_lazy_load_no_trans 설정은 안티 패턴이다</h2><p>하지만 이와 같은 수단은 <a href="https://vladmihalcea.com/the-hibernate-enable_lazy_load_no_trans-anti-pattern/">이 사이트</a>에 나와있듯이 <code>LazyInitializationException</code>을 피해가기 위한 편법에 불가하다. N+1 문제를 방지할 수 없는 것은 물론이고, 프록시를 초기화할 때마다 새로운 <code>EntityManager</code>와 트랜잭션을 열고 닫고를 반복해야 하고, 이에 따라 JDBC 커넥션도 점유했다 반납했다를 반복하게 된다. 이는 리소스 낭비다. 이런 옵션이 필요한 상황이 있다면 트랜잭션과 <code>EntityManager</code>가 닫히기 전에 원하는 엔티티를 미리 초기화해놓는 방식으로 해결해야 할 것이다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/10/06/review-clean-architecture/">
+        <span class="nav-arrow">← </span>
+        
+          클린 아키텍처 후기
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/12/17/goodbye-2019-as-developer-1/">
+        
+          2019년 개발자 회고 (1)
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EB%AC%B8%EC%A0%9C-%EC%83%81%ED%99%A9"><span class="toc-nav-text">문제 상황</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#EntityManager%EC%9D%98-%EB%9D%BC%EC%9D%B4%ED%94%84%EC%82%AC%EC%9D%B4%ED%81%B4"><span class="toc-nav-text">EntityManager의 라이프사이클</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Detached-%EC%97%94%ED%8B%B0%ED%8B%B0-%ED%94%84%EB%A1%9D%EC%8B%9C%EC%9D%98-%EC%B4%88%EA%B8%B0%ED%99%94"><span class="toc-nav-text">Detached 엔티티 프록시의 초기화</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#enable-lazy-load-no-trans-%EC%84%A4%EC%A0%95%EC%9D%80-%EC%95%88%ED%8B%B0-%ED%8C%A8%ED%84%B4%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">enable_lazy_load_no_trans 설정은 안티 패턴이다</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2019/10/27/hibernate-detached-entity-proxy-initialization/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Hibernate Detached 엔티티 프록시의 초기화",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

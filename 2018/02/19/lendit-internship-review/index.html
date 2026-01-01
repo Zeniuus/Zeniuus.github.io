@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      2018.02.19.
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>2018.02.19.</h2>
+  <p class="post-date">2018-02-19</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="렌딧-인턴-후기"><a href="#렌딧-인턴-후기" class="headerlink" title="렌딧 인턴 후기"></a>렌딧 인턴 후기</h1><p>두달 간의 인턴십이 끝났다. 초반 한달은 정말 천천히 갔는데, 후반 한달은 이전에 했던 일의 유지보수와 새로운 일이 겹치면서 정신없이 지나가버렸다.<br><br /></p>
+<p>만족감, 아쉬움, 부족함, 동기부여 등 수많은 키워드로 표현할 수 밖에 없는 복잡한 두달이었다. 이렇게 두달 동안 느낀 점이 너무나도 많기에 글로 정리하여 남기려고 한다.<br><br /></p>
+<h2 id="Dunning-Kruger-Effect"><a href="#Dunning-Kruger-Effect" class="headerlink" title="Dunning-Kruger Effect"></a>Dunning-Kruger Effect</h2><p>인턴십을 마치고 난 직후의 나의 상태를 요약하자면, 나의 진로에 대한 확신은 생겼으나 자신감은 많이 떨어진 상태이다. 렌딧에서의 이번 두 달이 개발자로서의 적성과 스타트업을 첫 직장으로 가지고 싶다는 생각을 재차 확인할 수 있는 좋은 기회였던 반면, 학교라는 좁은 물 안에서 갇혀있던 내 시야가 넓어짐으로써 내 실력에 대한 자신감이 꽤 떨어지는 계기가 되기도 했다.<br><br /></p>
+<p>Dunning-Kruger effect라는 유명한 심리학 이론이 있는데, 이에 따르면 특정 기술에 대한 숙련도가 매우 낮을 때 자신의 무지함을 깨닫지 못하고 자신감이 비정상적으로 높아진다고 한다.<br><br /></p>
+<p>나는 최근 반년 동안 이 효과에서 말하는 ‘숙련도가 부족한 사람’이었다. 만약 학교에 계속 머물러 있고 인턴을 하지 않았다면 내 좁은 시야에 대해 깨닫지 못하고 졸업할 때 까지 저 상태를 유지했을 것이 분명하다. 우물 안 개구리에서 벗어나 나의 부족함을 객관적으로 깨달은 점은 이번 인턴십에서 얻을 수 있었던 가장 중요한 것 중 하나이다.<br><br /></p>
+<h2 id="학교에서의-개발과-현업에서의-개발은-다르다"><a href="#학교에서의-개발과-현업에서의-개발은-다르다" class="headerlink" title="학교에서의 개발과 현업에서의 개발은 다르다"></a>학교에서의 개발과 현업에서의 개발은 다르다</h2><p>구체적으로 내가 부족함을 느낀 부분은 지금까지 학교에서 열심히 쌓아왔던 지식들이 현업에 뛰어들기 부끄러울 만큼 작은 양이라는 것이었다.<br><br /></p>
+<p>이전에 한 스타트업 CEO와 대화했을 때 코드리뷰를 받으면 완전히 발가벗겨진 상태로 거리에 나선 기분이 든다고 들었는데, 이번 인턴십에서 이를 뼈저리게 느꼈다. 나름 스스로의 코드 퀄리티에 만족하고 있었던 나는 몇백줄밖에 되지 않는 짧은 코드에 달린 수십개의 코멘트를 보고 큰 충격을 받았다. 내가 짠 코드는 느리게 돌아가고, 모듈화가 되어있지 않고, 확장성이 떨어지고, 읽기 힘든 지저분한 코드였다.<br><br /></p>
+<p>지금까지 학교에서 개발을 할 때 신경써야 할 유일한 사항은 ‘생각대로 작동하는가’였다. 서비스의 규모도 작고, 아직 대부분 학생이다보니 생각대로 작동하게 만드는 것만으로도 벅찼다. 그래서 생각했던 대로 프로그램이 돌아가기만 하면 충분했고, 다들 만족해했다.<br><br /></p>
+<p>반면, 현업에서의 개발은 ‘잘’ 돌아가는 것이 중요하다. 단순히 돌아가는 것만으로는 부족하다. 빠르게 돌아야하고, 유저가 사용하기 편해야 하고, 예외에 취약하지 말아야 하고, 보안이 철저해야 하고, 쉽게 확장 가능해야 하고, 그 와중에 가독성이 좋게 코드를 작성해야 한다.<br><br /></p>
+<p>개발을 처음 시작했을 때부터 현재까지 약 1년동안 나는 개발 전반의 흐름과 원리를 파악하는 데에 많은 시간을 할애했다. 이로 인해 원하는 기능을 구현하는 데에는 큰 문제가 없게 되었고, 또 인턴십에서 새로운 지식들을 빠르게 습득하는 데에 큰 도움이 되었다.<br><br /></p>
+<p>하지만 현업에서 일해보고, 학교에서의 개발과 현업에서의 개발은 다르다는 것을 느꼈다. 지금까지 공부해왔던 지식들과는 다른 방향의, 각 기술에 대한 훨씬 더 심도있는 이해를 필요로 했다.<br><br /></p>
+<h2 id="구글신은-모든-것을-알지만-모든-것을-알려주지는-않는다"><a href="#구글신은-모든-것을-알지만-모든-것을-알려주지는-않는다" class="headerlink" title="구글신은 모든 것을 알지만, 모든 것을 알려주지는 않는다"></a>구글신은 모든 것을 알지만, 모든 것을 알려주지는 않는다</h2><p>이를 위해서 나는 개발 관련 서적을 구입해서 읽기로 결심했다. 내가 원하는 지식은 구글링을 통해 얻기 적합한 종류의 지식이 아니라고 느꼈다.<br><br /></p>
+<p>구글링을 통해서 알 수 있는 것은 굉장히 많다. 사실, 구글링을 통해 알 수 없는 정보가 없다고 말하는 편이 옳을 것이다. 그러나 구글링은 검색을 해야 하기 때문에 내가 검색할 query를 직접 입력해야 한다. 즉, 내가 모르는 키워드에 대해서는 검색할 수 없다는 치명적인 단점이 존재한다.<br><br /></p>
+<p>요컨데 이런 것이다. 나는 Java로 String을 concatenate 하는 방법을 안다. 그냥 String끼리 <code>+</code>를 사용하여 더하면 된다. 하지만, Java는 여러가지 String concatenation 방법을 지원한다. 예를 들어 <code>String.format()</code>이나 <code>StringBuilder</code> class를 사용하는 것이다. 만약 내가 <code>+</code>만 알고 있었다면 String concatenation이 필요한 모든 경우에 아무 생각 없이 <code>+</code>를 사용했을 것이다. 하지만 만약 <code>+</code> 외에 다른 방법들을 알고, 그들의 작동 원리와 그로 인해서 발생하는 성능 차이에 대해 알고 있다면 상황에 따라 다른 String concatenation 방법을 사용했을 것이다.<br><br /></p>
+<p>이렇게 ‘<code>+</code> 이외에 다른 String concatenation 방식이 있고 각각의 방식마다 성능차이가 난다’는 지식은 <code>+</code>를 알고 있는 것만으로는 평생동안 알지 못하는 사실이다. 물론 이는 구글링을 해보면 다 나오는 정보지만, 애초에 이러한 지식이 부재한 상태로는 구글링을 하지 못한다.<br><br /></p>
+<p>이러한 지식을 알기 위해서는 누군가로부터 ‘String concatenation 방식에 여러가지가 있고, 이들은 상황마다 다른 성능을 낸다’는 사실을 전달받아야 한다. 나는 구글링을 통해 효율적으로 습득할 수 있는 선의 지식을 대부분 습득했다고 판단했고, 나에게 현업에서 사용되는 기술들에 대한 키워드를 던져줄 무언가가 필요하다고 느꼈다.<br><br /></p>
+<h2 id="책은-가장-좋은-스승이다"><a href="#책은-가장-좋은-스승이다" class="headerlink" title="책은 가장 좋은 스승이다"></a>책은 가장 좋은 스승이다</h2><p>나는 이러한 사실을 전달받는 매체로 책이 매우 적절하다고 느꼈다.<br><br /></p>
+<p>이를 느끼게 된 것은 [토비의 스프링]이라는 책을 읽고 공부하면서였다. 내가 처음으로 읽은 개발 관련 서적이었는데, 자바와 객체지향, Spring에 대해 내가 모르는 수많은 개념을 정리된 상태로 접하면서 새로운 지식을 빠르게 습득할 수 있었다. Vue.js 공식 documentation도 마찬가지였다. 이때까지 필요할 때 이것저것 참고해왔던 docs를 정독하니 내가 모르는 점들이 정말 많았다.<br><br /></p>
+<p>내가 모르는 지식을 체계적으로 배울 수 있는 점도 좋지만, 무엇보다 책이나 공식 documentation이 매력적으로 느껴진 이유는 각각의 기술이 추구하는 방향성을 확실히 배울 수 있었기 때문이다. 중학교 때로 돌아가서, 나는 꽤 성적을 잘 받는 편이었고, 덕분에 어떻게 하면 성적을 잘 받을 수 있냐는 질문을 여러번 받았었다. 그리고 그러한 질문이 들어올 때마다 내가 한 답변은 ‘출제자의 의도를 파악해라’는 것이었다. 출제자의 의도를 알면 대충 어떤 느낌의 답을 적어야 하는지 알 수 있기 때문이다.<br><br /></p>
+<p>어디서든지 제작자의 의도는 매우 중요하다. 특히 어떤 기술에서의 의도, 혹은 방향성은 해당 기술을 어디서 어떻게 사용하는 것이 적절한 지에 대한 명확한 지표가 된다. 따라서 개발자의 의도를 파악한다면 자연스럽게 해당 기술을 더욱 잘 활용할 수 있게 된다. 정리된 문서에는 기술이 추구하는 방향성, 기술의 의도, 기술의 design choice에 대한 이유가 잘 녹아들어있다.<br><br /></p>
+<p>인턴십이 끝나고 나서 JavaScript에 큰 흥미를 느껴 [You don’t know JS]라는 책을 정독하기로 결심했다. 이 외에도 TypeScript와 NativeScript에 대한 documentation을 정독하고 있다. 이때까지 열심히 구글링을 통해 개발에 대한 스케치를 해왔으니, 책을 통해 디테일한 색칠을 시작하려고 한다.<br><br /></p>
+<h2 id="개발자의-유저는-사용자-뿐만이-아니다"><a href="#개발자의-유저는-사용자-뿐만이-아니다" class="headerlink" title="개발자의 유저는 사용자 뿐만이 아니다"></a>개발자의 유저는 사용자 뿐만이 아니다</h2><p>다시 학교와 현업의 차이로 돌아가서, 내가 현업에서 개발을 하며 느낀 다른 중요한 점은 코드를 예쁘게 짜는 것이 매우x100000 중요하다는 것이다.<br><br /></p>
+<p>이전에 학교에서 HCI(Human-Computer Interface) 수업을 들을 때 나는 유저가 얼마나 중요한 존재인지 배웠다. 이는 내 사고방식을 바꾼 몇 안되는 계기일 만큼 나는 유저의 중요성에 크게 공감했고, 이 수업을 들은 이후로 나는 개발은 물론이고 그 외의 어떤 일에서도 ‘나의 유저’가 누구인지 항상 고려하고 행동하게 되었다.<br><br /></p>
+<p>그리고 이번 인턴십에서 나는 사용자 뿐만 아니라 다른 협업중인 개발자 역시 내 프로그램의 유저라는 매우 중요한 사실을 깨달았다.<br><br /></p>
+<p>사용자는 실제 작동하는 프로그램의 타겟 유저이고, 개발자는 소스코드의 타겟 유저이다. 바꿔 말하자면, 프로그램의 성능과 유저 경험(user experience)도 중요하지만 그 만큼 코드를 다른 사람이 읽기 쉽게 짜는 것도 매우 중요하다. 코드를 가독성 있게 작성하는 것은 개발자라는 유저의 경험을 향상시키는 것이다.<br><br /></p>
+<p>오늘날 개발자는 아무도 혼자 일하지 않는다. 이는 진짜 갓 시작한 스타트업에서나 있을만한 일이다. 대부분의 개발자에게는 다른 사람들과의 협업이 필수적이고, 심지어 요즘 개발 트렌드인 오픈소스 개발에서는 얼굴조차 모르는 사람들과 협업을 해야한다. 이러한 상황에서 협업을 효율적으로 할 수 있는 방법은 매우 중요하고, 그 시작이 바로 ‘예쁜 코드’이다. 합리적인 변수/함수명, 예측가능한 로직, 모듈화된 코드, 이 모든 것들은 다른 개발자와 의사소통을 하기 위한 기본이다.<br><br /></p>
+<p>한편, 프로그램의 사용자와 개발자 둘 다 개발자의 유저라는 사실은 역으로 실제 사용자 역시 개발자 만큼이나마 중요하다는 점을 시사한다. 즉, 위에서 말한 예쁜 코드를 짜는 데에 너무 치중한 나머지 실제 사용자를 소홀히 대하면 안된다는 뜻이다. 좋은 개발자는 이 둘의 밸런스를 잘 맞출 줄 안다. 그러면 어떻게 밸런스를 잘 맞출 수 있을까? 그건 지금부터 열심히 굴러야 알 수 있을 것 같다.<br><br /></p>
+<h2 id="역시-나는-스타트업을-가고-싶다"><a href="#역시-나는-스타트업을-가고-싶다" class="headerlink" title="역시, 나는 스타트업을 가고 싶다"></a>역시, 나는 스타트업을 가고 싶다</h2><p>마지막으로 내가 얻은 가장 큰 수확은 스타트업에 대한 확신이었다.<br><br /></p>
+<p>첫 개발을 할 때부터 나는 스타트업에 대한 장점을 들어왔기 때문에 스타트업에 대해 상당히 긍정적인 이미지를 가지고 있었다. 수평적인 분위기, 합리적인 프로세스, 같은 목표를 향해 함께 몰입하는 팀원들, 내가 상상하던 스타트업은 내가 희망하던 직장의 형태 그대로였다.<br><br /></p>
+<p>그리고 이번에 첫 직장을 스타트업에 다니면서 이러한 상상이 단순한 망상이 아니라는 것을 느꼈다. 너무 좋았다라고 말할 수 밖에 없는 두달이었다. 나의 생각 속에만 있었던 목표를 두 눈으로 똑똑히 보고왔고, 나의 부족함을 구체적으로 느꼈으며, 어떻게 나의 부족함을 매꿀 수 있는지도 배울 수 있었다.<br><br /></p>
+<p>이런 좋은 사람들과 함께 일하기 위해 더욱 열심히 나를 갈고닦아야 한다고 생각한다. 그리고 지난 두달은 이 생각을 충분히 실천할 수 있을 만큼 큰 동기부여가 되었다. 이제 앞으로 나아가는 일만 남았다.<br><br /></p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/01/27/Git-Rebase-2/">
+        <span class="nav-arrow">← </span>
+        
+          Git Rebase (2)
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/03/22/change-blog/">
+        
+          블로그 개편
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EB%A0%8C%EB%94%A7-%EC%9D%B8%ED%84%B4-%ED%9B%84%EA%B8%B0"><span class="toc-nav-text">렌딧 인턴 후기</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Dunning-Kruger-Effect"><span class="toc-nav-text">Dunning-Kruger Effect</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%95%99%EA%B5%90%EC%97%90%EC%84%9C%EC%9D%98-%EA%B0%9C%EB%B0%9C%EA%B3%BC-%ED%98%84%EC%97%85%EC%97%90%EC%84%9C%EC%9D%98-%EA%B0%9C%EB%B0%9C%EC%9D%80-%EB%8B%A4%EB%A5%B4%EB%8B%A4"><span class="toc-nav-text">학교에서의 개발과 현업에서의 개발은 다르다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B5%AC%EA%B8%80%EC%8B%A0%EC%9D%80-%EB%AA%A8%EB%93%A0-%EA%B2%83%EC%9D%84-%EC%95%8C%EC%A7%80%EB%A7%8C-%EB%AA%A8%EB%93%A0-%EA%B2%83%EC%9D%84-%EC%95%8C%EB%A0%A4%EC%A3%BC%EC%A7%80%EB%8A%94-%EC%95%8A%EB%8A%94%EB%8B%A4"><span class="toc-nav-text">구글신은 모든 것을 알지만, 모든 것을 알려주지는 않는다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%B1%85%EC%9D%80-%EA%B0%80%EC%9E%A5-%EC%A2%8B%EC%9D%80-%EC%8A%A4%EC%8A%B9%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">책은 가장 좋은 스승이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9D%98-%EC%9C%A0%EC%A0%80%EB%8A%94-%EC%82%AC%EC%9A%A9%EC%9E%90-%EB%BF%90%EB%A7%8C%EC%9D%B4-%EC%95%84%EB%8B%88%EB%8B%A4"><span class="toc-nav-text">개발자의 유저는 사용자 뿐만이 아니다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%97%AD%EC%8B%9C-%EB%82%98%EB%8A%94-%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85%EC%9D%84-%EA%B0%80%EA%B3%A0-%EC%8B%B6%EB%8B%A4"><span class="toc-nav-text">역시, 나는 스타트업을 가고 싶다</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2018/02/19/lendit-internship-review/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "2018.02.19.",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>
