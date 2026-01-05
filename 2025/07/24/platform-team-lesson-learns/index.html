@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      [라포 회고록] 플랫폼 팀 업무에 대한 생각 조각 모음
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>[라포 회고록] 플랫폼 팀 업무에 대한 생각 조각 모음</h2>
+  <p class="post-date">2025-07-24</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><br></p>
+<h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>이번 글에서는 플랫폼 팀에서 다양한 업무를 진행하면서 했던 고민과 배운 점을 정리해보려고 한다.</p>
+<p><br></p>
+<h2 id="MSA-전환"><a href="#MSA-전환" class="headerlink" title="MSA 전환"></a>MSA 전환</h2><p>2년이 조금 안 되는 시간 동안 서버 플랫폼 팀에서 했던 메인 업무는 MSA 전환이었다. 모노리스에서 마이크로서비스를 찢어내고, MSA에 맞게끔 API spec 관리 방식을 변경하고, API gateway를 도입하고, MSA 환경에서 개발할 때 필요한 다양한 개발 도구를 제공하는 업무를 했다.</p>
+<p><br></p>
+<h3 id="MSA는-비용이-높다"><a href="#MSA는-비용이-높다" class="headerlink" title="MSA는 비용이 높다"></a>MSA는 비용이 높다</h3><p>MSA 전환을 직접 진행하면서 배운 것은, MSA가 여러가지 의미로 비용이 정말 높은 아키텍처라는 점이다.</p>
+<ol>
+<li><p>MSA는 비싸다.</p>
+<p> 기술 스택이나 인프라 아키텍처에 따라 다르지만, MSA는 기본적으로 서버 비용이 많이 나온다. CPU는 최소한 서버간 serde에 연산량만큼 증가하고, 메모리는 최소한 각 서버에서 공통적으로 사용하는 프레임워크/라이브러리가 사용하는 것만큼 증가하며, 인메모리 호출이 네트워크 통신으로 바뀌므로 네트워크 비용도 증가한다. 이론적인 측면 외에도 실제로 서비스 운영을 하다보면 서비스 안정성을 위해 한 마이크로서비스를 최소 2대씩 띄우기도 하고, 장애 격리를 위해 데이터베이스를 나누기도 한다. 이는 모두 추가적인 인프라 비용을 발생시킨다.</p>
+</li>
+<li><p>MSA는 개발 공수가 많이 든다.</p>
+<p> MSA 환경에서 개발하기 위해서는 모노리스보다 더욱 많은 개발 편의성 도구가 필요하다. 모노리스 구조에서는 공통 기능이 있을 경우 별도 모듈로 빼기만 했으면 됐지만, MSA 환경에서는 라이브러리로 말아서 배포하거나 git submodule을 사용하는 등의 조치가 필요하다. 또한 서버가 여러 개다 보니 로컬에서 서버를 띄워서 테스트하기가 더욱 어려워지고, 한 요청 처리 시 남은 로그를 추적하려면 트레이싱이 필요하다. 서버간 새로운 인증 체계도 필요하고, API gateway도 필요하고, API spec을 관리할 프로세스와 자동화도 필요하다. <strong>MSA로 전환한다는 것은 단순히 서버를 찢는 것이 아니라, 이 모든 도구를 새롭게 만들고 유지보수해야 함을 의미한다.</strong></p>
+<p> 라포랩스에서 MSA로 전환할 때는 MSA를 경험해본 적이 없었기 때문에 이런 부분을 간과했다. 서버를 실제로 찢고 난 이후에 여러 도구의 필요성이 한 번에 터져 나오는 바람에 태스크 매니징이 상당히 어려웠고, 잘 해내지 못했다고 생각한다.</p>
+</li>
+<li><p>MSA는 업무 생산성이 떨어진다.</p>
+<p> MSA 환경이 되면 기본적으로 인지 부하가 커진다. 코드를 읽거나 짤 때 여러 레포지토리를 옮겨가며 작업을 해야 하는데, 어떤 코드가 어떤 레포지토리에 있을지를 잘 인지하고 있어야 하며 컨텍스트 스위칭도 많아진다. 작업을 배포할 때도 서버간 배포 순서가 매우 중요하기 때문에 배포가 훨씬 번거롭고 스트레스 받는 작업이 된다. 모노리스보다 MSA 환경에서 root cause가 될 수 있는 서비스 컴포넌트가 훨씬 많기 때문에, MSA로 전환하면 모니터링 도구가 아무리 잘 제공되더라도 모니터링이 훨씬 어려워진다.</p>
+</li>
+</ol>
+<p><br></p>
+<h3 id="코드-분리와-서버-분리는-다른-것이다"><a href="#코드-분리와-서버-분리는-다른-것이다" class="headerlink" title="코드 분리와 서버 분리는 다른 것이다"></a>코드 분리와 서버 분리는 다른 것이다</h3><p>그럼에도 불구하고 서버팀이 일정 규모 이상으로 커지면 코드베이스를 쪼개는 작업이 반드시 필요하다고 생각하는데, 코드베이스가 거대해지면 몇 가지 심각한 문제가 발생하기 때문이다.</p>
+<ol>
+<li><p>빌드가 느려진다.</p>
+<p> 빌드 속도가 느려지는 것은 개발 사이클에 상당한 악영향을 미치므로 빌드 속도를 항상 잘 관리해야 한다.</p>
+<p> 당연한 말이지만, 코드와 테스트의 양이 많을수록 빌드가 점점 느려진다. 이때 빌드 속도를 개선할 수 있는 가장 좋은 방법은 코드베이스를 분리하는 것이라고 생각한다. 테스트 속도를 빠르게 개선하거나 incremental build가 잘 동작하도록 의존성을 관리하는 것은 생각보다 매우 까다롭다.</p>
+</li>
+<li><p>가독성이 떨어진다.</p>
+<p> 한 코드베이스에서 개발된 코드는 인터페이스를 드러내야 하는 강제성이 부족하기 때문에, 책임과 인터페이스가 불분명한 형태로 구현될 가능성이 높다. 코드베이스가 커질수록 이러한 위험은 기하급수적으로 높아진다. 또한 코드베이스가 커지면 내가 굳이 몰라도 되지만 같은 코드베이스 안에 있다는 이유로 인지 영역에 들어오는 코드의 양이 많아진다. 이는 개발자 생산성에 실질적인 악영향을 미친다.</p>
+</li>
+</ol>
+<p>한편, 코드 분리를 한다고 해서 반드시 MSA로 넘어가야 하는 것은 아니다. 코드를 분리하는 것과 서버를 분리하는 것은 명확히 독립적인 선택이다. 서버 분리는 리소스 격리가 필요하거나(e.g. 특정 연산에 사용되는 CPU 사용량 제한), 리소스를 보다 효율적으로 사용할 수 있거나(e.g. 메모리를 많이 써야 하는 서버를 따로 분리해서 scale out 시 메모리 낭비 방지), 기술적인 이유로 배포 사이클이 달라야 하거나(e.g. websocket을 물고 있는 서버는 분리하고 최대한 배포하지 않기), 운영 책임을 분명하게 분리하는 등 보다 운영적인 측면과 관련이 있다.</p>
+<p>코드 분리는 하고 서버는 분리하지 않을 수 있는데, 모듈리스가 바로 이러한 형태의 서버이다. 모듈리스가 괜찮은지는 아직 판단이 잘 서지 않는다. 퀸잇과 팔도감이라는 특수한 상황으로 인해 모듈리스를 찍먹해볼 수 있었는데, 생각보다 의존성 관리가 매우 까다로웠다(<a href="https://blog.rapportlabs.kr/%EC%99%9C-%ED%8C%94%EB%8F%84%EA%B0%90%EC%9D%80-%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4%EC%97%90%EC%84%9C-%EB%AA%A8%EB%86%80%EB%A6%AC%EC%8A%A4%EB%A1%9C-%EC%A0%84%ED%99%98%ED%96%88%EC%9D%84%EA%B9%8C-59277">관련 라포랩스 기술 블로그 아티클</a>). 다만 이건 업스트림인 퀸잇 쪽 코드베이스가 모듈리스 형태를 전혀 고려하지 않고 개발되어서 발생한 문제일 가능성이 높다. 그래서 만약 다음에 MSA 전환을 할 일이 있다면, 모노리스 → 모듈리스 → MSA 순으로 점진적으로 전환하는 전략을 짤 것 같다.</p>
+<p><br></p>
+<h3 id="MSA-전환-과정에서-어려웠던-것-경계-나누기"><a href="#MSA-전환-과정에서-어려웠던-것-경계-나누기" class="headerlink" title="MSA 전환 과정에서 어려웠던 것 - 경계 나누기"></a>MSA 전환 과정에서 어려웠던 것 - 경계 나누기</h3><p>MSA 전환을 경험한 입장에서 MSA로 전환하고 MSA 환경에서 일할 때 가장 어려운 부분은 서버를 어떤 경계, 어떤 기준으로 쪼개느냐는 것이다.</p>
+<p>개발 생산성 측면에서 가장 이상적인 상황은 마이크로서비스의 경계 = 조직의 경계가 되는 것이다. 여러 마이크로서비스를 넘나들면서 개발하는 것이 매우 생산성이 떨어지기 때문이다. 각 팀은 각자가 오너십을 가진 마이크로서비스 안에서만 개발하는 것이 가장 생산적이다. 하지만 여기서 만약 조직 개편이 이뤄지면 어떻게 될까? 높은 확률로 마이크로서비스의 경계와 조직의 경계가 일치하지 않는 상황이 발생할 것이다. 하지만 마이크로서비스의 경계를 개편하는 작업은 비용이 매우 높으므로, 조직 개편을 할 때마다 MSA 경계를 다시 나누기는 어렵다.</p>
+<p>도메인 단위로 경계를 나누는 방법은 어떨까? 조직 개편을 어떻게 하든 어떤 도메인에 대한 오너십은 보통 한 팀이 가져가니 말이다. 하지만 이러면 마이크로서비스의 개수가 너무 많아질 수 있다. 이커머스에 일반적으로 존재하는 도메인만 하더라도 상품, 검색 &amp; 추천, 쿠폰, 포인트, 가격, 멤버십, 유저, 결제, 주문, 배송, 정산 등 어마어마하게 숫자가 많은데, 이마다 서버를 나누면 돈이든 생산성이든 비용이 어마어마하게 높아질 수 있다.</p>
+<p>약 3년 가까이 MSA 환경에서 개발해보니, <strong>마이크로서비스 경계를 명료하게 나누는 것은 거의 불가능에 가깝다는 것을 깨달았다.</strong> 개편되는 조직 구조에 맞춰 마이크로서비스 경계를 지속적으로 개편하기 어렵다는 문제도 있고, 애초에 상품 도메인처럼 한 도메인이 여러 팀에게 중요해서 도메인 오너십이 애매해지는 경우도 있다. 그래서 경계나 오너십이 애매해서 한 팀이 여러 마이크로서비스를 오가며 작업해야 하는 상황은 어차피 발생한다. 따라서 정말 비상식적으로 경계를 나누는 게 아니라면 명료한 경계는 굳이 쫓지 않아도 될 가치라고 생각한다.</p>
+<p><strong>그보다 훨씬 중요한 것은 마이크로서비스의 숫자가 너무 많아지지 않도록 통제하는 것이다.</strong> 레포지토리를 옮겨가면서 개발하고, 마이크로서비스간 배포 순서를 지켜서 배포하는 작업이 발생시키는 생산성 저하가 생각보다 어마어마하다. 또한 마이크로서비스가 많은 것은 인프라 비용적인 측면에서도 상당한 마이너스 요소가 된다. 이런 측면에서 <strong>마이크로서비스 경계를 결정할 때 적절하다고 생각하는 전략은 1. 도메인의 경계를 먼저 나눈 뒤에 2. 분리해야 하는 서버 수(모듈리스라면 레포 수) 목표치를 조직 규모에 맞춰서 적절히 설정하고 3. 그 목표치에 맞게 도메인을 그룹핑하는 것이다. 즉, 마이크로서비스의 숫자를 억제한다는 목표를 더 높은 우선순위로 둬야 한다.</strong></p>
+<p><br></p>
+<h2 id="서비스-운영"><a href="#서비스-운영" class="headerlink" title="서비스 운영"></a>서비스 운영</h2><p>서버 플랫폼 팀에서 가장 잘 체화된 부분은 서비스를 운영하는 방법이다. 다양한 장애를 겪고, 대응하고, 분석하고, 시스템을 더욱 견고하게 개선하는 과정을 반복적으로 경험한 것은 서버 개발자로서 매우 소중한 자산이 되었다.</p>
+<p><br></p>
+<h3 id="모니터링-블랙박스-모니터링과-화이트박스-모니터링"><a href="#모니터링-블랙박스-모니터링과-화이트박스-모니터링" class="headerlink" title="모니터링 - 블랙박스 모니터링과 화이트박스 모니터링"></a>모니터링 - 블랙박스 모니터링과 화이트박스 모니터링</h3><p>서비스를 운영할 때 가장 중요한 것은 모니터링 도구를 잘 갖추는 것이다. 서비스 로그와 메트릭을 잘 수집해서 가시성을 확보하고, 적절한 조건으로 얼럿을 거는 것이 필요하다. 하지만 <strong>운영하는 시스템에 대해 어떤 종류의 가시성을 확보해야 할까?</strong></p>
+<p><strong>여기에 대해 개인적으로 가장 설득력이 있다고 느껴진 주장은 모니터링을 블랙박스 모니터링과 화이트박스 모니터링으로 나누어서 생각하는 것이었다.</strong></p>
+<ul>
+<li><p>블랙박스 모니터링 (증상)</p>
+<p>  블랙박스 모니터링은 시스템 외부에서 바라볼 때 시스템에 문제가 있는지를 관찰하는 것이다. 즉, 서비스에 문제가 있다는 <strong>증상</strong>에 초점을 맞춘다.</p>
+<p>  서버에 대해서 사용할 수 있는 증상에는 크게 두 가지가 있다고 본다. 첫 번째는 error rate이다. 서비스의 HTTP 응답 중 4xx/5xx 응답이 차지하는 비율이 평소에 비해 과하게 높아지는 경우 시스템에 문제가 있다고 판단할 수 있다. 두 번째는 latency이다. 정상 응답이 내려가더라도 latency가 과하게 높으면 서비스를 이용하는 유저 입장에서는 서비스가 정상적으로 동작하지 않고 있다고 느낄 수 있다.</p>
+<p>  블랙박스 모니터링은 장애 발생 여부를 판단하는 기준 지표가 된다. error rate가 높거나 latency가 높으면 사람을 즉시 호출하는 얼럿을 걸어두는 것이 적절하다.</p>
+<p>  <strong>이런 측면에서 서비스 초기부터 에러 응답에 대한 처리나 에러 로그를 남기는 기준을 빡빡하게 운영하는 것이 좋다.</strong> 에러 처리를 대충 구현하면 에러 응답과 에러가 아닌 응답을 구분하기 매우 어려워지므로 1. 장애를 잘 탐지하지 못해서 제때 장애 대응을 하지 못하거나(false negative), 2. 장애를 과하게 탐지하여 개발팀의 피로도가 올라갈 수 있다(false positive).</p>
+</li>
+<li><p>화이트박스 모니터링 (원인)</p>
+<p>  화이트박스 모니터링은 시스템의 구조나 시스템 내부의 각 컴포넌트 구조에 맞춰서 세부 내용을 관찰하는 것이다. 블랙박스 모니터링으로는 장애가 발생했다는 사실은 인지할 수 있지만, 그 장애가 왜 발생했는지는 알기 어렵다. 화이트박스 모니터링을 통해 확보한 시스템의 세부적인 가시성이 있으면 장애의 <strong>원인</strong>을 빠르고 정확하게 분석할 수 있다.</p>
+<p>  화이트박스 모니터링은 말 그대로 시스템의 내부 구조를 잘 알고 있는 것처럼 모니터링을 하는 것이기 때문에, 수집해야 하는 로그나 메트릭 역시 시스템의 구조에 맞춰서 달라진다. 서버는 CPU 및 메모리를 모니터링해야 하고, JVM 프로세스라면 GC 관련 메트릭이나 thread pool 관련 메트릭을 추가로 확인해야 한다. DB, redis, kafka, 그 외의 다른 시스템 컴포넌트가 있다면 그 컴포넌트의 기술적 특성에 맞는 메트릭을 수집하면 된다.</p>
+<p>  화이트박스 모니터링은 블랙박스 모니터링과는 달리 모니터링해야 하는 지점이 매우 많기도 하고, 시스템을 구성하는 모든 컴포넌트에 대한 이해도가 충분히 깊기도 어려우므로, 시스템을 처음 구축할 때부터는 충분한 화이트박스 모니터링을 하기 어려울 수 있다. 이럴 때 도움이 되는 것은 각 기술 공식 문서 중 monitoring 섹션에 적혀 있는 metrics를 살펴보는 것이다. 해당 기술을 활용할 때 통상적으로 중요하다고 여겨지는 메트릭에 어떤 것들이 있는지 쉽게 파악할 수 있다. 또한, 새로운 패턴의 장애가 발생할 때마다 해당 장애와 관련된 메트릭 수집 작업을 해두는 습관도 큰 도움이 된다.</p>
+</li>
+</ul>
+<p>어떤 지표는 블랙박스 지표임과 동시에 화이트박스 지표가 될 수 있다. 예를 들어 RDB의 CPU가 튀는 것은 서버 개발자 입장에서는 ‘DB가 문제의 원인이구나’를 파악하는 화이트박스 지표일 수 있지만, DBA 입장에서는 DB에 장애가 발생했음을 인지하는 블랙박스 지표가 될 수 있다.</p>
+<p><br></p>
+<h3 id="장애-대응"><a href="#장애-대응" class="headerlink" title="장애 대응"></a>장애 대응</h3><p>개인적으로 소프트웨어 엔지니어라는 직업을 선택한 것에 대해 매우 만족하고, 후회하거나 아쉬움을 느끼지 않는다. 하지만 아직까지도 싫어하는 업무가 하나 있는데, 바로 장애 대응이다. 자동화를 통해 적은 인력으로도 많은 수의 유저에게 제품의 가치를 전달할 수 있다는 점은 소프트웨어 엔지니어의 가장 큰 매력이지만, 이로 인해 엔지니어가 한 실수의 여파 역시 많은 수의 유저에게 빠르게 전파된다는 치명적인 리스크도 동시에 존재한다. 그래서 시스템을 변경할 때 어쩔 수 없이 예민해지고, 실제로 장애가 발생하면 극심한 스트레스를 받게 된다.</p>
+<p>처음 큰 장애를 났을 때가 아직도 생생하게 기억이 난다. VCNC를 다닐 때 인프라 작업을 한 뒤 서비스가 잘 되는지 확인해보려고 어드민에 들어갔는데, 스피너가 계속 돌고 접속이 되지 않았다. 새로고침을 아무리 해도 흰 창만 떴다. 온몸의 핏기가 싹 빠져나가는 기분이 들었다. ‘머리가 하얘지다’라는 표현이 그제야 이해가 됐다. 새하얀 머릿속에 떠오르는 생각은 ‘어떡하지?’ 밖에 없었다. 그때 내가 잘한 점이 딱 하나 있다면 장애를 옆에 있던 시니어 분한테 빠르게 리포팅했다는 점이다. 다행히 장애는 10여분 만에 복구가 됐다.</p>
+<p><strong>장애 대응에서 가장 중요한 점은 침착함을 유지하는 것이다.</strong> 이 아래 문단부터 장애 대응에 대해 배운 여러가지 레슨을 기록할 예정이지만, 머리가 하얘지면 아무런 의미가 없는 팁이 된다. 나는 LOL 경기를 자주 보는데, 거기서 나오는 이야기 중 하나는, 실제 경기에서는 선수들이 긴장하기 때문에 연습 경기(스크림) 대비 보통 50~70% 정도의 실력만 나온다는 것이다. 장애 대응도 마찬가지이다. 아무리 이론적인 측면을 배워도, 실전에서 긴장하면 아무것도 할 수가 없다. 안타깝게도 이런 침착함은 글로 배울 수 없다. 작은 규모의 장애부터 시작해서 점점 더 큰 장애를 겪고, 머리가 하얘져보고, 장애 대응이 딜레이 되고, 사과하고, 우울해지는 과정을 거쳐야만 평정심을 유지할 수 있는 능력이 길러진다.</p>
+<p>침착함을 유지하는 데 한 가지 팁이 있다면, 장애가 발생했을 때 ‘이 장애 아무것도 아니야~’라는 마음가짐을 가지는 것이다. 장애를 대응하는 과정에서는 미안함이나 죄책감과 같은 감정은 아무런 도움이 되지 않는다. 그래서 마치 내가 저지르지 않은 것처럼, 장애가 별 거 아닌 것처럼 이 악물고 얕보는 게 중요하다. 미안함과 죄책감은 우선 장애를 대응하고 나서 표출해도 늦지 않다.</p>
+<hr>
+<p>이 아래부터는 장애 대응에 있어서 평소에 준비해두면 좋을 마음가짐, 프로세스, 도구, 문화 등을 정리해보았다.</p>
+<ul>
+<li><p><strong>장애 대응은 RCA(root cause analysis)가 아니라 장애 해소가 1순위이다.</strong></p>
+<p>  장애가 발생한 경우 보통 장애의 원인이 무엇인지 분석하게 된다. <strong>하지만 장애 해소와 장애 원인 파악은 엄연히 다른 것이다</strong>. 장애 해소를 할 때는 종종 장애의 원인을 매우 정밀하게 타겟팅해서 분석할 필요가 없다. 대충 장애를 해소할 수 있을 것 같은 방법이 떠오른다면, 그리고 그게 새로운 장애를 내지 않을 것 같다면, 일단 실행해야 한다. 일단 실행하면서 얼마든지 동시에 넥스트 플랜에 대해 고민할 수 있다. 실제로 장애 대응을 하다 보면 원인이 무엇이든 꽤 많은 장애의 해소 방법은 ‘일단 서버를 더 띄워’라는 것을 경험하게 된다.</p>
+</li>
+<li><p><strong>‘장애는 날 수 있는 것이고, 개발팀이 최선을 다하고 있다’라는 컨센서스를 회사 전체에 만들어야 한다.</strong></p>
+<p>  제품팀, 특히 서버 개발자 입장에서야 장애가 워낙 자연스럽고 당연한 일이지만, 세상의 많은 직장인은 IT 프로덕트에 대한 이해도가 높지 않다. 그러므로 장애가 발생했을 때 ‘이 작업이 되게 어려웠는데 고작 이정도 장애로 끝나서 다행이다 ^^’라는 생각보다는 ‘아 왜 자꾸 우리 서비스 장애남? 협력사에 연락해야 해서 귀찮네 ㅡㅡ’와 같은 불만을 가질 수 있다. 이런 불만이 쌓여서 제품팀에 대한 불신으로 이어지면 제품팀과 사업팀이 협업을 할 때 심각하게 생산성이 저하될 수 있다. 장애로 인해 사업팀과 제품팀 분위기가 냉랭한 상황을 상상해보자. 개발자 입장에서 배포를 하는 것이 더욱 꺼려지고, 장애 대응을 할 때 더 긴장할 수밖에 없다. 이런 심리적인 압박이 생산성에 미치는 악영향은 상당히 크다.</p>
+<p>  따라서 이러한 불만이 쌓이지 않도록 장애가 발생했을 때 이에 대해 잘 설명하는 것이 필요하다. 즉, 개발팀에 대한 신뢰 수준을 잘 관리해야 한다. 장애가 났으면 어떤 작업하다가 장애가 났는지, 해당 작업이 왜 필요한지, 해당 작업이 얼마나 위험한지, 장애의 여파는 어느 정도인지, 동일한 장애가 다시 발생하지 않도록 어떤 재발 방지책을 고민하고 있는지 등을 잘 커뮤니케이션해야 한다.</p>
+<p>  <strong>이때 가장 경계해야 하는 것은, 장애가 날 때마다 사과해서 ‘장애는 나면 안 되는 것’이라는 인식이 생기면 안 된다. 나는 장애의 빈도가 해당 조직이 속도를 위해 안정성을 얼마만큼 희생할 것인지를 선택한 결과라고 생각한다.</strong> 장애를 줄이려면 더 꼼꼼하게 설계하고, 더 꼼꼼하게 테스트하고, 더 많은 인프라 비용을 지불해야 한다. 그러면 제품 개발 속도는 필연적으로 느려진다. 적절한 수준의 장애는 속도를 위한 트레이드오프이기 때문에 필수불가결하다는 사실을 조직 전체가 이해하고 제품팀과 사업팀이 함께 감내할 수 있도록 컨센서스를 잘 형성하는 것이 중요하다.</p>
+</li>
+<li><p>자주 발생하는 RC를 즉각적으로 인지할 수 있도록 화이트박스 모니터링 대시보드를 잘 구성해둬야 한다.</p>
+<p>  대부분의 장애는 2가지 원인으로 발생한다. 1. 서버를 배포하거나 설정을 변경했는데 무언가 문제가 발생하거나, 2. 마케팅 등으로 인해 트래픽이 높아졌을 때 시스템의 특정 컴포넌트에서 리소스가 부족해져서 병목 지점이 발생하는 것이다.</p>
+<p>  이중 1번은 배포한 사람이 RC를 잘 인지할 가능성이 높으니 넘어가고, 2번을 빠르게 인지할 수 있는 시스템이 있으면 장애 대응에 큰 도움이 된다. 병목 지점으로 인한 장애가 발생했을 때 빠르게 대응하려면, 시스템에 대한 화이트박스 모니터링 대시보드를 잘 구성해두는 것이 매우 큰 도움이 된다. 4xx/5xx 에러 비율이 높아지거나 latency가 올라가서 얼럿이 온 경우, 화이트박스 모니터링 대시보드가 잘 구성되어 있으면 스크롤을 슥 내리는 것만으로도 어떤 조치를 취해야 할지 즉각적으로 인지할 가능성이 높아진다.</p>
+</li>
+<li><p>장애 시점에 발생한 변경이 무엇인지를 잘 찾아야 한다.</p>
+<p>  위에서 언급한 것처럼 대부분의 장애는 서버 배포나 설정 변경 등 시스템에 어떤 변경을 적용해서 발생한다. 따라서 장애가 발생했을 때 가장 타율이 높은 방법은 방금 적용한 변경을 롤백하는 것이다. 조직이 작으면 장애 시점 근처에 어떤 변경이 있었는지 추적하기 쉽지만, 개발자가 많아지고 시스템이 복잡해질수록 변경의 수가 많아지고 변경의 영향을 예측하기 어려워지므로 장애의 원인이 되는 변경을 식별하기가 어려워질 수 있다. 따라서 장애 대응 인원은 적극적으로 개발팀 내부에 장애를 전파하고, 개발팀 구성원은 자신이 장애 발생 시각 근처에 시스템을 변경한 사항이 있다면 적극적으로 리포팅하는 문화가 필요하다.</p>
+</li>
+<li><p>장애 대응에 참여한 인원을 충분히 활용할 수 있는 프로세스가 필요하다.</p>
+<p>  장애 대응에는 보통 여러명이 참여하는데, 개인적으로 이 인원이 비효율적으로 장애 대응을 하기가 쉽다고 느낀다. 예를 들면 모두가 같은 메트릭을 보고 있는 경우가 많은데, 각자 서로 다른 메트릭을 확인해본다면 장애 원인을 더욱 빨리 발견할 가능성이 높아질 것이다.</p>
+<p>  또한 보통 장애 대응을 개발자가 하므로 모두가 장애의 원인을 찾는 데 몰두하게 되는데, 이로 인해 장애 전파나 커뮤니케이션 측면이 소홀해지는 경향이 있다. 장애 원인 분석과 해소도 물론 중요하지만, 사내에 장애를 전파하고 문의에 적절히 대응하는 것도 장애 대응의 중요한 측면 중 하나이다. 예를 들어 마케팅이 예정되어 있는 시간대에 장애가 난다면, 마케팅 팀에 이를 잘 전파해서 마케팅 시간을 옮기거나 다른 방법을 강구하도록 유도해야 할 수 있다.</p>
+</li>
+</ul>
+<p><br></p>
+<h3 id="RCA-Root-Cause-Analysis"><a href="#RCA-Root-Cause-Analysis" class="headerlink" title="RCA (Root Cause Analysis)"></a>RCA (Root Cause Analysis)</h3><p>개인적으로 RCA는 가장 난이도가 높은 개발 업무 중 하나라고 생각하는데, 장애는 내가 잘 아는 코드나 기술에서만 발생하는 것이 아니기 때문이다. 개발을 하다 보면 필연적으로 내가 짜지 않은 코드를 가져다 쓰게 되는데(일종의 레버리지라고 생각한다), 장애는 시스템 중 내가 구현한 부분과 구현하지 않은 부분을 가리지 않고 아무데서나 발생한다. 개발자는 자신이 만들지 않은 기술로 인해 장애가 발생하더라도 해당 장애의 원인을 정확히 분석하고 사후 대응을 해야 한다. 하지만 잘 모르는 기술을 디버깅하는 것은 매우 괴롭고 어려운 일이다.</p>
+<p>3년간 여러 종류의 장애에 대해 RCA를 하면서 배운 점이 상당히 많은데, 정리해보면 총 3가지 교훈으로 압축할 수 있다.</p>
+<ol>
+<li><p>가설을 잘 세우고, 가설 검증에 집중해야 한다.</p>
+<p> <strong>잘 모르는 기술에 대해 RCA를 하다 보면 스스로 무엇을 확인하고 싶은지 잘 모르는 상태에서 막연히 코드와 문서와 메트릭 사이를 방황하게 되기 쉽다고 생각한다. 이러한 목적 없는 방황을 경계해야 한다.</strong> 장애 현상에 맞춰서 해당 장애 현상이 발생할 수 있는 여러가지 가능성에 대해 가설을 세우고, 그 가설이 맞는지 틀렸는지를 검증하는 것에 초점을 맞춰서 코드 / 문서 / 메트릭을 살펴봐야 한다. 만약 지식이 부족해서 가설을 세우기 어렵다면, 내가 무엇을 몰라서 가설을 세우기가 어려운지를 명확히 정의한 이후 해당 지식을 습득해야 한다.</p>
+<p> RCA는 마치 깜깜한 미로를 헤쳐나가는 것과 같다. 내가 알고 있는 지식과 발생한 장애 현상이 미로의 입구이고, RC가 미로의 출구이다. 우리는 코드, 문서, 메트릭을 손으로 더듬더듬 짚으며 조금씩 나아가서 RC로 다가가야 한다. 이 과정에서 같은 곳을 빙빙 도는 것을 경계하고, 인내심을 가지고 지금까지 가보지 못한 새로운 경로로 한 걸음씩 천천히 전진해야 RC를 찾아낼 수 있다.</p>
+</li>
+<li><p>본인의 생각이 아니라 데이터가 유일한 진실이다.</p>
+<p> 장애 대응과 RCA를 하다 보면 일반적으로 자주 발생하는 RC가 있다. 빈번한 RC에 대해 잘 이해하고 활용하는 것은 효율적인 장애 대응을 위해 필요한 일이지만, 관성적으로 자신의 가설을 진실이라고 지레짐작하는 태도는 경계해야 한다. 백엔드 시스템은 상당히 복잡한 추상화 레이어 위에서 동작하므로 내가 모르는 부분이 얼마든지 있을 수 있다.</p>
+<p> 그러므로 우리는 내 생각이 언제든지 틀릴 수 있으며, 데이터를 통해 내 생각이 맞는지 늘 검증해야 한다는 마인드를 가져야 한다. <strong>소프트웨어 엔지니어링에서, 로그와 메트릭 등 관측된 데이터는 엔지니어가 신뢰할 수 있는 유일한 진실이다. 따라서 내 머릿속에서 떠오른 가설이 아니라, 관측된 데이터가 사고의 출발점 및 종착점이 되는 습관을 들여야 한다.</strong></p>
+</li>
+<li><p>RCA가 어려우면 가시성이 부족한지 되돌아봐야 한다.</p>
+<p> 잘 모르는 기술에 대해 RCA를 하다 보면 종종 명확하게 원인을 특정하기 어려운 경우가 있다. 가지고 있는 데이터를 충분히 분석하고 활용하지 못한 것일 수도 있지만, 반대로 더 뾰족하게 가설 검증을 할 수 있는 데이터가 부족해서 어려운 경우도 있다. <strong>가설 검증이 어렵다고 느껴지면, 어떤 로그나 메트릭이 더 있으면 가설을 검증할 수 있을 것 같은지 고민해보는 게 돌파구가 될 수 있다.</strong></p>
+</li>
+</ol>
+<p><br></p>
+<h2 id="기타"><a href="#기타" class="headerlink" title="기타"></a>기타</h2><p><br></p>
+<h3 id="컨벤션과-규칙"><a href="#컨벤션과-규칙" class="headerlink" title="컨벤션과 규칙"></a>컨벤션과 규칙</h3><p>이전에 VCNC에서 개발할 때는 컨벤션이 그리 중요하다는 생각을 하지 않았다. 개발팀이 비교적 작기도 했고, 기능 조직이라 이런저런 인원 조합으로 자주 섞어서 일을 했어서, 컨벤션을 명시적으로 정하지 않았어도 얼추 비슷한 생각을 가지고 일해서 컨벤션의 필요성을 잘 느끼지 못했다.</p>
+<p>조금 더 큰 조직에서 플랫폼 팀 소속으로 업무를 하다 보니, 개발할 때 컨벤션과 규칙이 상당히 중요하다는 인식을 갖게 되었다. 지금은 어느 정도 개인의 자유와 취향을 억제하더라도 컨벤션을 정하고 강제하는 것이 좋다고 생각하는데, 이유는 크게 두 가지이다.</p>
+<ol>
+<li><p>불필요한 논쟁이나 인지 부하를 줄일 수 있다.</p>
+<p> 조직이 커지고, 코드베이스가 복잡해지고, 개발하는 인원이 많아질수록 구성원의 취향 역시 다양해진다. 이들의 취향을 완전히 존중해주는 경우, 각자 오너십을 가지고 있는 코드에 자신의 취향을 녹이게 된다. 한편, 업무를 하다 보면 다른 사람 혹은 다른 팀이 작성한 코드 위에서 일해야 하는 경우가 매우 많다. 이때 코드베이스에 너무 다양한 취향이 녹아 있어서 통일성이 없으면 코드를 일고 수정하고 테스트하기 어렵다.</p>
+</li>
+<li><p>자동화가 편해진다.</p>
+<p> 플랫폼 개발을 할 때 컨벤션은 일종의 인터페이스처럼 작용할 수 있다. 반대로 컨벤션이 없으면 플랫폼 개발의 비용이 높아진다. 예를 들어 Spring + Kotlin 기술 스택에서 테스트를 작성할 때 mockito와 mockk 라이브러리를 모두 쓰는 경우, mocking과 관련된 helper method를 추가하려면 개발 비용이 두 배로 들 것이다. 또다른 예시로 CI 환경에서 사용하는 mysql 버전을 올리고 싶은 경우, 한 마이크로서비스는 testcontainers 라이브러리를 사용하고 다른 마이크로서비스는 github action의 service containers 기능을 사용한다면 버전을 올리는 작업이 훨씬 번거로워질 것이다.</p>
+</li>
+</ol>
+<p>코드베이스에 이런이런 컨벤션들이 꼭 필요하다고 생각하기보다는, 그냥 컨벤션이 있기만 하면 된다는 입장이다. 그럼에도 불구하고 컨벤션을 정할 때 나름의 취향이 있다면, 컨벤션은 가능한 단순하고 최소화되어야 한다. 단순하고 최소화된 컨벤션은 새로운 팀원이 봤을 때 이해하기 쉽고, 문제가 있을 때 개선하거나 걷어내기 쉽고, 해당 컨벤션 위에서 자동화를 하기도 편리하다.</p>
+<p><br></p>
+<h3 id="기술의-적절한-활용"><a href="#기술의-적절한-활용" class="headerlink" title="기술의 적절한 활용"></a>기술의 적절한 활용</h3><p>이전에는 개발 과정에서 불편한 부분이나 필요하다고 생각하는 도구가 있으면 그냥 직접 코드로 짜서 문제를 해결했다. 개발팀이 비교적 작다 보니 해결해야 하는 문제도 상대적으로 간단했기 때문이다. 필요한 것이 있으면 직접 개발하는 것이 리서치하고, 새로운 도구를 배우고, 도입하는 것보다 더 값싸다고 생각했다. 내가 구현하지 않은 것을 도입하는 것은 리스크이고 부채이므로 최소화해야 한다고 생각했다.</p>
+<p>라포랩스에서 다양한 경험을 하면서 이런 생각이 많이 바뀌게 되었다. <strong>여전히 새로운 기술을 도입하는 것이 리스크이자 부채라고 생각하긴 하지만, 적절하게 활용하기만 한다면 매우 높은 생산성을 보여줄 수 있다는 것을 배웠다. 즉, 새로운 기술의 활용은 매우 중요한 레버리징이라는 생각으로 바뀌었다.</strong> 코드베이스가 커지고 트래픽이 증가하면 개발적인 측면에서 해결해야 하는 문제도 함께 많아진다. 그 모든 문제를 하나하나 분석하고, 필요한 도구를 직접 개발하는 것은 바퀴를 다시 만드는 것과 같다. 나와 같은 문제를 겪은 사람이 있는지, 그 문제를 다른 사람들이 어떻게 해결했는지를 꼼꼼히 리서치해보고, 득실을 잘 따져보는 것이 필요하다.</p>
+<p>이걸 잘하기 위해서는 기술에 대한 폭넓고 깊은 지식을 갖추고 있어야 한다. 많은 지식을 알고 있다는 것은 다양한 기술 문제와 이에 대한 best practice를 이해하고 있으며, 기술적으로 어떤 것이 가능하고 불가능한지 혹은 더 쉽고 간단한지를 정확하게 판단할 수 있다는 뜻이다. 그러므로 내가 겪고 있는 문제에 대한 해결책을 더 그럴싸하게 그려볼 수 있고, 이를 기반으로 원하는 도구를 더 빠르고 정확하게 타겟팅하여 리서치할 수 있다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2025/07/21/what-is-platform-team/">
+        <span class="nav-arrow">← </span>
+        
+          [라포 회고록] 조직적인 관점에서의 플랫폼 팀에 대한 생각
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2025/07/24/stock-option/">
+        
+          [라포 회고록] 스톡옵션 - 숨겨두고 까먹은 비상금
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#MSA-%EC%A0%84%ED%99%98"><span class="toc-nav-text">MSA 전환</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#MSA%EB%8A%94-%EB%B9%84%EC%9A%A9%EC%9D%B4-%EB%86%92%EB%8B%A4"><span class="toc-nav-text">MSA는 비용이 높다</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%BD%94%EB%93%9C-%EB%B6%84%EB%A6%AC%EC%99%80-%EC%84%9C%EB%B2%84-%EB%B6%84%EB%A6%AC%EB%8A%94-%EB%8B%A4%EB%A5%B8-%EA%B2%83%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">코드 분리와 서버 분리는 다른 것이다</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#MSA-%EC%A0%84%ED%99%98-%EA%B3%BC%EC%A0%95%EC%97%90%EC%84%9C-%EC%96%B4%EB%A0%A4%EC%9B%A0%EB%8D%98-%EA%B2%83-%EA%B2%BD%EA%B3%84-%EB%82%98%EB%88%84%EA%B8%B0"><span class="toc-nav-text">MSA 전환 과정에서 어려웠던 것 - 경계 나누기</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9A%B4%EC%98%81"><span class="toc-nav-text">서비스 운영</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81-%EB%B8%94%EB%9E%99%EB%B0%95%EC%8A%A4-%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%EA%B3%BC-%ED%99%94%EC%9D%B4%ED%8A%B8%EB%B0%95%EC%8A%A4-%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81"><span class="toc-nav-text">모니터링 - 블랙박스 모니터링과 화이트박스 모니터링</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%9E%A5%EC%95%A0-%EB%8C%80%EC%9D%91"><span class="toc-nav-text">장애 대응</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#RCA-Root-Cause-Analysis"><span class="toc-nav-text">RCA (Root Cause Analysis)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B8%B0%ED%83%80"><span class="toc-nav-text">기타</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EC%BB%A8%EB%B2%A4%EC%85%98%EA%B3%BC-%EA%B7%9C%EC%B9%99"><span class="toc-nav-text">컨벤션과 규칙</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%EA%B8%B0%EC%88%A0%EC%9D%98-%EC%A0%81%EC%A0%88%ED%95%9C-%ED%99%9C%EC%9A%A9"><span class="toc-nav-text">기술의 적절한 활용</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2025/07/24/platform-team-lesson-learns/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "[라포 회고록] 플랫폼 팀 업무에 대한 생각 조각 모음",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

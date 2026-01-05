@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Deep Dive into pip - 2
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Deep Dive into pip - 2</h2>
+  <p class="post-date">2018-10-30</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><a href="/2018/10/24/deep-dive-into-pip-1/">지난 포스트</a>에서는 pip의 기본에 대해서 알아보았다. 주로 requirements.txt에 대한 이야기를 했었는데, 우리가 막힌 부분은 <code>pip install</code> 의 <code>-e</code> 옵션에 대한 부분이었다.<br><br/></p>
+<p>이번 포스트에서는 지난 포스트에 이어서 <code>pip install -e .</code> 가 어떤 의미인지 알아볼 것이다. 그렇게 하기 위해서 우리는 setuptools에 대해서 알아야 한다.<br><br/></p>
+<h1 id="setuptools-Preview"><a href="#setuptools-Preview" class="headerlink" title="setuptools: Preview"></a>setuptools: Preview</h1><h2 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h2><p><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html">setuptools 공식 다큐멘테이션</a>에 따르면, setuptools는 파이썬의 <code>distutils</code> 이라는 라이브러리를 기반으로 개발자들이 자신들의 파이썬 패키지를 쉽게 배포할 수 있도록 도와주는 파이썬 라이브러리이다. pip와 함께 사용되기는 하지만, pip는 패키지를 다운받는 툴인 반면 setuptools는 패키지를 배포하는 툴이기 때문이기 때문에 어느 의미로는 pip와 정 반대의 역할이라고도 볼 수 있겠다. setuptools를 사용하면 자신의 패키지로부터 쉽게 sdist나 egg, wheel을 만들고 이를 업로드하여 배포할 수 있다.<br><br/></p>
+<p>setuptools를 쓰는 방법은 간단하다. 프로젝트 root에 <code>setup.py</code> 파일을 만들고, 아래와 같이 <code>setup.py</code> 안에서 <code>setuptools.setup</code> 을 적절한 옵션과 함께 호출해주기만 하면 된다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># setup.py</span><br><span class="line">from setuptools import setup</span><br><span class="line"></span><br><span class="line">setup(**kwargs)</span><br></pre></td></tr></table></figure><br>이후 콘솔에서 <code>python setup.py [args]</code> 를 입력하면 자동으로 cli option에 맞게 배포 파일을 생성해준다. 예를 들어,<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python setup.py sdist bdist_wheel</span><br></pre></td></tr></table></figure><br>을 입력하면 자동으로 source distribution tar 파일과 wheel binary 파일을 생성해준다.<br><br/></p>
+<h2 id="sdist-egg-bdist-wheel"><a href="#sdist-egg-bdist-wheel" class="headerlink" title="sdist? egg? bdist_wheel?"></a>sdist? egg? bdist_wheel?</h2><p>이 용어들에 대해서 아는 사람도 있겠지만, 모르는 독자도 있을테니 갑자기 튀어나온 sdist, egg, bdist_wheel 등의 용어에 대해서 짚고 넘어가도록 하겠다.<br/><br/>자신의 프로젝트를 배포할 때, 여러가지 방법으로 배포를 할 수 있을 것이다. 소스를 통째로 배포할 수도 있고, 하나의 파일로 압축하여 배포할 수도 있을 것이다. sdist, egg, wheel은 모두 이러한 배포 포맷들이다.<br/><br/>배포 포맷은 크게 두 가지 형태로 나눌 수 있는데, 소스 코드를 통째로 배포하는 sdist와 프로젝트를 빌드한 결과물만을 배포하는 bdist가 있다.<br/></p>
+<h3 id="sdist"><a href="#sdist" class="headerlink" title="sdist"></a>sdist</h3><p>sdist는 source distribution의 약자이다. 이 포맷은 말 그대로 소스 코드 자체를 배포하는 방식으로, <code>python setup.py sdist</code> 를 실행하면 프로젝트 소스의 루트 디렉토리를 통째로 압축한 파일이 생성된다. 압축 파일은 default로 tar.gz 포맷이며, 옵션을 통해 다양한 포맷으로 압축할 수 있다.</p>
+<h3 id="bdist"><a href="#bdist" class="headerlink" title="bdist"></a>bdist</h3><p>bdist는 built distribution의 약자이다. 기본적으로 binary package를 만드는 것과 유사하나, 그 결과물이 항상 binary는 아니고 단순히 소스 코드와 바이트 코드만을 포함할 수도 있다고 한다. sdist와의 결정적인 차이는 빌드 혹은 컴파일이 미리 되어있느냐의 차이인데, 이 말은 <code>python setup.py bdist</code> 를 실행한 결과물은 즉시 실행 / 사용 가능한 파일이라는 뜻이다. 예를 들어, 윈도우에서 <code>python setup.py bdist</code> 를 실행하면 executable installer가 튀어나오고, macOS에서 실행시키면 패키지가 설치된 virtualenv가 튀어나온다.</p>
+<h3 id="egg-wheel"><a href="#egg-wheel" class="headerlink" title="egg, wheel"></a>egg, wheel</h3><p>egg와 wheel은 각각 bdist의 배포 포맷이다. 각 포맷의 디테일에 대해서는 나도 정확히 공부해보지는 않았으므로 넘어가도록 하겠다. 다만, 요즘은 wheel이 de facto standard 라고 한다.<br><br/></p>
+<h1 id="setuptools-In-Detail"><a href="#setuptools-In-Detail" class="headerlink" title="setuptools: In Detail"></a>setuptools: In Detail</h1><p>아까 위에서 가장 간단한 <code>setup.py</code> 파일을 보았다. <code>setup()</code> 한 줄로 되어있는 파일이었다. 물론 이 <code>setup.py</code> 로도 충분히 프로젝트를 배포할 수 있지만, 당연히 유저는 프로젝트를 배포할 때 많은 정보를 포함하고 싶을 것이다. 이를 위해 <code>setup()</code> 함수는 다양한 option을 kwargs 형태로 지원한다.<br><br/></p>
+<p>사실 이번 시리즈의 목적은 setuptools를 완전 정복하는 것이 아니라 <code>pip install -e .</code> 가 무엇인지를 설명하기 위한 시리즈이기 때문에, setuptools가 지원하는 수많은 옵션들을 전부 설명하지는 않을 것이다. 주로 사용되는 옵션이나 <code>pip install -e .</code> 을 설명하는데 필요한 선까지만 설명을 할 것이다.</p>
+<h2 id="setuptools-Options"><a href="#setuptools-Options" class="headerlink" title="setuptools Options"></a>setuptools Options</h2><h3 id="metadata-관련"><a href="#metadata-관련" class="headerlink" title="metadata 관련"></a>metadata 관련</h3><p>metadata 관련 옵션은 말 그대로 프로젝트의 메타데이터를 지정할 수 있는 옵션이다. 예를 들면, 프로젝트의 이름, 버전, 저자, 공식 홈페이지 등을 지정할 수 있다. 공식 다큐멘테이션에서는 아래와 같은 예시를 들고 있다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># setup.py</span><br><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&quot;HelloWorld&quot;,</span><br><span class="line">    version=&quot;0.1&quot;,</span><br><span class="line">    author=&quot;Me&quot;,</span><br><span class="line">    author_email=&quot;me@example.com&quot;,</span><br><span class="line">    description=&quot;This is an Example Package&quot;,</span><br><span class="line">    license=&quot;PSF&quot;,</span><br><span class="line">    keywords=&quot;hello world example examples&quot;,</span><br><span class="line">    url=&quot;http://example.com/HelloWorld/&quot;,   # project home page, if any</span><br><span class="line">    project_urls=&#123;</span><br><span class="line">        &quot;Bug Tracker&quot;: &quot;https://bugs.example.com/HelloWorld/&quot;,</span><br><span class="line">        &quot;Documentation&quot;: &quot;https://docs.example.com/HelloWorld/&quot;,</span><br><span class="line">        &quot;Source Code&quot;: &quot;https://code.example.com/HelloWorld/&quot;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # could also include long_description, download_url, classifiers, etc.</span><br><span class="line">    # ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h3 id="entry-points"><a href="#entry-points" class="headerlink" title="entry_points"></a>entry_points</h3><p><code>entry_points</code> 는 배포한 프로젝트를 다운받은 뒤 별도의 세팅 없이 바로 스크립트를 실행할 수 있도록 해주는 옵션이다. 예를 들어 아래와 같이 <code>entry_points</code> 를 지정했다고 하자.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># setup.py</span><br><span class="line">from setuptools import setup</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    # other arguments here...</span><br><span class="line">    entry_points=&#123;</span><br><span class="line">        &#x27;console_scripts&#x27;: [</span><br><span class="line">            &#x27;foo = my_package.some_module:main_func&#x27;,</span><br><span class="line">            &#x27;bar = other_module:some_func&#x27;,</span><br><span class="line">        ],</span><br><span class="line">        &#x27;gui_scripts&#x27;: [</span><br><span class="line">            &#x27;baz = my_package_gui:start_func&#x27;,</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure><br>그러면 이 프로젝트를 설치할 경우 자동으로 <code>foo</code>, <code>bar</code>, 그리고 <code>baz</code> 라는 실행 가능한 entry point가 생긴다. 여기서 말하는 entry point란, non-Windows에서는 스크립트, 즉 Unix 계열에서 따진다면 bash에서 실행할 수 있는 스크립트이며, Windows에서는 .exe 파일을 뜻한다. <code>entry_points</code> 의 멋진 점은 운영체제에 알맞은 entry point를 자동으로 생성해준다는 점이다.</p>
+<h3 id="install-requires-extras-require"><a href="#install-requires-extras-require" class="headerlink" title="install_requires, extras_require"></a>install_requires, extras_require</h3><p><code>install_requires</code> 및 <code>extra_requires</code> 는 requirements.txt와 동일하게 프로젝트의 의존성을 관리할 수 있다. 심지어 의존하는 패키지의 버전을 명시하기 위해 requirements.txt와 동일한 requirement specifier을 사용한다.<br><br/></p>
+<p><code>install_requires</code> 는 프로젝트가 항상 필요로 하는 의존성을 나열하는 데에 쓰인다. 반면 <code>extra_requires</code> 는 특별한 상황마다 추가적으로 필요한 의존성을 나열할 수 있다. 예를 들어, ci 환경에서 필요한 별도의 패키지를 <code>extra_requires</code> 에 ci라는 항목으로 나열하고, ci 환경에서만 이를 추가적으로 설치할 수 있다. <code>extra_requires</code> 에 선언한 추가적인 의존성은 그냥 설치하면 설치되지 않고, 설치한다고 지정을 해 주어야 비로소 설치된다.<br><br/></p>
+<p>아래는 <code>install_requires</code> 와 <code>extra_requires</code> 의 사용 예시이다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Project A&#x27;s setup.py</span><br><span class="line">from setuptools import setup</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&quot;Project-A&quot;,</span><br><span class="line">    install_requires=[&quot;aiohttp&quot;],</span><br><span class="line">    extras_require=&#123;</span><br><span class="line">        &#x27;PDF&#x27;:  [&quot;ReportLab&gt;=1.2&quot;, &quot;RXP&quot;],</span><br><span class="line">        &#x27;reST&#x27;: [&quot;docutils&gt;=0.3&quot;],</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Project B&#x27;s setup.py</span><br><span class="line">from setuptools import setup</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&quot;Project-B&quot;,</span><br><span class="line">    install_requires=[&quot;Project-A[PDF]&quot;],</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure><br>이렇게 하고 프로젝트 B를 설치하면 <code>aiohttp</code> 와 <code>ReportLab&gt;=1.2</code>, 그리고 <code>RXP</code> 가 설치된다.<br><br/></p>
+<h2 id="setup-cfg"><a href="#setup-cfg" class="headerlink" title="setup.cfg"></a>setup.cfg</h2><p>파이썬 프로젝트를 몇 번 다뤄본 사람이면 <code>setup.py</code> 말고 <code>setup.cfg</code> 라는 비슷한 이름의 파일을 본 적이 있을 것이다. setuptools는 <code>setup.py</code> 대신 <code>setup.cfg</code> 라는 configuration 파일로 대신 <code>setuptools.setup()</code> 의 옵션을 지정하는 것을 허용한다. <code>setup.cfg</code> 포맷에 맞게 옵션을 작성하고 <code>setup.py</code> 와 같이 프로젝트 루트에 두면 자동으로 setuptools가 <code>setup.cfg</code> 파일을 찾아서 설정을 오버라이드 한다. 포맷에 대해서는 공식 홈페이지에 상세히 설명되어 있으니 굳이 여기서 짚고 넘어가지는 않겠다.<br><br/></p>
+<p>사실 왜 굳이 <code>setup.cfg</code> 파일을 따로 생성하는 것을 지원하는지는 모르겠다. 공식 홈페이지에서는 </p>
+<blockquote>
+<p>This approach not only allows automation scenarios but also reduces boilerplate code in some cases.<br>이라고만 나와있고 별 다른 특별한 use case를 설명해주지는 않는다. 다만 개인적으로는 configuration 파일을 따로 두는게 뭔가 마음이 편하긴 한 것 같다.<br><br/></p>
+</blockquote>
+<h2 id="setuptools-Develop-Mode"><a href="#setuptools-Develop-Mode" class="headerlink" title="setuptools Develop Mode"></a>setuptools Develop Mode</h2><p>다음과 같은 상황을 생각해보자. 내가 클라이언트와 서버 프로젝트를 별도로 작성하고 있다. 당연히 두 프로젝트는 서로에 대한 의존성을 어느 정도 가지며, 하나의 기능을 개발하기 위해서 두 프로젝트를 동시에 수정해야 하는 경우도 있을 것이다.  이 때 integration test를 돌린다고 해보자. 그러면 두 프로젝트를 같은 폴더에 넣은 테스트 전용 프로젝트를 따로 파지 않은 이상, 코드를 수정하고 integration test를 돌리려고 할 때마다 각 프로젝트를 배포해야 한다. 굉장히 번거롭기 짝이 없다. 꼭 클라이언트와 서버 모델의 경우 뿐만이 아니다. 작업이 조금만 커지면 두 개 이상의 연관된 프로젝트를 동시에 다뤄야 하는 경우가 일상 다반사다. 이러한 경우 어떻게 다수의 프로젝트에 걸친 개발을 할 수 있을까?<br><br/></p>
+<p>이를 위해 setuptools는 코드를 로컬에 임시로 배포할 수 있는 develop mode를 지원한다. Develop mode를 통해 프로젝트를 로컬에 배포하면, setuptools는 소스코드를 PATH directory에 복사하지 않고 프로젝트가 설치된 폴더를 참조하게만 설정한다. 따라서, 마치 <code>pip install</code> 을 통해 패키지를 설치한 것과 같은 효과를 내지만 소스코드를 수정할 때마다 즉시 반영되는 것이다(C extention 등의 파일은 다시 빌드해야 한다). 그래서 ‘develop mode’이다.<br><br/></p>
+<p>사용법은 간단하다. 위에서 구성한 <code>setup.py</code> 파일만 있으면 된다. 그 이후에는 <code>python setup.py develop</code> 을 콘솔에 입력하기만 하면 된다. 그러면 실제로 <code>site-packages</code> 폴더에 설치되는 대신 <code>.egg-link</code> 라는, 프로젝트 소스 코드를 링킹해주는 파일을 생성한다. 반대로 삭제는 <code>python setup.py develop --uninstall</code> 을 입력하면 된다.<br><br/></p>
+<h1 id="다시-pip-install-e"><a href="#다시-pip-install-e" class="headerlink" title="다시, pip install -e ."></a>다시, pip install -e .</h1><p>이제 정말 <code>pip install -e .</code> 라는 커맨드가 무엇인지 이해할 준비가 다 되었다. 다시 한번 pip의 공식 다큐멘테이션으로 돌아가보자.</p>
+<h2 id="pip-e-option"><a href="#pip-e-option" class="headerlink" title="pip -e option"></a>pip -e option</h2><p>공식 다큐멘테이션에 따르면 pip의 <code>-e</code> 옵션은 editable 옵션으로, 기본적으로 setuptools의 develop mode와 동일하다. 다만 pip의 editable mode를 사용하면 생성되는 egg-info 파일이 프로젝트 루트에 상대적으로 생성된다는 점에서 egg-info 파일이 커맨드를 실행한 폴더에 상대적으로 생성되는 setuptools의 develop mode 보다 장점이 있다고 한다. 정말 소소하기 그지 없는 장점이다…<br><br/></p>
+<p>pip의 <code>-e</code> 옵션을 통해 로컬 혹은 VCS 프로젝트를 로컬에 설치할 수 있는데, 각각의 설치 방법은 아래와 같다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pip install -e path/to/project # Install local project</span><br><span class="line">$ pip install -e git+http://repo/my_project.git#egg=SomeProject # Install VCS project</span><br></pre></td></tr></table></figure></p>
+<p>또한, 프로젝트 뒤에 <code>extra_requires</code> 에 작성된 feature을 명시함으로써 추가적인 의존성을 설치할 수 있다. 예를 들어, 아까 위에서 든 프로젝트 A가 있다고 하자. 이 때 프로젝트 A를 PDF 및 reST feature을 사용할 수 있도록 설치하려면 아래와 같이 커맨드를 입력하면 된다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install -e .[PDF,reST]</span><br></pre></td></tr></table></figure><br><br/></p>
+<h1 id="글을-맺으며"><a href="#글을-맺으며" class="headerlink" title="글을 맺으며"></a>글을 맺으며</h1><p>지금까지 pip와 setuptools에 대해서 꽤나 날림으로 알아보았다. 현재 내 개인 프로젝트에 <code>setup.py</code> 를 추가하고 있는 중인데, 확실히 로컬에서 개발하기에 편해진 느낌이 있다. 일단 소소하게는 패키지 바깥에 정의된 테스트 파일에서 프로젝트 파일들을 import 할 때 더 이상 오류가 나지 않는 점이 마음에 든다. 앞으로 다양한 옵션들을 이것저것 테스트 해볼텐데, 편한 사용법이 있으면 또 다른 포스트로 정리할 것이다.<br><br/></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://pip.pypa.io/en/stable/user_guide/">pip 공식 다큐멘테이션 - User Guide</a></li>
+<li><a href="https://pip.pypa.io/en/stable/reference/pip_install/">pip 공식 다큐멘테이션 - Reference (pip install)</a></li>
+<li><a href="https://setuptools.readthedocs.io/en/latest/setuptools.html">setuptools 공식 다큐멘테이션</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/10/24/deep-dive-into-pip-1/">
+        <span class="nav-arrow">← </span>
+        
+          Deep Dive into pip - 1
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/12/25/spring-data-jpa-projection-tips/">
+        
+          Spring Data JPA - Projection 이모저모
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#setuptools-Preview"><span class="toc-nav-text">setuptools: Preview</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Basic"><span class="toc-nav-text">Basic</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#sdist-egg-bdist-wheel"><span class="toc-nav-text">sdist? egg? bdist_wheel?</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#sdist"><span class="toc-nav-text">sdist</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#bdist"><span class="toc-nav-text">bdist</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#egg-wheel"><span class="toc-nav-text">egg, wheel</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#setuptools-In-Detail"><span class="toc-nav-text">setuptools: In Detail</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#setuptools-Options"><span class="toc-nav-text">setuptools Options</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#metadata-%EA%B4%80%EB%A0%A8"><span class="toc-nav-text">metadata 관련</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#entry-points"><span class="toc-nav-text">entry_points</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#install-requires-extras-require"><span class="toc-nav-text">install_requires, extras_require</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#setup-cfg"><span class="toc-nav-text">setup.cfg</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#setuptools-Develop-Mode"><span class="toc-nav-text">setuptools Develop Mode</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EB%8B%A4%EC%8B%9C-pip-install-e"><span class="toc-nav-text">다시, pip install -e .</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#pip-e-option"><span class="toc-nav-text">pip -e option</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%EA%B8%80%EC%9D%84-%EB%A7%BA%EC%9C%BC%EB%A9%B0"><span class="toc-nav-text">글을 맺으며</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Reference"><span class="toc-nav-text">Reference</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2018/10/30/deep-dive-into-pip-2/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Deep Dive into pip - 2",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

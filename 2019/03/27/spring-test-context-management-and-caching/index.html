@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Spring Testing - Context Management and Caching
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Spring Testing - Context Management and Caching</h2>
+  <p class="post-date">2019-03-27</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>최근 들어 회사에서 테스트 성능이 문제가 된 경우가 몇 번 있었다. 이를 해결하기 위해 <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html">Spring의 Testing 레퍼런스</a>를 정독하며 테스트의 동작 방식에 대해서 파헤쳐보았다. 비록 내가 내린 결론은 테스트 툴을 더 잘 활용하여 빌드 속도를 끌어올리기는 어렵다는 것이었지만, 그래도 내가 모르고 있었던 테스트 작동 방식에 대해서 더 깊이 이해할 수 있었던 좋은 기회였다.<br /><br>이번 글에서는 Spring에서 intergration test를 위해 제공하는 주요 기능 중의 하나인 <strong>context management 및 caching</strong>에 대해서 정리해보았다.</p>
+<p><br /></p>
+<h2 id="Context-Management"><a href="#Context-Management" class="headerlink" title="Context Management"></a>Context Management</h2><p><strong>Spring으로 작성된 application의 integration test를 돌리기 위해서는 <code>ApplicationContext</code>가 필요</strong>하다. Unit test와는 달리 두 개 이상의 bean이 함께 작동했을 때 의도한 대로 작동하는 지를 확인해야 하기 때문이다. JUnit4를 기반으로 작성된 Spring의 integration test 실행 과정은 다음과 같다 :</p>
+<ol>
+<li>테스트 클래스의 instance를 생성한다. 이 때 instance는 no-args constructor를 통해 생성된다.</li>
+<li>테스트에 필요한 bean으로 <code>ApplicationContext</code>를 구성한다.</li>
+<li>2의 테스트 instance에, 1에서 생성한 <code>ApplicationContext</code>를 활용하여 필요한 bean을 주입한다.</li>
+</ol>
+<p>Spring에서는 <code>TestContext</code>라는 프레임워크를 통해 테스트에서 사용할 <code>ApplicationContext</code>를 정의할 수 있다. 대표적으로 <strong><code>@ContextConfiguration</code>이라는 annotation을 활용하는 방법</strong>이 있다. 테스트 클래스에 <code>@ContextConfiguration</code>을 붙이고 테스트에서 사용할 <code>@Configuration</code> 클래스나 <code>@Component</code> 클래스을 명시하면 된다. 아래는 Kotlin으로 작성한 예시 코드이다.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Configuration &amp; Component class definition */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BeanA</span> &#123;&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BeanB</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConfigA</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">beanA</span><span class="params">()</span></span>: BeanA &#123;</span><br><span class="line">        <span class="keyword">return</span> BeanA()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConfigB</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">beanB</span><span class="params">()</span></span>: BeanB &#123;</span><br><span class="line">        <span class="keyword">return</span> BeanB()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ComponentC</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ComponentD</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Test code */</span></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class, ComponentC::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SomeIntegrationTest1</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> beanA: BeanA</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> componentC: ComponentC</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">someTest1</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>위의 예시에 대해서 조금 더 자세히 설명해보자면, 우선 몇 개의 <code>@Configuration</code> 클래스 및 <code>@Component</code> 클래스를 선언했다.</p>
+<ul>
+<li><code>ConfigA</code> -&gt; <code>BeanA</code>를 구성</li>
+<li><code>ConfigB</code> -&gt; <code>BeanB</code>를 구성</li>
+<li><code>ComponentC</code></li>
+<li><code>ComponentD</code></li>
+</ul>
+<p>그리고 <code>SomeIntegrationTest1</code>에서는 <code>@ContextConfiguration</code> 의 <code>classes</code> attribute로 <code>ConfigA</code>와 <code>ComponentC</code>를 사용하겠다고 지정했다. 그러면 <code>SomeIntegrationTest1</code>을 돌릴 때 사용될 <code>ApplicationContext</code>는 <code>ConfigA</code>와 <code>ComponentC</code>만으로 구성되고 <code>ConfigB</code>와 <code>ComponentD</code>는 사용되지 않는다. 이런 방식으로 <strong>테스트에서 실제로 필요한 bean만 생성하여 사용하고 불필요한 bean을 생성하여 성능이 저하되는 것을 방지</strong>할 수 있다.</p>
+<p><code>@ContextConfiguration</code> 클래스의 <code>classes</code> attribute에는 다음과 같은 type의 class가 올 수 있다.</p>
+<ul>
+<li><code>@Configuration</code> 클래스</li>
+<li><code>@Component</code>, <code>@Service</code>, <code>@Repository</code> 등 stereotype 클래스</li>
+<li>그 외 <code>@Bean</code> 메소드를 포함한 아무 클래스</li>
+</ul>
+<p><br /></p>
+<h2 id="Context-Caching"><a href="#Context-Caching" class="headerlink" title="Context Caching"></a>Context Caching</h2><p>방금 전 상황에서는 테스트 클래스가 하나였다. 하지만 이제 테스트 클래스가 100개가 있다고 해보자. 당연히 CI를 하려면 전체 빌드를 돌려야 하고, 테스트 클래스 100개를 전부 다 돌려야 할 것이다. 이 때 <code>ApplicationContext</code> 생성 전략을 어떻게 취하면 될까?<br /><br>우선, 가장 쉬운 방법은 각 테스트를 돌릴 때마다 새로운 <code>ApplicationContext</code>를 생성하는 방법이 있다. 하지만 이 방법은 최악의 성능을 보일 것이다. <code>ApplicationContext</code>를 생성하는 데에 테스트 당 20~30초만 걸려도 전체 빌드를 돌리는 데에 1시간이 걸리는 기적을 볼 수 있다.<br /><br>그렇다고 하나 이상의 테스트에서 사용되는 모든 bean으로 구성된 <code>ApplicationContext</code> 한 번만 만들어서 전체 테스트에 대해 재사용하는 것 역시 좋지 않은 방법이다. 우선, 이는 몇 개의 테스트만 돌려보고 싶은 상황을 고려하지 않은 전략이다. 한 개의 테스트만 돌릴 것인데 다른 테스트에서 필요한 bean을 생성하는 것은 분명한 리소스 낭비이다. 또한, 테스트가  <code>ApplicationContext</code>를 오염시키는 경우 다음 테스트를 돌릴 때에는 어쩔 수 없이 새 <code>ApplicationContext</code>를 만들어야 하는데, 이 때 다시 수많은 bean을 생성해야 하므로 굉장히 오랜 시간이 걸릴 것이다.<br /><br><strong>Spring은 이러한 문제를 해결하기 위해 context caching 기능을 지원</strong>한다. Spring <code>TestContext</code> 프레임워크는 한 번 <code>ApplicationContext</code>가 만들어지면 이를 캐시에 저장한다. 그리고 다른 테스트를 돌릴 때 <strong>가능한 경우</strong> 재사용한다. 여기서 <strong>가능한 경우</strong>란,</p>
+<ol>
+<li>같은 bean의 조합을 필요로 하고</li>
+<li>이전 테스트에서 <code>ApplicationContext</code>가 오염되지 않은 경우</li>
+</ol>
+<p>를 의미한다. 물론 <strong>context caching은 한 test suite 내에서만, 즉 한 JVM에서 실행되는 테스트 클래스에 대해서만 동작</strong>한다.<br /><br>그렇다면 Spring <code>TestContext</code> 프레임워크는 두 테스트 클래스가 같은 bean의 조합을 필요로 하는지 어떻게 판별할까? 이 질문은 곧 context caching에서의 cache key가 무엇으로 구성되는 지와 동일하다. <strong>Spring <code>TestContext</code> 프레임워크는 테스트 클래스의 여러 configuration으로 이 key를 구성</strong>한다.</p>
+<ul>
+<li><code>locations</code> (from <code>@ContextConfiguration</code>)</li>
+<li><code>classes</code> (from <code>@ContextConfiguration</code>)</li>
+<li><code>contextInitializerClasses</code> (from <code>@ContextConfiguration</code>)</li>
+<li><code>contextCustomizers</code> (from <code>ContextCustomizerFactory</code>)</li>
+<li><code>contextLoader</code> (from <code>@ContextConfiguration</code>)</li>
+<li><code>parent</code> (from <code>@ContextHierarchy</code>)</li>
+<li><code>activeProfiles</code> (from <code>@ActiveProfiles</code>)</li>
+<li><code>propertySourceLocations</code> (from <code>@TestPropertySource</code>)</li>
+<li><code>propertySourceProperties</code> (from <code>@TestPropertySource</code>)</li>
+<li><code>resourceBasePath</code> (from <code>@WebAppConfiguration</code>)</li>
+</ul>
+<p>여기서 놓치기 쉬운 점은 <strong>어떤 bean을 mock으로 처리했느냐(Mockito의 <code>@MockBean</code>을 사용했느냐)가 <code>ApplicationContext</code> 재사용 여부에 영향을 미친다는 것</strong>이다. Mockito의 <code>@MockBean</code>을 사용할 경우 <code>contextCustomizers</code>에 <code>MockitoContextCustomizer</code>가 추가되는데, 이 때문에 테스트 클래스에서 <code>@MockBean</code> 처리한 bean의 조합이 달라질 경우 cache key가 달라지게 된다. 따라서 비록 같은 <code>@ContextConfiguration</code> <code>classes</code> attributes를 가졌다고 하더라도 <code>@MockBean</code>의 조합이 달라지면 Spring <code>TestContext</code>는 <code>ApplicationContext</code>를 재사용하지 않는다.<br/><br>(생각해보면 이는 당연한 일인데, 어떤 bean을 mocking 하는 일은 해당 bean을 변형시키는 일이라서 <code>ApplicationContext</code>가 오염되는 것과 마찬가지이기 때문이다.)<br /><br>아래는 위의 context caching 규칙을 예시를 통해 정리한 것이다. 아까 Context Management 부분에서 정의한 <code>ConfigA</code>, <code>ConfigB</code>, <code>ComponentC</code>, <code>ComponentD</code>가 정의되어 있다고 가정하자.<br /><br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass1</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass2</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass3</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> beanA: BeanA</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>위 3개 테스트를 함께 돌리면 <code>ApplicationContext</code>는 한 번만 생성되고 3개 테스트에 대해서 모두 재사용된다. <code>@ContextConfiguration</code> 구성이 모두 같기 때문이다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass4</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigB::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass5</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ComponentC::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass6</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ComponentD::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass7</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>위 4개의 테스트를 함께 돌리면 매번 새 <code>ApplicationContext</code>를 생성한다. <code>@ContextConfiguration</code> 구성이 모두 다르기 때문이다.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class, ConfigB::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass8</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class, ConfigB::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass9</span> &#123;</span><br><span class="line">    <span class="meta">@MockBean</span></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> beanA: BeanA</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class, ConfigB::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass10</span> &#123;</span><br><span class="line">    <span class="meta">@MockBean</span></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> beanB: BeanB</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RunWith(SpringRunner::class)</span></span><br><span class="line"><span class="meta">@ContextConfiguration(</span></span><br><span class="line"><span class="meta">    classes = [ConfigA::class, ConfigB::class]</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass11</span> &#123;</span><br><span class="line">    <span class="meta">@MockBean</span></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> beanA: BeanA</span><br><span class="line"></span><br><span class="line">    <span class="meta">@MockBean</span></span><br><span class="line">    <span class="keyword">lateinit</span> <span class="keyword">var</span> beanB: BeanB</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="comment">/* some test code */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>위 4개 테스트를 함께 돌리면 매번 새 <code>ApplicationContext</code>를 생성한다. <code>@ContextConfiguration</code> 구성은 같지만 <code>@MockBean</code> 처리된 bean의 구성이 모두 다르기 때문이다.</li>
+</ul>
+<p><br /></p>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>Spring <code>TestContext</code> 프레임워크의 <code>ApplicationContext</code> 생성 전략을 잘 파악하고 성능이 최대한 잘 나오도록 유의하여 사용하자.</p>
+<p><br /></p>
+<h2 id="레퍼런스"><a href="#레퍼런스" class="headerlink" title="레퍼런스"></a>레퍼런스</h2><ul>
+<li><a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html">Spring framework reference - Testing</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/02/24/jpa-vs-hibernate-vs-spring-data-jpa/">
+        <span class="nav-arrow">← </span>
+        
+          JPA, Hibernate, 그리고 Spring Data JPA의 차이점
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/04/22/understanding-kubernetes-design/">
+        
+          Kubernetes 좀 더 잘 이해하기
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Context-Management"><span class="toc-nav-text">Context Management</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Context-Caching"><span class="toc-nav-text">Context Caching</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-nav-text">결론</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EB%A0%88%ED%8D%BC%EB%9F%B0%EC%8A%A4"><span class="toc-nav-text">레퍼런스</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2019/03/27/spring-test-context-management-and-caching/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Spring Testing - Context Management and Caching",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

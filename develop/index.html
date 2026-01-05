@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Develop
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Develop</h2>
+</div>
+<main class="app-body">
+  <div class="articles">
+    
+    
+    
+    
+    
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2023/06/17/jdk-virtual-thread/">JDK Virtual Thread 살펴보기</a>
+        </h2>
+      </div>
+      <p class="article-date">June 17, 2023</p>
+      
+      <div class="article-summary">
+        
+        Overview
+Virtual thread가 아닌 일반 JVM thread의 쓰레딩 모델은 아래와 같다.
+(출처: https://perfectacle.github.io/2022/12/29/look-over-java-virtual-threads/)
+JVM 쓰레드( ...
+        
+      </div>
+      <a class="more" href="/2023/06/17/jdk-virtual-thread/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2023/01/01/goodbye-2022-1/">2022년 회고 - (1)</a>
+        </h2>
+      </div>
+      <p class="article-date">January 1, 2023</p>
+      
+      <div class="article-summary">
+        
+        CH 1. Develop이직 사이에는 충분한 쉼을 가지자올해 가장 잘한 일이라고 생각한 것은, 퇴사와 구직 사이에 충분한 휴식 시간을 둔 것이었다. 작년 11월 말에 퇴사하고 올해 3월 말에 입사했으니, 약 4개월 가량을 백수로 보낸 것이다. 물론 작년 12월  ...
+        
+      </div>
+      <a class="more" href="/2023/01/01/goodbye-2022-1/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2022/11/27/spring-boot-auto-configuration/">Spring Boot Auto-Configuration</a>
+        </h2>
+      </div>
+      <p class="article-date">November 27, 2022</p>
+      
+      <div class="article-summary">
+        
+        Auto-configuration이란?정의우선 auto-configuration의 정의부터 살펴보자. Spring Boot Reference의 Auto-configuration 섹션에서는 auto-configuration에 대해 다음과 같이 설명한다.
+
+Spri ...
+        
+      </div>
+      <a class="more" href="/2022/11/27/spring-boot-auto-configuration/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2022/01/21/Kotlin-coroutine-structured-concurrency/">Kotlin Coroutine의 Structured Concurrency 구현 상세</a>
+        </h2>
+      </div>
+      <p class="article-date">January 21, 2022</p>
+      
+      <div class="article-summary">
+        
+        개요Kotlin coroutine의 structured concurrency의 동작 방식을 다시 살펴보자.
+
+parent가 어떤 이유로든 취소되면, parent의 모든 children이 취소된다.
+child에서 exception이 던져져서 취소되면, except ...
+        
+      </div>
+      <a class="more" href="/2022/01/21/Kotlin-coroutine-structured-concurrency/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2021/05/16/refactoring-databases/">Refactoring Databases</a>
+        </h2>
+      </div>
+      <p class="article-date">May 16, 2021</p>
+      
+      <div class="article-summary">
+        
+        책 제목에서 느낄 수 있듯이, 마틴 파울러의 &lt;Refactoring&gt;과 상당히 유사한 책이다. 단지 주제가 코드에서 데이터베이스로 바뀐 것뿐이다. 책을 읽다 보면 마틴 파울러의 &lt;Refactoring&gt;이 자주 언급되는 것을 느낄 수 있다.  ...
+        
+      </div>
+      <a class="more" href="/2021/05/16/refactoring-databases/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2021/04/08/implementing-domain-driven-design/">Implementing Domain-Driven Design</a>
+        </h2>
+      </div>
+      <p class="article-date">April 8, 2021</p>
+      
+      <div class="article-summary">
+        
+        두께만큼이나 방대한 주제, 풍부한 예시, 그리고 디테일한 논의가 담겨 있는 책이다. DDD를 워낙 뭣도 모를 때 읽었고, 읽은지도 1~2년 정도 돼서 좀 걱정됐는데, 읽어보니 DDD 내용을 모르는 건 그리 큰 문제가 되지 않았다. 초반부의 전략적 설계 내용을 제 ...
+        
+      </div>
+      <a class="more" href="/2021/04/08/implementing-domain-driven-design/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2021/02/09/refactoring-martin-fowler/">Refactoring - Martin Fowler</a>
+        </h2>
+      </div>
+      <p class="article-date">February 9, 2021</p>
+      
+      <div class="article-summary">
+        
+        2021년 읽은 두 번째 개발 서적. &lt;디자인 패턴&gt; 다음 이 책을 고른 이유는 지금 서버 코드를 리팩토링할 필요성을 느꼈기 때문이다. 지금이 바로 회사에서 서버팀의 사이즈가 늘어날(혹은 늘어나야만 하는) 타이밍인데, 개인적으로 지금의 서버 코드는 이 ...
+        
+      </div>
+      <a class="more" href="/2021/02/09/refactoring-martin-fowler/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2021/01/31/gof-design-patterns/">Design Patterns - GoF</a>
+        </h2>
+      </div>
+      <p class="article-date">January 31, 2021</p>
+      
+      <div class="article-summary">
+        
+        다 읽고 나서야 이 책에 부제가 있다는 사실을 알았다. 이 책의 full name은 &lt;Design Patterns: Elements of Reusable Object-Oriented Software&gt;로, 직역하자면 “재사용 가능한 객체지향 소프트웨어의 ...
+        
+      </div>
+      <a class="more" href="/2021/01/31/gof-design-patterns/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2021/01/14/kubernetes-ops-components/">쿠버네티스 환경에서 서비스를 운영할 때 필요한 것들</a>
+        </h2>
+      </div>
+      <p class="article-date">January 14, 2021</p>
+      
+      <div class="article-summary">
+        
+        작년 11월 중순부터 12월 중순까지 나는 타다 EKS 클러스터의 버전업 작업을 맡아서 진행했다. 타다 EKS 클러스터를 바닥부터 한땀한땀 띄워보면서 타다 백엔드 시스템이 무엇으로 구성되어 있고, 또 어떻게 동작하는지에 대해 정말 많이 배웠다. 그 때 배운 지식 ...
+        
+      </div>
+      <a class="more" href="/2021/01/14/kubernetes-ops-components/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2020/12/30/goodbye-2020/">2020년 회고</a>
+        </h2>
+      </div>
+      <p class="article-date">December 30, 2020</p>
+      
+      <div class="article-summary">
+        
+        이런저런 사건사고가 많았기 때문일까, 2020년은 유독 느리게 흘러간 것 같다. 그럼에도 시간은 착실히 흘러 어느덧 2년이라는 연차가 쌓였다. 그동안 나는 신입 티를 완전히 벗었고, 좀 더 개발자다워진 것 같다.
+2020년 때 주로 배운 건 코드를 잘 짜는 법은 ...
+        
+      </div>
+      <a class="more" href="/2020/12/30/goodbye-2020/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2020/04/11/backend-application-design-202004/">소프트웨어 개발과 설계</a>
+        </h2>
+      </div>
+      <p class="article-date">April 11, 2020</p>
+      
+      <div class="article-summary">
+        
+        개요백엔드 어플리케이션을 개발하면서 지금까지 소프트웨어 개발에 대해 고민한 것들을 정리한다.
+설계는 복잡성을 현명하게 다루기 위해 필요하다DDD 책의 표지를 보면 부제목으로 “소프트웨어의 복잡성을 다루는 지혜”라는 글귀가 적혀있다. 이것이야말로 어플리케이션 개발 ...
+        
+      </div>
+      <a class="more" href="/2020/04/11/backend-application-design-202004/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2020/01/16/spring-transaction-common-mistakes/">Spring Transaction 사용 시 주의할 점</a>
+        </h2>
+      </div>
+      <p class="article-date">January 16, 2020</p>
+      
+      <div class="article-summary">
+        
+        개요최근 몇 달 간 내가 Spring에서 트랜잭션을 사용할 때 겪었던 여러 문제 상황에 대해서 이야기하려고 한다.
+트랜잭션 안에서 트랜잭션을 새로 여는 경우트랜잭션 안에서 새로운 트랜잭션을 열 때의 동작 방식, 혹은 propagation behavior에 대해  ...
+        
+      </div>
+      <a class="more" href="/2020/01/16/spring-transaction-common-mistakes/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/12/17/goodbye-2019-as-developer-2/">2019년 개발자 회고 (2)</a>
+        </h2>
+      </div>
+      <p class="article-date">December 17, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요2019년 회고 글에서 이어지는 글이다. 이번 편에서는 내가 했던 활동들과 새롭게 가졌던 마음가짐에 대해서 정리하고, 내년 목표를 글로 남겨놓음으로써 더 많은 성장을 이루기 위한 의지를 다지려고 한다.
+개발자로서의 활동첫 컨퍼런스 발표개발자 행사는 아니었지만 ...
+        
+      </div>
+      <a class="more" href="/2019/12/17/goodbye-2019-as-developer-2/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/12/17/goodbye-2019-as-developer-1/">2019년 개발자 회고 (1)</a>
+        </h2>
+      </div>
+      <p class="article-date">December 17, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요2019년 한 해 동안, 나는 개발자로서 정말 빠르게 성장했다. 빠르게 성장할 수 있었던 이유는 내가 겪었던 모든 경험이 새로웠기 때문이다. 올해는 내가 개발을 업으로 삼아 온전히 보낸 첫 해였다. 학교에서 하던 개발이 필요로 하던 역량과 실제 판매되는 제품 ...
+        
+      </div>
+      <a class="more" href="/2019/12/17/goodbye-2019-as-developer-1/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/10/27/hibernate-detached-entity-proxy-initialization/">Hibernate Detached 엔티티 프록시의 초기화</a>
+        </h2>
+      </div>
+      <p class="article-date">October 27, 2019</p>
+      
+      <div class="article-summary">
+        
+        문제 상황Spring + Hibernate + Spring Data JPA 환경에서 다음과 같은 상황이 있었다.123456789fun doSomeTask(transactionTemplate: TransactionTemplate, entityRepository:  ...
+        
+      </div>
+      <a class="more" href="/2019/10/27/hibernate-detached-entity-proxy-initialization/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/10/06/review-clean-architecture/">클린 아키텍처 후기</a>
+        </h2>
+      </div>
+      <p class="article-date">October 6, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요얼마 전 &lt;클린 아키텍처&gt;를 읽고 나서 새롭게 바뀐 시각, 느낀 점을 정리했다.
+소프트웨어의 가장 중요한 가치는 쉽게 변화할 수 있는 성질이다우리는 어떤 복잡한 기능이나 요구사항을 구현해야 하는 상황이 오면 “설계를 잘하고 들어가야 한다”고 이야기 ...
+        
+      </div>
+      <a class="more" href="/2019/10/06/review-clean-architecture/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/06/09/transaction-isolation-level-and-lock/">Lock으로 이해하는 Transaction의 Isolation Level</a>
+        </h2>
+      </div>
+      <p class="article-date">June 9, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요내게 transaction의 isolation level은 개발할 때 항상 큰 찝찝함을 남기게 하는 요소였다. row를 읽기만 할 때는 REPEATABLE READ로, row를 삽입 / 수정 / 삭제할 때는 SERIALIZABLE로 isolation leve ...
+        
+      </div>
+      <a class="more" href="/2019/06/09/transaction-isolation-level-and-lock/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/04/22/understanding-kubernetes-design/">Kubernetes 좀 더 잘 이해하기</a>
+        </h2>
+      </div>
+      <p class="article-date">April 22, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요나는 주로 필요에 의해서만 새로운 기술을 배우는 편인데, 최근에 Kubernetes를 사용할 일이 생겨서 드디어 배우고 싶던 Kubernetes를 공부하게 되었다.
+그런데 공부하면 할수록 Kubernetes는 내가 지금까지 주워들었던 컨테이너 오케스트레이션  ...
+        
+      </div>
+      <a class="more" href="/2019/04/22/understanding-kubernetes-design/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/03/27/spring-test-context-management-and-caching/">Spring Testing - Context Management and Caching</a>
+        </h2>
+      </div>
+      <p class="article-date">March 27, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요최근 들어 회사에서 테스트 성능이 문제가 된 경우가 몇 번 있었다. 이를 해결하기 위해 Spring의 Testing 레퍼런스를 정독하며 테스트의 동작 방식에 대해서 파헤쳐보았다. 비록 내가 내린 결론은 테스트 툴을 더 잘 활용하여 빌드 속도를 끌어올리기는 어 ...
+        
+      </div>
+      <a class="more" href="/2019/03/27/spring-test-context-management-and-caching/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/02/24/jpa-vs-hibernate-vs-spring-data-jpa/">JPA, Hibernate, 그리고 Spring Data JPA의 차이점</a>
+        </h2>
+      </div>
+      <p class="article-date">February 24, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요Spring 프레임워크는 어플리케이션을 개발할 때 필요한 수많은 강력하고 편리한 기능을 제공해준다. 하지만 많은 기술이 존재하는 만큼 Spring 프레임워크를 처음 사용하는 사람이 Spring 프레임워크에 대한 정확한 이해를 하기는 매우 어렵다.
+내가 특히  ...
+        
+      </div>
+      <a class="more" href="/2019/02/24/jpa-vs-hibernate-vs-spring-data-jpa/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2019/02/06/difference-between-junior-and-senior/">3개월 차 주니어가 느끼는 나와 시니어의 차이</a>
+        </h2>
+      </div>
+      <p class="article-date">February 6, 2019</p>
+      
+      <div class="article-summary">
+        
+        개요입사한 지 3개월, 나는 훌륭한 동료들과 선배들 사이에서 정말 즐겁게 일하고 있다. 하지만 동시에 스스로의 부족함을 많이 느끼고 있고, 이는 성장에 대한 좋은 동기부여가 되고 있다.
+하지만 회사에 입사하고 본격적으로 개발자로서 커리어를 시작한 지금, 나는 내 ...
+        
+      </div>
+      <a class="more" href="/2019/02/06/difference-between-junior-and-senior/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/12/30/spring-junit-disable-postconstruct-in-test/">Spring + JUnit - 테스트에서 @PostConstruct 비활성화 하기</a>
+        </h2>
+      </div>
+      <p class="article-date">December 30, 2018</p>
+      
+      <div class="article-summary">
+        
+        개요이번 글은 테스트를 돌릴 때 @PostConstruct와 @PreDestroy hook을 비활성화하는 방법에 대한 글이다.
+문제 상황아래와 같이 batch job을 @PostConstruct과 ScheduledExecutorService를 활용하여 띄운다고  ...
+        
+      </div>
+      <a class="more" href="/2018/12/30/spring-junit-disable-postconstruct-in-test/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/12/25/spring-data-jpa-projection-tips/">Spring Data JPA - Projection 이모저모</a>
+        </h2>
+      </div>
+      <p class="article-date">December 25, 2018</p>
+      
+      <div class="article-summary">
+        
+        개요요즘 회사에서 Spring으로 백엔드 개발을 하고 있는데, 너무 자동으로 돌아가는게 많아서 고생을 하고 있다. 이번 포스팅에서는 Spring Data JPA의 Projection 기능을 쓰면서 새롭게 알게된 사실들을 기록해두려고 한다.
+Projection B ...
+        
+      </div>
+      <a class="more" href="/2018/12/25/spring-data-jpa-projection-tips/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/10/30/deep-dive-into-pip-2/">Deep Dive into pip - 2</a>
+        </h2>
+      </div>
+      <p class="article-date">October 30, 2018</p>
+      
+      <div class="article-summary">
+        
+        지난 포스트에서는 pip의 기본에 대해서 알아보았다. 주로 requirements.txt에 대한 이야기를 했었는데, 우리가 막힌 부분은 pip install 의 -e 옵션에 대한 부분이었다.
+이번 포스트에서는 지난 포스트에 이어서 pip install -e .  ...
+        
+      </div>
+      <a class="more" href="/2018/10/30/deep-dive-into-pip-2/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/10/24/deep-dive-into-pip-1/">Deep Dive into pip - 1</a>
+        </h2>
+      </div>
+      <p class="article-date">October 24, 2018</p>
+      
+      <div class="article-summary">
+        
+        Intro최근 회사에서 새 프로젝트에 기여를 하기 위해 테스트를 돌리는 와중, import error 가 뜬 적이 있었다. 다른 프로젝트에서는 전부 PATH를 추가하지 않아도 테스트 파일이 프로젝트 모듈들을 잘 import 했는데, 새로 clone 받은 이 프로 ...
+        
+      </div>
+      <a class="more" href="/2018/10/24/deep-dive-into-pip-1/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/10/20/use-git-in-aws-lambda/">삽질기 - AWS Lambda를 활용하여 Github에 자동으로 커밋하기</a>
+        </h2>
+      </div>
+      <p class="article-date">October 20, 2018</p>
+      
+      <div class="article-summary">
+        
+        이번 글은 AWS Lambda 배포 과정 삽질기다. 삽질의 포인트를 요약해보자면 아래와 같다.
+
+AWS Lambda로 Cron job scheduling 하기
+YAML로 작성된 파일의 내용을 유지하며 일부만 변경하기
+AWS Lambda 환경에서 git 사용하기
+ ...
+        
+      </div>
+      <a class="more" href="/2018/10/20/use-git-in-aws-lambda/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/04/18/JS-async-programming-with-promise-and-generator/">JS - Promise와 Generator을 활용한 async programming</a>
+        </h2>
+      </div>
+      <p class="article-date">April 18, 2018</p>
+      
+      <div class="article-summary">
+        
+        이번 글에서는 최근 JavaScript를 공부하면서 가장 인상 깊었던 부분인 Promise와 Generator을 활용한 비동기 프로그래밍 구현에 대해서 정리해보았다. 글의 목적이 Promise와 Generator을 설명하는 것이 아니기 때문에 이 둘에 대한 설명 ...
+        
+      </div>
+      <a class="more" href="/2018/04/18/JS-async-programming-with-promise-and-generator/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/03/22/change-blog/">블로그 개편</a>
+        </h2>
+      </div>
+      <p class="article-date">March 22, 2018</p>
+      
+      <div class="article-summary">
+        
+        이번에 블로그를 대규모로 개편했다. 원래 Jekyll을 사용하고 있었는데, 이번에 개편하면서 hexo로 갈아탔다. 갈아탄 이유는 그냥 내가 Vue.js의 광팬이고 Vue.js 공식 홈페이지 디자인을 매우 좋아하는데 hexo에만 유사한 테마가 있길래(…) 덕분에  ...
+        
+      </div>
+      <a class="more" href="/2018/03/22/change-blog/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/01/27/Git-Rebase-2/">Git Rebase (2)</a>
+        </h2>
+      </div>
+      <p class="article-date">January 27, 2018</p>
+      
+      <div class="article-summary">
+        
+        안녕하세요, 이번 포스팅에서는 지난 포스팅에 이어서 git rebase에 대해 조금 더 탐구해보도록 하겠습니다. 지난 포스팅이 git rebase의 개념과 작동 원리에 초점을 맞췄다면, 이번 포스팅은 구체적인 예시를 통해 git rebase의 더 다양하고 강력한 ...
+        
+      </div>
+      <a class="more" href="/2018/01/27/Git-Rebase-2/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/01/21/Git-Rebase-1/">Git Rebase (1)</a>
+        </h2>
+      </div>
+      <p class="article-date">January 21, 2018</p>
+      
+      <div class="article-summary">
+        
+        안녕하세요, 이번 포스팅과 다음 포스팅에서는 git을 처음 배우는 사람들이 가장 어려워한다는 git rebase에 대해서 알아보도록 하겠습니다. 이번 포스팅은 git에 대해 어느 정도 지식이 있는 사람이 보기에 적합할 것 같습니다. 적어도 커밋이 무엇인지, 브랜 ...
+        
+      </div>
+      <a class="more" href="/2018/01/21/Git-Rebase-1/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2018/01/13/Python3-Useful-Tips-1/">Python3 Useful Tips - 1</a>
+        </h2>
+      </div>
+      <p class="article-date">January 13, 2018</p>
+      
+      <div class="article-summary">
+        
+        안녕하세요, 이번 포스팅에서는 Python3을 사용하실 때 유용하게 사용할 수 있는 팁에 대해서 작성해보고자 합니다.
+이번 글은 비정규 시리즈로 작성할 생각을 하고 있는데요, 앞으로 개발을 하면서 Python3에 대한 유용한 팁들을 배울 때마다 [Python3  ...
+        
+      </div>
+      <a class="more" href="/2018/01/13/Python3-Useful-Tips-1/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2017/12/29/Python3-Context-Manager/">Python3 Context Manager</a>
+        </h2>
+      </div>
+      <p class="article-date">December 29, 2017</p>
+      
+      <div class="article-summary">
+        
+        안녕하세요, 이번 시간에는 Python3의 context manager라는 것을 배워보도록 하겠습니다.
+Python에서 파일 사용아마 여러분들은 이미 Python에서 파일을 열고, 읽거나 쓰고, 다시 닫는 데에 굉장히 익숙하실 것입니다. 바로 아래와 같은 코드를 ...
+        
+      </div>
+      <a class="more" href="/2017/12/29/Python3-Context-Manager/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2017/06/26/jekyll-blog-customizing-example/">Jekyll 블로그 커스터마이징 예시</a>
+        </h2>
+      </div>
+      <p class="article-date">June 26, 2017</p>
+      
+      <div class="article-summary">
+        
+        안녕하세요, 이번 포스트에서는 지난 포스트에서 배운 Jekyll project의 파일 구조를 바탕으로 실제로 제 Jekyll 블로그를 어떻게 커스터마이징하는지를 보여드리도록 하겠습니다. 파일 구조에 대한 원론적인 이해도 중요하지만, 이를 실제로 어떻게 활용하는지 ...
+        
+      </div>
+      <a class="more" href="/2017/06/26/jekyll-blog-customizing-example/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2017/06/23/jekyll-project-structure/">Jekyll project 폴더 파일 구조 파헤치기</a>
+        </h2>
+      </div>
+      <p class="article-date">June 23, 2017</p>
+      
+      <div class="article-summary">
+        
+        이번 포스팅에서는 Jekyll로 만들어진 블로그를 커스터마이징 하기 위해 Jekyll project의 파일 구조를 분석하고 YAML 헤더에 대해서 알아보겠습니다. HTML에 대한 기본 지식이 어느정도 있다고 가정하고 포스팅을 작성하였습니다. 하지만 없어도 상관  ...
+        
+      </div>
+      <a class="more" href="/2017/06/23/jekyll-project-structure/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2017/06/22/jekyll-themes/">Jekyll로 만든 블로그에 테마 적용하기</a>
+        </h2>
+      </div>
+      <p class="article-date">June 22, 2017</p>
+      
+      <div class="article-summary">
+        
+        지난 포스팅에서는 새 Jekyll project를 생성하고 이를 Github Pages와 연동하는 것까지 해보았습니다. 이번 포스팅에서는 블로그를 예쁘게 꾸미는 것을 해보겠습니다. 예쁘게 꾸미는 것이라고 하니까 거창하게 들리겠지만, 그냥 수없이 많은 테마 중 하 ...
+        
+      </div>
+      <a class="more" href="/2017/06/22/jekyll-themes/">Read more</a>
+      </article>
+    
+      <div>
+        <h2 class="article-head">
+          <a href="/2017/06/22/create-blog-with-github-pages-and-jekyll/">Github Pages와 Jekyll로 블로그 만들기</a>
+        </h2>
+      </div>
+      <p class="article-date">June 22, 2017</p>
+      
+      <div class="article-summary">
+        
+        첫 포스트에서는 이 블로그와 같은 블로그를 만드는 법을 알아보겠습니다.
+이 블로그는 Github에서 제공하는 Github Pages라는 서비스와 Jekyll이라는 블로그 지향적인 정적 사이트 생성기를 사용하여 제작되었는데요, 마크업 언어로 파일을 작성하여 Git ...
+        
+      </div>
+      <a class="more" href="/2017/06/22/create-blog-with-github-pages-and-jekyll/">Read more</a>
+      </article>
+    
+    
+    
+
+    
+    <div class="guide-pager">
+  
+    <a class="unvisible" href="/"><span class="page-arrow">←</span> Prev</a>
+  
+  
+    <a class="unvisible" href="/">Next <span class="page-arrow">→</span></a>
+  
+</div>
+    
+  </div>
+</main>
+<script>
+  (function() {
+    var url = 'https://suhwan.dev/develop/index.html';
+    $('#article-banner').geopattern(url);
+    $('.header').removeClass('fixed-header')
+  })()
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

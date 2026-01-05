@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Spring Data JPA - Projection 이모저모
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Spring Data JPA - Projection 이모저모</h2>
+  <p class="post-date">2018-12-25</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>요즘 회사에서 Spring으로 백엔드 개발을 하고 있는데, 너무 자동으로 돌아가는게 많아서 고생을 하고 있다. 이번 포스팅에서는 Spring Data JPA의 Projection 기능을 쓰면서 새롭게 알게된 사실들을 기록해두려고 한다.<br><br /></p>
+<h2 id="Projection-Basic"><a href="#Projection-Basic" class="headerlink" title="Projection Basic"></a>Projection Basic</h2><p>우선 Projection이 무슨 기능인지 간단하게 살펴보자. 아래와 같이 <code>Student</code> 엔티티를 정의했다고 해보자. 참고로 필자는 Kotlin만 사용해서 Java는 쓸 줄 모른다…</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">data class Student(</span><br><span class="line">    @get:Id</span><br><span class="line">    @get:GeneratedValue(strategy = GenerationType.IDENTITY)</span><br><span class="line">    var id: Int? = null,</span><br><span class="line"></span><br><span class="line">    @get:Column(length = 32, nullable = false)</span><br><span class="line">    var name: String,</span><br><span class="line"></span><br><span class="line">    @get:Column(nullable = false)</span><br><span class="line">    var grade: Int,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>그리고 <code>Student</code>의 Repository를 하나 선언하고 적절히 쿼리 메소드를 선언하면 우리는 별 다른 노력 없이 <code>Student</code>에 대해 쿼리를 날릴 수 있다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface StudentRepository : JpaRepository&lt;Student, Int&gt; &#123;</span><br><span class="line">    fun findById(id: Int): Student?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>여기서 다음과 같은 상황을 생각해보자. 우리의 비즈니스 로직이 점차 복잡해져서 <code>Student</code> 모델에 여러가지 field가 추가되어 <code>Student</code> 모델이 꽤나 비대해졌다. 이 때, 학생의 이름만을 나열하는 페이지를 만들고 싶다. 이러한 상황에서 우리는 결코 Student 엔티티의 모든 field를 DB에서 가져오고 싶지는 않을 것이다.<br><br /></p>
+<p>이럴 때 사용하는 것이 바로 projection이다. Projection을 사용하면 엔티티의 일부 field만을 project(수학에서 말하는 투사? 투영?과 같은 느낌이다)하여 가져올 수 있다.<br><br /></p>
+<p>사용법은 아주 간단하다. 우선, 아래와 같이 projection interface를 정의한 후, 가져오고 싶은 field 이름만 적는다. 이 때 주의해야 할 점은, <strong>field 명이 반드시 일치해야 한다</strong>는 것이다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface StudentNameOnly &#123;</span><br><span class="line">    val id: Int</span><br><span class="line">    val name: String</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>그리고 Repository에서 해당 projection interface를 리턴 타입으로 가지는 쿼리 메소드를 작성하면 끝이다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface StudentRepository : JpaRepository&lt;Student, Int&gt; &#123;</span><br><span class="line">    fun findById(id: Int): Student?</span><br><span class="line">    fun findAllNameOnlyProjectionBy(): List&lt;StudentNameOnly&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>이제 <code>val students: List&lt;StudentNameOnly&gt; = studentRepository.findAllNameOnlyProjectionBy()</code> 라고 메소드를 호출하면 우리는 우리의 관심사인 학생의 이름만을 가지고 작업을 할 수 있다.<br><br /></p>
+<h2 id="Projection-with-Custom-Query"><a href="#Projection-with-Custom-Query" class="headerlink" title="Projection with Custom Query"></a>Projection with Custom Query</h2><p>위의 <code>Student</code> 모델에 더해서, 각 학생의 과목별 시험 성적을 저장하는 모델이 있다고 생각해보자.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">enum class Course &#123;</span><br><span class="line">    MA, // Mathematics</span><br><span class="line">    CS, // Computer Science,</span><br><span class="line">    PH, // Physics,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">data class StudentTestScore(</span><br><span class="line">    @get:Id</span><br><span class="line">    @get:GeneratedValue(strategy = GenerationType.IDENTITY)</span><br><span class="line">    var id: Int? = null,</span><br><span class="line"></span><br><span class="line">    @get:ManyToOne(fetch = FetchType.LAZY)</span><br><span class="line">    @get:JoinColumn(name = &quot;student_id&quot;, nullable = false)</span><br><span class="line">    var student: Student?,</span><br><span class="line"></span><br><span class="line">    @get:Column(length = 32, nullable = false)</span><br><span class="line">    @get:Enumerated(EnumType.STRING)</span><br><span class="line">    var course: Course,</span><br><span class="line"></span><br><span class="line">    @get:Column(nullable = false)</span><br><span class="line">    var score: Int,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>이 때, 각 학생마다 모든 과목의 시험 점수의 평균을 구하고 싶다. 그러면 우리는 <code>GROUP BY</code>를 활용한 쿼리 메소드를 작성하여 사용하고 싶을 것이다. 그런데 문제는, <code>GROUP BY</code>는 Spring Data JPA에서 지원을 해주지 않는다. 그러면 우리는 어쩔 수 없이 <code>@Query</code> annotation을 사용해서 커스텀 쿼리를 작성해야 하는데, 문제는 이러한 커스텀 쿼리의 결과값을 어떻게 받아올 수 있냐는 점이다.<br><br /></p>
+<p>바로 여기서 다시 한번 projection을 사용할 수 있다. 우선 우리가 쿼리의 결과값으로 받을 projecition interface를 정의한다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface StudentAverageTestScore &#123;</span><br><span class="line">    studentId: Int</span><br><span class="line">    averageScore: Int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>그 다음은 <code>StudentAverageTestScore</code>을 리턴 타입으로 가지는 커스텀 쿼리 메소드를 만들기만 하면 된다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface StudentTestScoreRepository : JpaRepository&lt;StudentTestScore, Int&gt; &#123;</span><br><span class="line">    fun findStudentAverageTestScores(): List&lt;StudentAverageTestScore&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>여기서 반드시 유의해야 할 점은, 커스텀 쿼리의 <code>SELECT</code> 절에서의 column 명과 projection interface의 field 명이 일치해야 한다는 점이다. Spring Data JPA는 여기서도 마찬가지로 column 명과 정확히 일치하는 projection interface의 field 명으로 쿼리 결과를 매핑하여 결과값을 생성하므로 꼭 이 둘을 일치시키도록 유의해야 한다. JPQL로는 해본적이 없긴 한데, <a href="https://stackoverflow.com/questions/51609025/spring-data-jpa-getting-a-projection-from-an-entity-with-a-query#answer-51609585">Stack Overflow</a>에 따르면 JPQL 에서도 마찬가지로 projection interface의 field 명과 쿼리 결과의 column 명을 일치시켜야 한다고 한다.<br><br /></p>
+<p>이제 아래 코드와 같이 학생의 평균 시험 점수를 가지고 비즈니스 로직을 짤 수 있다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val studentAverageTestScores = studentTestScoreRepository.findStudentAverageTestScores()</span><br><span class="line">studentAverageTestScores.map &#123; // it: StudentAverageTestScore</span><br><span class="line">    // business logic</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br /></p>
+<h2 id="Projection에-관련된-몇-가지-실험"><a href="#Projection에-관련된-몇-가지-실험" class="headerlink" title="Projection에 관련된 몇 가지 실험"></a>Projection에 관련된 몇 가지 실험</h2><p>사실 위에는 projection과 관련된 기본적인 지식이었다. 여기서부터는 내가 projection을 사용하다가 삽질하면서 배운, projection을 사용할 때 유의해야 할 몇 가지 주의사항들이다.</p>
+<h3 id="Projection은-실제로-쿼리가-줄어드는가"><a href="#Projection은-실제로-쿼리가-줄어드는가" class="headerlink" title="Projection은 실제로 쿼리가 줄어드는가?"></a>Projection은 실제로 쿼리가 줄어드는가?</h3><p>위에서 <code>Student</code>와 <code>StudentNameOnly</code>의 경우, 우리는 비대한 <code>Student</code> 모델의 모든 정보를 들고 오는 대신 관심있는 <code>name</code> field만 들고 왔었다. 여기서 드는 한 가지 의문은, 실제로 Hibernate가 날리는 쿼리의 양이 줄어들었냐는 점이다. 이를 확인하기 위해 아래와 같이 간단하게 테스트를 짜고 Hibernate가 생성한 쿼리를 확인해보았다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner::class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">class SampleApplicationTest &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    lateinit var studentRepository: StudentRepository</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    fun `Student 이름만 조회`() &#123;</span><br><span class="line">        val student = studentRepository.save(Student(</span><br><span class="line">            name = &quot;학생&quot;,</span><br><span class="line">            grade = 2</span><br><span class="line">        ))</span><br><span class="line">        val studentsNameOnly = studentRepository.findAllNameOnlyProjectionBy()</span><br><span class="line">        Assert.assertEquals(1, studentsNameOnly.size)</span><br><span class="line">        Assert.assertEquals(student.name, studentsNameOnly[0].name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>쿼리 결과는 아래와 같았다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2018-12-25 17:11:07.973 DEBUG 43952 --- [           main] org.hibernate.SQL                        : </span><br><span class="line">    select</span><br><span class="line">        student0_.id as col_0_0_,</span><br><span class="line">        student0_.name as col_1_0_ </span><br><span class="line">    from</span><br><span class="line">        Student student0_</span><br></pre></td></tr></table></figure><br>Hibernate가 생성한 쿼리 역시 정확하게 projection에 필요한 field인 <code>id</code>와 <code>name</code>만을 가져오는 것을 확인할 수 있다. 즉, 실제로 projection을 사용하면 쿼리를 줄일 수 있다. DB 쪽은 아직 공부를 안 해서 잘 모르긴 한데, 성능상 이득이 충분히 있을 수 있지 않을까…?</p>
+<h3 id="Projection-결과-객체는-영속성이-유지되고-있을까"><a href="#Projection-결과-객체는-영속성이-유지되고-있을까" class="headerlink" title="Projection 결과 객체는 영속성이 유지되고 있을까?"></a>Projection 결과 객체는 영속성이 유지되고 있을까?</h3><p>회사에서 아무 생각 없이 projection을 쓰고 있던 와중, 다른 개발자분이 projection 결과값에 대해서 영속성이 유지되는지 질문하셨다. 갑자기 궁금해진 나는 당장 테스트해보기로 했다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner::class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">class SampleApplicationTest &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    lateinit var studentRepository: StudentRepository</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    lateinit var entityManager: EntityManager</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    fun `StudentNameOnly 영속성 확인`() &#123;</span><br><span class="line">        studentRepository.save(Student(</span><br><span class="line">            name = &quot;학생&quot;,</span><br><span class="line">            grade = 2</span><br><span class="line">        ))</span><br><span class="line">        val studentNameOnly = studentRepository.findAllNameOnlyProjectionBy()[0]</span><br><span class="line">        entityManager.contains(studentNameOnly)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>좀 억지 코드이기는 하지만, 영속성이 유지되는지 확인할 방법이 잘 떠오르지 않아서 일단 이렇게 처리했다. <code>entityManager.contains(studentNameOnly)</code>에서 Exception이 발생하면 영속성이 유지되지 않는 것이고 Exception이 발생하지 않으면 영속성이 유지되는 것이라고 볼 수 있다. 돌려본 결과, <code>java.lang.IllegalArgumentException: Not an entity</code> Exception이 던져졌다. 즉, projection 결과에 대해서는 영속성이 유지되지 않는다. 이 말은 projection 결과를 바꿔도 자동으로 DB에 반영되지 않을 것이라는 뜻이다.<br><br /></p>
+<p>결과론적으로 본다면 사실 당연한 이야기인게, <code>StudentNameOnly</code> 인터페이스에는 <code>@Entity</code> annotation이 달리지도 않았으니 엔티티 매니저 팩토리가 엔티티 매니저를 만들 때 <code>StudentNameOnly</code> 타입 객체의 영속성을 유지할 저장 공간을 생성하지도 않을 것 같다. 아무튼 혹시 모르는 사항을 확인했다는 점에서 굉장히 만족스러운 테스트였다.</p>
+<h3 id="Projection에서-eager-loading을-하려면"><a href="#Projection에서-eager-loading을-하려면" class="headerlink" title="Projection에서 eager loading을 하려면?"></a>Projection에서 eager loading을 하려면?</h3><p>결론부터 말하면, projection에서는 eager loading이 아닌게 없다. 원래 Hibernate는  기본적으로 lazy loading을 하도록 설정한 후 <code>@EntityGraph</code> 등 명시적으로 eager loading을 할 수 있는데, projection을 하면 어떤 설정하에 있던 간에 eager loading을 하는 것으로 보인다.</p>
+<p>아래는 이를 확인한 테스트 코드이다. 우선 간단한 테스트를 위해 <code>StudentTestScoreStudentOnly</code> projection interface를 생성한다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface StudentTestScoreStudentOnly &#123;</span><br><span class="line">    var student: Student?</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>이후 <code>StudentTestScoreRepository</code>에 해당 interface를 리턴 타입으로 가지는 쿼리 메소드를 하나 선언한다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface StudentTestScoreRepository : JpaRepository&lt;StudentTestScore, Int&gt; &#123;</span><br><span class="line">    fun findStudentAverageTestScores(): List&lt;StudentAverageTestScore&gt;</span><br><span class="line">    fun findStudentOnlyById(id: Int): StudentTestScoreStudentOnly?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>이후 연관된 entity를 조회하는 테스트를 짠다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner::class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">class SampleApplicationTest &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    lateinit var studentRepository: StudentRepository</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    lateinit var studentTestScoreRepository: StudentTestScoreRepository</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    fun `projection에서 eager loading 여부 확인`() &#123;</span><br><span class="line">        val student = studentRepository.save(Student(</span><br><span class="line">            name = &quot;학생&quot;,</span><br><span class="line">            grade = 2</span><br><span class="line">        ))</span><br><span class="line">        val studentTestScore = studentTestScoreRepository.save(StudentTestScore(</span><br><span class="line">            student = student,</span><br><span class="line">            course = &quot;Computer Science&quot;,</span><br><span class="line">            score = 100</span><br><span class="line">        ))</span><br><span class="line"></span><br><span class="line">        val studentTestScores = studentTestScoreRepository.findAll()</span><br><span class="line">        Assert.assertEquals(studentTestScore.id, studentTestScores[0].id)</span><br><span class="line">        Assert.assertEquals(student.id, studentTestScores[0].student?.id) // 일반적인 엔티티 조회에서 연관된 엔티티 접근</span><br><span class="line">        val studentTestScoreStudentOnly = studentTestScoreRepository.findStudentOnlyById(studentTestScore.id!!)</span><br><span class="line">        Assert.assertEquals(student.id, studentTestScoreStudentOnly?.student?.id) // Projection에서 연관된 엔티티 접근</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>아래는 쿼리 결과다.<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">2018-12-25 18:04:36.383 DEBUG 47722 --- [           main] org.hibernate.SQL                        : </span><br><span class="line">    select</span><br><span class="line">        studenttes0_.id as id1_1_,</span><br><span class="line">        studenttes0_.course as course2_1_,</span><br><span class="line">        studenttes0_.score as score3_1_,</span><br><span class="line">        studenttes0_.student_id as student_4_1_ </span><br><span class="line">    from</span><br><span class="line">        StudentTestScore studenttes0_</span><br><span class="line">2018-12-25 18:04:36.396 DEBUG 47722 --- [           main] org.hibernate.SQL                        : </span><br><span class="line">    select</span><br><span class="line">        student0_.id as id1_0_0_,</span><br><span class="line">        student0_.grade as grade2_0_0_,</span><br><span class="line">        student0_.name as name3_0_0_ </span><br><span class="line">    from</span><br><span class="line">        Student student0_ </span><br><span class="line">    where</span><br><span class="line">        student0_.id=?</span><br><span class="line">2018-12-25 18:04:36.396 TRACE 47722 --- [           main] o.h.type.descriptor.sql.BasicBinder      : binding parameter [1] as [INTEGER] - [1]</span><br><span class="line">2018-12-25 18:04:36.524 DEBUG 47722 --- [           main] org.hibernate.SQL                        : </span><br><span class="line">    select</span><br><span class="line">        student1_.id as id1_0_,</span><br><span class="line">        student1_.grade as grade2_0_,</span><br><span class="line">        student1_.name as name3_0_ </span><br><span class="line">    from</span><br><span class="line">        StudentTestScore studenttes0_ </span><br><span class="line">    inner join</span><br><span class="line">        Student student1_ </span><br><span class="line">            on studenttes0_.student_id=student1_.id </span><br><span class="line">    where</span><br><span class="line">        studenttes0_.id=?</span><br><span class="line">2018-12-25 18:04:36.526 TRACE 47722 --- [           main] o.h.type.descriptor.sql.BasicBinder      : binding parameter [1] as [INTEGER] - [1]</span><br></pre></td></tr></table></figure><br>위의 쿼리를 보면 테스트 실행 도중 총 3개의 <code>SELECT</code> 쿼리가 발생한 것을 알 수 있다. 첫 번째와 세 번째 쿼리는 각각 레포지토리를 통해서 <code>studentTestScores</code>와 <code>studentTestScoreStudentOnly</code>를 가져올 때 발생한 쿼리고, 두 번째 쿼리는 <code>Assert.assertEquals(student.id, studentTestScores[0].student?.id)</code>가 실행될 때 프록시 객체에 접근하면서 연관된 엔티티를 가져올 때 발생한 쿼리다. 반면, <code>Assert.assertEquals(student.id, studentTestScoreStudentOnly?.student?.id)</code>가 실행될 때는 어떤 쿼리도 실행되지 않았다. 즉, 이미 <code>Student</code>를 가져왔다는 뜻이다. 이는 세 번째 쿼리에서 Student를 조인해서 가져온 부분에서 다시 한 번 확인할 수 있다. 따라서, projection을 쓸 때 예상치 못한 쿼리가 날라가지 않도록 주의해야 한다.<br><br /></p>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>Projection이 편리하다고 막 쓰지 말고, 이런 저런 불편한 점과 유의해야 할 점들이 있으니 신경써서 사용하자.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2018/10/30/deep-dive-into-pip-2/">
+        <span class="nav-arrow">← </span>
+        
+          Deep Dive into pip - 2
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/12/30/spring-junit-disable-postconstruct-in-test/">
+        
+          Spring + JUnit - 테스트에서 @PostConstruct 비활성화 하기
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Projection-Basic"><span class="toc-nav-text">Projection Basic</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Projection-with-Custom-Query"><span class="toc-nav-text">Projection with Custom Query</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Projection%EC%97%90-%EA%B4%80%EB%A0%A8%EB%90%9C-%EB%AA%87-%EA%B0%80%EC%A7%80-%EC%8B%A4%ED%97%98"><span class="toc-nav-text">Projection에 관련된 몇 가지 실험</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Projection%EC%9D%80-%EC%8B%A4%EC%A0%9C%EB%A1%9C-%EC%BF%BC%EB%A6%AC%EA%B0%80-%EC%A4%84%EC%96%B4%EB%93%9C%EB%8A%94%EA%B0%80"><span class="toc-nav-text">Projection은 실제로 쿼리가 줄어드는가?</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Projection-%EA%B2%B0%EA%B3%BC-%EA%B0%9D%EC%B2%B4%EB%8A%94-%EC%98%81%EC%86%8D%EC%84%B1%EC%9D%B4-%EC%9C%A0%EC%A7%80%EB%90%98%EA%B3%A0-%EC%9E%88%EC%9D%84%EA%B9%8C"><span class="toc-nav-text">Projection 결과 객체는 영속성이 유지되고 있을까?</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Projection%EC%97%90%EC%84%9C-eager-loading%EC%9D%84-%ED%95%98%EB%A0%A4%EB%A9%B4"><span class="toc-nav-text">Projection에서 eager loading을 하려면?</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-nav-text">결론</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2018/12/25/spring-data-jpa-projection-tips/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Spring Data JPA - Projection 이모저모",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

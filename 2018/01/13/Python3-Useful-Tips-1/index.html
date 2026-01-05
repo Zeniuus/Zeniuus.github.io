@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Python3 Useful Tips - 1
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Python3 Useful Tips - 1</h2>
+  <p class="post-date">2018-01-13</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>안녕하세요, 이번 포스팅에서는 Python3을 사용하실 때 유용하게 사용할 수 있는 팁에 대해서 작성해보고자 합니다.</p>
+<p>이번 글은 비정규 시리즈로 작성할 생각을 하고 있는데요, 앞으로 개발을 하면서 Python3에 대한 유용한 팁들을 배울 때마다 [Python3 Useful Tips] 시리즈의 글을 작성할 예정입니다.</p>
+<p>오늘 소개해드릴 팁은 Python3의 <code>defaultdict</code>와 <code>namedtuple</code>과 관련된 이야기입니다..</p>
+<h1 id="defaultdict"><a href="#defaultdict" class="headerlink" title="defaultdict"></a><code>defaultdict</code></h1><p><code>dict</code> 자료구조는 타 Collections 자료구조(<code>list</code>, <code>set</code>…)에 비해서 key가 있다는 큰 차이가 있기에 특정 상황에서 굉장히 유용하게 사용될 수 있죠. 예를 들면 <code>list</code>는 index만으로 데이터에 접근해야하기 때문에 코드의 가독성이 떨어지는 경우가 종종 있는데, 이럴 때 <code>dict</code>를 사용하면 가독성도 높이고 편하게 데이터를 저장할 수 있습니다.</p>
+<p>하지만 가끔가다 불편한 점이 있는데, 한 가지 예시 상황을 보여드리도록 하겠습니다. 예를 들어, 사람과 소속 단체의 <code>tuple</code>의 <code>list</code>가 있다고 합시다. 이 때 각 동아리에 어떤 사람들이 들어있는지 <code>list</code>로 정리하고 싶습니다. 이런 경우 <code>dict</code>을 쓰면 아주 편리하게 코드를 작성할 수 있죠.</p>
+<pre><code>people_group_tuples = [(&apos;Zeniuus&apos;, &apos;SPARCS&apos;), ...]
+group_member_dict = &#123;&#125;
+
+for pair in people_group_tuples:
+    group_member_dict[pair[1]].append(pair[0])
+</code></pre><p>하지만, 위의 코드는 실행시키자마자 오류가 날 것입니다. 왜냐하면 <strong><code>group_member_dict</code>에 ‘SPARCS’라는 key를 가진 key-value pair가 없기 때문</strong>입니다. 따라서 <code>group_member_dict[pair[1]]</code>은 <code>KeyError</code>을 띄울 것입니다.</p>
+<p>이 오류를 해결하려면 아래와 같이 코드를 수정해야 할 것입니다.</p>
+<pre><code>people_group_tuples = [(&apos;Zeniuus&apos;, &apos;SPARCS&apos;), ...]
+group_member_dict = &#123;&#125;
+
+for pair in people_group_tuples:
+    # key가 없으면 key-value pair을 만들어준다.
+    if group not in group_member_dict:
+        group_member_dict[pair[1]] = []
+    group_member_dict[pair[1]].append(pair[0])
+</code></pre><p>이제 문제 없이 코드가 실행될 것입니다. 하지만 좀 지저분해보이죠?</p>
+<p>이를 깔끔하게 해결할 수 있는 방법이 바로 <code>collections.defaultdict</code>를 사용하는 것입니다. <code>defaultdict</code>는 <code>dict</code> class를 상속받아 구현된 subclass인데요, <strong>key에 해당하는 pair가 없는 경우 KeyError을 띄우지 않고 default로 지정해놓은 값을 key에 배정한 다음 해당 명령을 수행</strong>합니다. 구체적으로는 key에 해당하는 값이 없을 경우 <code>__missing__(key)</code>라는 함수를 실행하여 key에 default 값을 지정해줍니다.</p>
+<p>그러면 <code>defaultdict</code>를 활용하여 위 코드를 바꿔볼까요?</p>
+<pre><code>from collections import defaultdict
+
+people_group_tuples = [(&apos;Zeniuus&apos;, &apos;SPARCS&apos;), ...]
+group_member_dict = defaultdict(list)
+
+for pair in people_group_tuples:
+    group_member_dict[pair[1]].append(pair[0])
+</code></pre><p>위와 같이 <code>defaultdict(list)</code>로 <code>defaultdict</code>를 만들면 key가 없을 때 자동으로 해당 key에 <code>list()</code>(= <code>[]</code>)를 assign한 후 <code>.append(pair[0])</code>를 실행합니다. 굉장히 코드가 깔끔해졌죠?</p>
+<p><code>defaultdict()</code>를 생성할 때 인자로 넘기는 값은 인자를 받지 않는 함수입니다. 이는 <code>__missing__(key)</code>에서 사용되는데, <strong>인자 없이 이 함수를 실행시킨 return 값을 key에 대한 default 값으로 지정</strong>해줍니다. <code>list</code>의 경우 인자 없이 실행했을 때(<code>list()</code>) return 값이 empty list(= <code>[]</code>)이기 때문에 default 값으로 empty list가 들어가게 됩니다.</p>
+<p>만약 <code>defaultdict()</code>에 아무 인자도 넣지 않고 실행한다면 해당되는 value가 없는 key에 대한 access가 일어났을 때 <code>dict</code>와 동일하게 <code>KeyError</code>을 띄우게 됩니다.</p>
+<h1 id="namedtuple"><a href="#namedtuple" class="headerlink" title="namedtuple"></a><code>namedtuple</code></h1><p><code>collections.namedtuple</code>은 <strong><code>tuple</code> 자료구조의 각 값에 접근할 때 index가 아닌 key로 접근을 가능하게 해주는 자료구조</strong>입니다. 간단한 설명만 들어도 굉장히 좋아보이죠? 코드의 가독성이 <strong><em>매우</em></strong> 좋아집니다. <code>dict</code>를 사용하지 않고 간단하게 <code>tuple</code>의 형태를 유지하면서 <code>dict</code>처럼 사용하는 것이죠.</p>
+<p>간단한 예시를 들어보겠습니다. 사람의 이름, 성별, 이메일 <code>tuple</code>의 <code>list</code>를 가지고 여러가지 작업을 해야 하는 상황이면, 아래와 같이 <code>namedtuple</code>을 사용할 수 있습니다.</p>
+<pre><code>from collections import namedtuple
+
+Person = namedtuple(&apos;Person&apos;, [&apos;name&apos;, &apos;gender&apos;])
+people_list = [Person(&apos;Zeniuus&apos;, &apos;male&apos;), ...]
+
+def person_str(person):
+    # 기존 tuple과 같이 index 접근도 가능하고 field 접근도 가능하다.
+    return f&apos;&#123;person[0]&#125; is &#123;person.gender&#125;.&apos;
+
+for person in people_list:
+    print(person_str(person))
+</code></pre><p><code>namedtuple</code>을 사용하면 기존 <code>tuple</code>처럼 <code>tuple_[i]</code>와 같은 접근도 가능하고, <code>tuple_.field_name</code>과 같이 field 접근도 가능합니다.</p>
+<p>오늘은 <code>collecitons</code> library에 속한 몇 가지 좋은 툴을 알아봤는데, 좀 더 자세한 사항은 <a href="https://docs.python.org/3.3/library/collections.html">Python3 공식 documentation</a>을 참고해주시기 바랍니다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2017/12/29/Python3-Context-Manager/">
+        <span class="nav-arrow">← </span>
+        
+          Python3 Context Manager
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2018/01/21/Git-Rebase-1/">
+        
+          Git Rebase (1)
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#defaultdict"><span class="toc-nav-text">defaultdict</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#namedtuple"><span class="toc-nav-text">namedtuple</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2018/01/13/Python3-Useful-Tips-1/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Python3 Useful Tips - 1",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

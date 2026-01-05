@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      Refactoring Databases
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Refactoring Databases</h2>
+  <p class="post-date">2021-05-16</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>책 제목에서 느낄 수 있듯이, 마틴 파울러의 &lt;Refactoring&gt;과 상당히 유사한 책이다. 단지 주제가 코드에서 데이터베이스로 바뀐 것뿐이다. 책을 읽다 보면 마틴 파울러의 &lt;Refactoring&gt;이 자주 언급되는 것을 느낄 수 있다. 구성도 거의 똑같아서, 책의 초반부에서는 데이터베이스 리팩토링의 이론적인 측면을 설명하고 뒤의 4분의 3은 상황별 리팩토링 기법을 상세히 다룬다. 뒷부분의 리팩토링 기법은 대충 읽고 넘어갔는데, 같은 내용의 반복이었기 때문이다. 하지만 오히려 반복되는 내용 덕분에 데이터베이스 리팩토링의 핵심이 되는 개념들을 뽑아내는 것이 수월했다.</p>
+<p>책 내용을 읽고 요약한 리팩토링의 핵심은 다음과 같다.</p>
+<ul>
+<li>데이터베이스 리팩토링의 3가지 요소는 스키마 변경, 데이터 마이그레이션, 엑세스 프로그램 변경으로 나뉜다.</li>
+<li><p>데이터베이스 리팩토링의 핵심은 과도기를 두는 것이다. 데이터베이스 리팩토링에서 과도기란 기존 스키마를 기반으로 동작하는 어플리케이션과 새 스키마를 기반으로 동작하는 어플리케이션이 모두 존재하는 기간을 의미한다. 이는 모든 어플리케이션이 한 번에 배포될 수 없기 때문에 발생하는 것으로, 이 기간 동안 기존 버전과 새 버전의 어플리케이션이 정상 동작할 수 있도록 데이터베이스를 리팩토링해야 한다.</p>
+<p>  과도기를 두는 방법은 간단하다. 기존 스키마와 새 스키마가 합쳐진 스키마를 배포하고, 트리거를 통해 기존 스키마의 데이터와 새 스키마의 데이터를 동기화시킨다.</p>
+<p>  컬럼 옮기기 리팩토링을 예시로 들어보겠다. A라는 테이블의 b 컬럼을 B라는 테이블로 옮기려고 한다. 이 때 과도기에는 A.b와 B.b가 둘 다 존재하도록 스키마를 변경하고, A.b가 생성/수정/삭제되는 경우 B.b에 값을 동기화시키는 트리거와 B.b가 생성/수정/삭제되는 경우 A.b에 값을 동기화시키는 트리거를 배포한다. 이러면 A.b에 의존하는 기존 버전 어플리케이션과 B.b에 의존하는 새 버전 어플리케이션이 둘 다 정상 동작할 수 있게 된다. 이 과도기 동안 A.b의 데이터를 B.b로 마이그레이션하고 어플리케이션을 모두 새 버전으로 배포하면 되고, 모든 어플리케이션이 새 버전으로 배포되면 A.b를 drop 시켜서 새 스키마만 남긴다.</p>
+</li>
+</ul>
+<p>이 책을 읽으면서 배운 점은 다음과 같다.</p>
+<ul>
+<li><p>가장 중요한 점은 DB가 단순한 데이터 저장소가 아니라 다양한 방법으로 활용할 수 있는 도구라는 점이다. 나는 지금까지 모든 문제를 어플리케이션 딴에서 해결했는데, 여기에는 몇 가지 이유가 있다.</p>
+<ol>
+<li>DB는 두려운 존재다. 안그래도 잘 알지 못하는 도구인데, 잘못 다뤘다간 정말 큰 문제가 터질 수 있기 때문에 DB를 만지는 걸 기피하게 된다.</li>
+<li>내가 어플리케이션 개발자이기 때문에 어플리케이션으로 문제를 해결하는 것에 익숙하다.</li>
+<li>현재 개발하고 있는 시스템은 규모가 그리 크지 않기 때문에 DB를 활용하여 문제를 해결할 필요성이 낮다.</li>
+</ol>
+<p>한편 이 책은 DB 전문가의 입장에서 작성되었고, 모든 문제를 DB를 활용하여 해결하려고 한다. 과도기를 두는 방식을 예로 들어보겠다. 타다 어플리케이션은 쿠버네티스 환경에서 rolling update로 배포되고 있는데, 데이터베이스를 서비스 무중단으로 변경하기 위해 나는 지금까지 어플리케이션 차원에서 기존 스키마와 새 스키마를 모두 지원하는 코드를 작성했다. 하지만 이 책에서는 데이터베이스 트리거를 통해 과도기 문제를 해결한다. 이 외에도 DB 차원에서 stored procedure를 통해 비즈니스 로직을 구현하거나 view를 통해 의존 포인트를 하나로 통일시키는 등 DB를 통해 시스템의 설계를 개선하는 예시가 많이 나온다.</p>
+<p>이런 논의를 계속 읽으면서 나는 DB를 활용하여 문제를 해결하는 게 충분히 합리적인 방법이고, 특히나 백엔드 시스템의 규모가 크면 클수록 이러한 방식이 효과적일 수 있다는 사실을 깨닫게 됐다.</p>
+</li>
+<li><p>데이터베이스 마이그레이션도 테스트가 가능하고, 어떻게 테스트하면 되는지를 배웠다. 프로덕션에서 대규모 마이그레이션을 한 적이 딱 한 번 있었는데, 테스트를 제대로 못 한 탓에 큰 두려움을 느끼며 마이그레이션을 진행해야만 했다.</p>
+<p>이 책은 데이터베이스 리팩토링을 테스트하는 것의 중요성을 강조한다. 테스트 가능성을 위해 리팩토링의 단계를 잘게 쪼개고, 더미 데이터를 만들어서 리팩토링 후에 데이터가 원하는 대로 잘 변경되었는지 확인하는 테스트 코드를 작성하라고 한다. 이전에 데이터 마이그레이션을 할 때는 마이그레이션에 대해 테스트를 작성할 생각 자체를 하지 못했어서, 테스트 이야기를 듣고는 크게 한 대 맞은 기분이 들었다. DB가 중요하고 문제가 생겼을 때의 파급력이 큰 만큼 데이터베이스 리팩토링을 위해서는 더 많은 테스트가 작성되어야 한다는 사실에 강하게 동의한다.</p>
+</li>
+<li><p>데이터베이스 테이블에 대한 의존성을 관리하는 게 중요하다는 점을 배웠다. 우선 데이터베이스에 의존하는 것들이 생각보다 다양하다는 것을 배웠다. 내가 작성하는 어플리케이션 뿐만 아니라 데이터 엔지니어링팀이 작성하는 배치 태스크, 데이터팀이나 사업분석팀에서 작성하는 모든 리포트도 데이터베이스에 의존하는 요소들이다. 회사가 커지면 커질수록 데이터베이스에 의존하는 요소들이 점점 많아진다.</p>
+<p>이렇게 백엔드 시스템이 복잡해질 수록 데이터베이스에 대한 의존성을 관리하는 것은 더더욱 중요해진다. view나 stored procedure를 통해 테이블 / 로직을 추상화하여 외부에 노출하면 의존 포인트를 최소한으로 만들 수 있고, 데이터베이스를 점진적으로 리팩토링하여 설계를 개선할 수 있는 가능성을 높여준다.</p>
+</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/04/08/implementing-domain-driven-design/">
+        <span class="nav-arrow">← </span>
+        
+          Implementing Domain-Driven Design
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2022/01/21/Kotlin-coroutine-structured-concurrency/">
+        
+          Kotlin Coroutine의 Structured Concurrency 구현 상세
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2021/05/16/refactoring-databases/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Refactoring Databases",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

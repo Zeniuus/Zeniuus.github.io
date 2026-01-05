@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      클린 아키텍처 후기
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>클린 아키텍처 후기</h2>
+  <p class="post-date">2019-10-06</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>얼마 전 &lt;클린 아키텍처&gt;를 읽고 나서 새롭게 바뀐 시각, 느낀 점을 정리했다.<br><br ></p>
+<h2 id="소프트웨어의-가장-중요한-가치는-쉽게-변화할-수-있는-성질이다"><a href="#소프트웨어의-가장-중요한-가치는-쉽게-변화할-수-있는-성질이다" class="headerlink" title="소프트웨어의 가장 중요한 가치는 쉽게 변화할 수 있는 성질이다"></a>소프트웨어의 가장 중요한 가치는 쉽게 변화할 수 있는 성질이다</h2><p>우리는 어떤 복잡한 기능이나 요구사항을 구현해야 하는 상황이 오면 “설계를 잘하고 들어가야 한다”고 이야기한다. 왜 좋은 설계, 좋은 아키텍처가 필요할까?</p>
+<p><strong>소프트웨어의 본질은 변하는 것이기 때문이다!</strong></p>
+<p>책의 초반부를 읽으면서 머리를 한 대 맞은 기분이 들었다. Software라는 이름이 붙은 이유는 변할 수 없는 딱딱한 “hard”ware와는 다르게 소프트웨어는 “soft”하여 쉽게 변할 수 있기 때문이라는 것이다. 이런 단순하고 중요한 사실을 개발한지 3년이 다 되어갈 때서야 알았다는 사실이 부끄러웠다.</p>
+<blockquote>
+<p>소프트웨어는 ‘부드러움을 지니도록’ 만들어졌다. 소프트웨어를 만든 이유는 기계의 행위를 쉽게 변경할 수 있도록 하기 위해서다.</p>
+</blockquote>
+<p>나는 지금까지 소프트웨어의 목적이 요구사항을 정확하게 이행하는 것이라고 생각했다. 그도 그럴 것이, 학교에서 했던 개발에서는 유지보수/운영이 필요 없었기 때문이다. 학교 과제는 테스트 환경에서 한 번 돌아가면 더는 볼 일이 없는 코드였다. 동아리에서 진행했던 프로젝트는 서비스 런칭 전에 그만뒀다. 요구사항이 변하는 상황을 겪지 못한 채 2년 넘게 코딩을 하다 보니, 자연스레 내게 있어서 개발은 지금 주어진 요구사항을 정확히 만족하도록 하는 일이 전부가 되었다.</p>
+<p>이런 상황에서 설계는 어떤 의미를 가질까? 요구사항이 복잡하지 않은 이상 거의 의미가 없다. 설계에 드는 비용보다 설계가 가져다줄 이득이 현저히 적기 때문이다. 어차피 한 번 구현하고 다시는 쳐다도 보지 않을 코드에 애써 공을 들일 필요가 없다.</p>
+<p>하지만 실제로 요구시항은 시시각각 변한다. 새로운 기능을 개발해야 할수도 있고, 심지어 이미 있는 기능을 바꿔야 할수도 있다.</p>
+<p>따라서, 소프트웨어가 현재의 요구사항을 정확히 만족하도록 개발하는 것도 중요하지만, 이보다 더 중요한 소프트웨어 개발자의 사명은 소프트웨어가 쉽게 변화할 수 있도록 만드는 것이다. 소프트웨어의 개발자는 소프트웨어를 유연하게 유지하기 위해 소프트웨어의 구조를 적절히 설계해야 한다. 여기에는 적절히 코드를 나누고, 적절한 위치에 적절한 책임을 두고, 나뉘어진 코드끼리 적절한 의존성을 가지게 하는 행위가 포함된다.</p>
+<p>또 한 가지 와닿았던 말은, 좋은 아키텍처는 선택을 미룰 수 있는 아키텍처라는 말이었다. 우리가 받은 요구사항은 항상 불완전하여, 아직 결정되지 않은 사항이 너무나도 많다. 이런 사항들에 대한 선택을 미리 하면, 나중에 요구사항이 바뀌었을 때 더 큰 비용을 지불해야 한다. 따라서 현재 결정하지 않아도 되는 사항, 이를테면 기술 스택이나 불분명한 요구사항을 불분명한 채로 놔두고, 나중에 선택을 했을 때 이를 쉽게 반영할 수 있도록 아키텍처를 설계해야 한다.<br><br ></p>
+<h2 id="쉽게-변화하는-소프트웨어를-만드는-방법"><a href="#쉽게-변화하는-소프트웨어를-만드는-방법" class="headerlink" title="쉽게 변화하는 소프트웨어를 만드는 방법"></a>쉽게 변화하는 소프트웨어를 만드는 방법</h2><p>소프트웨어는 필연적으로 변한다. 그러면 소프트웨어가 쉽게 변화할 수 있기 위해서는 어떻게 해야 할까? &lt;클린 아키텍처&gt;를 읽고 느낀 점을 두 가지로 요약하자면 1. 바꾸어야 할 부분을 쉽고 명확하게 파악할 수 있어야 하고, 2. 변경이 최소한으로 일어나야 한다. 책에서 소개되는 대부분의 방법론은 이 두 목표를 이루기 위해 있는 것이라고 생각한다. 예를 들어, SRP(Single Responsibility Principle)는 1번과 2번 목표 둘 다를 이루는 데에 큰 도움을 준다.</p>
+<p>이 책을 읽으면 “의존성”이라는 단어를 매우 많이 접하게 된다. 그리고 책에서 소개하는 대부분의 원칙들이 의존성을 어떻게 관리해야 하는지에 대한 규칙이다. 책에서 의존성을 이토록 중요하게 다루는 이유는, A → B로의 의존성이 있는 경우, B가 변화하면 A도 반드시 변화해야 하기 때문이다. 즉, <strong>의존 관계에 있는 컴포넌트 사이에는 변화가 전파된다</strong>.</p>
+<p>소프트웨어가 필연적으로 변화하고, 의존성 관계가 있는 경우 변화가 전파된다고 했을 때, 변경을 최소화할 수 있는 방법은</p>
+<ol>
+<li>변경이 함께 일어나는 컴포넌트끼리 한 데 묶고</li>
+<li>자주 바뀌는 컴포넌트에서 상대적으로 자주 바뀌지 않는 컴포넌트 방향으로의 의존성만 있도록 의존성을 관리하는 것이다.</li>
+</ol>
+<p>어디서 많이 들어본 말이 아닌가? SRP(Single Responsibility Principle), ISP(Interface Segregation Principle)는 1번에 속하고, DIP(Dependency Inversion Principle)는 2번에 속한다. 의존성 역전은 이러한 의존성 관리를 효과적으로 할 수 있는 방법으로, 코드 실행 흐름에 반하도록 의존성을 만들 수 있다.</p>
+<p>잠깐 다른 이야기로 넘어가서, 코드 중복에 대해서 이야기해보려고 한다. 저자는 “우발적 중복”이라는 용어를 사용하며, 진짜 코드 중복과 잠깐 중복하는 것처럼 보이는 우발적 중복을 구분해야 한다고 이야기한다. 이를 구별하는 기준은, 코드의 중복을 판단하는 기준은 현재 코드가 얼마나 유사하냐가 아니라 앞으로 어떻게, 얼마나 빠르게 변화할 것이냐가 되어야 한다. 이 역시 SRP에서 이야기하는 책임 - 변경이 일어나는 이유 - 의 분리와 잘 맞닿아있는 이야기이다.<br><br ></p>
+<h2 id="테스트의-가치"><a href="#테스트의-가치" class="headerlink" title="테스트의 가치"></a>테스트의 가치</h2><p>테스트는 소프트웨어가 요구사항을 잘 만족하는지 확인할 수 있는 강력한 수단이다. 하지만, 이 책을 읽고 테스트를 바라보는 시각에 변화가 생겼다.</p>
+<p>소프트웨어의 본질을 변하는 것으로 생각했을 때, 테스트는 한 가지 중요한 가치를 더 가지게 된다. 테스트는 소프트웨어를 마음 편히 변경할 수 있는 안전장치로 작용한다. 변경사항에 대응하여 다시 설계하고 거듭 리팩토링을 해나가는 과정에서, 소프트웨어가 기존 요구사항을 여전히 잘 수행하는지를 매우 손쉽게 판단할 수 있는 수단이 바로 자동화된 테스트이다. 테스트는 개발자가 소프트웨어를 주저 없이 변경할 수 있도록 도와준다.</p>
+<p>한편, 이 이야기는 동시에 테스트가 어떻게 설계되어야 하는지에 대해 간접적인 원칙을 제시한다. 테스트는 구현 방식과는 독립적으로 기능의 명세를 테스트해야 한다. 세부 구현 방식은 언제든지 리팩토링을 통해 변경될 수 있다. 이 때 단순히 가독성을 위해서나 길이가 길어서 나눈 함수를 위한 테스트가 있다면, 이러한 테스트는 오히려 변경을 방해하는 요소가 된다. 따라서 소프트웨어의 내부 구현이 바뀌더라도 변경될 필요가 없는 동시에 명세대로 잘 동작하는지를 확인할 수 있는 적절한 수준의 테스트를 작성해야 한다.<br><br ></p>
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><p>“소프트웨어의 가장 중요한 가치는 쉽게 변할 수 있는 성질”이라는 단순한 사고방식, 혹은 소프트웨어의 개발에 임하는 태도는 내가 개발할 때 가지는 시야를 크게 바꾸었다. 이제까지는 단순히 가독성을 기준으로, 혹은 감으로만 코드를 분리했기 때문에 항상 내가 한 설계에 찝찝함이 남아있었다. 하지만 “쉽게 변경할 수 있어야 한다”는 명확한 기준과 근거가 생기니 설계를 할 때 자신감이 붙고, 더 깔끔하고 유연한 설계(라고 본인은 생각한다)를 하게 된 것 같다.</p>
+<p>이 책 한 권에 사고방식이 갇혀서는 안 되고, 다른 패러다임 혹은 설계/아키텍팅 방식에 대한 견문을 꾸준히 넓혀가야 할 것이다. 미래의 변경에 쉽게 대응하는 데에 몰두하여 너무 많은 예측을 하는데 리소스를 낭비하고, 과도한 일반화를 하는 것도 경계해야 한다. 하지만 소프트웨어 개발자로서 소프트웨어를 바라보는 새로운 시각을 넓혀준 이 책에게 감사한다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/08/25/stop-staying-up-all-night/">
+        <span class="nav-arrow">← </span>
+        
+          2019.08.24.
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/10/27/hibernate-detached-entity-proxy-initialization/">
+        
+          Hibernate Detached 엔티티 프록시의 초기화
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%EC%9D%98-%EA%B0%80%EC%9E%A5-%EC%A4%91%EC%9A%94%ED%95%9C-%EA%B0%80%EC%B9%98%EB%8A%94-%EC%89%BD%EA%B2%8C-%EB%B3%80%ED%99%94%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%84%B1%EC%A7%88%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">소프트웨어의 가장 중요한 가치는 쉽게 변화할 수 있는 성질이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%89%BD%EA%B2%8C-%EB%B3%80%ED%99%94%ED%95%98%EB%8A%94-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%EB%A5%BC-%EB%A7%8C%EB%93%9C%EB%8A%94-%EB%B0%A9%EB%B2%95"><span class="toc-nav-text">쉽게 변화하는 소프트웨어를 만드는 방법</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%9D%98-%EA%B0%80%EC%B9%98"><span class="toc-nav-text">테스트의 가치</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%A0%95%EB%A6%AC"><span class="toc-nav-text">정리</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2019/10/06/review-clean-architecture/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "클린 아키텍처 후기",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

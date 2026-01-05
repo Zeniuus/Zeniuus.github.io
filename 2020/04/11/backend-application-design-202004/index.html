@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      소프트웨어 개발과 설계
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>소프트웨어 개발과 설계</h2>
+  <p class="post-date">2020-04-11</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h2><p>백엔드 어플리케이션을 개발하면서 지금까지 소프트웨어 개발에 대해 고민한 것들을 정리한다.<br><br></p>
+<h2 id="설계는-복잡성을-현명하게-다루기-위해-필요하다"><a href="#설계는-복잡성을-현명하게-다루기-위해-필요하다" class="headerlink" title="설계는 복잡성을 현명하게 다루기 위해 필요하다"></a>설계는 복잡성을 현명하게 다루기 위해 필요하다</h2><p>DDD 책의 표지를 보면 부제목으로 “소프트웨어의 복잡성을 다루는 지혜”라는 글귀가 적혀있다. 이것이야말로 어플리케이션 개발자가 가져야 하는 가장 중요한 능력이라고 생각한다.</p>
+<p>소프트웨어란 무엇인가? 소프트웨어는 현실의 문제를 해결하여 새로운 가치를 창출해내는 컴퓨터 프로그램이다. 소프트웨어는 세상에 존재하는 프로세스를 1. 자동화하고 2. 빠르게 처리하고 3. 온라인에서 일어나게 하여 새로운 가치를 창출한다. 즉, 현실에서 사람의 손으로 문제를 해결하던 프로세스를 컴퓨터가 대신 수행하도록 모델링한 것이다.</p>
+<p>이런 소프트웨어에 대한 개념을 바탕으로 소프트웨어의 복잡성에 대해 이야기해보자.</p>
+<p>첫 번째로, 소프트웨어는 소프트웨어에 담으려는 현실이 복잡하기 때문에 복잡하다. 실제 세계에 존재하는 문제는 매우 복잡하다. 현실의 문제를 다루는 프로세스 역시 간단하지 않다. 프로세스는 오랜 시간에 걸친 시행착오를 통해 진화하며, 그 과정에서 온갖 예외 상황들에 대한 처리 방식이 적립된다. 새로운 예외 사항이 발견되거나, 문제가 바뀌거나, 더 많은 문제를 풀려고 하면 새로운 프로세스가 추가될 것이다. 소프트웨어에 담아내야 하는 프로세스는 온갖 예외 케이스로 떡칠된 무언가이다. 많은 요구사항을 정확히 수행하는 소프트웨어는 필연적으로 복잡해진다.</p>
+<p>또한, 소프트웨어는 “소프트”하지만 사람 만큼 유연하지는 않다. 개발자가 시스템을 변경할 수 있는 속도는 사람이 프로세스를 바꿀 수 있는 속도보다 느리다. 하지만 소프트웨어는 발전하는 프로세스를 지속적으로 반영해서 진화해야 한다. 이러한 모순이 두 번째 복잡성을 낳는다. 소프트웨어는 자기보다 빠르게 변화하는 프로세스의 발전을 계속해서 따라잡을 수 있어야 한다. 그러려면 소프트웨어는 아무렇게나 개발되어서는 안 된다. 언제나 변경을 빠르게 수용할 수 있는 형태로 존재해야 한다.</p>
+<p>설계는 복잡한 현실을 적절히 모델링하고, 앞으로 다가올 복잡한 변경 사항을 빠르게 반영하기 위해 필요하다.<br><br></p>
+<h2 id="설계는-변경의-비용이-높은-결정을-미리-잘-내리는-것이다"><a href="#설계는-변경의-비용이-높은-결정을-미리-잘-내리는-것이다" class="headerlink" title="설계는 변경의 비용이 높은 결정을 미리 잘 내리는 것이다"></a>설계는 변경의 비용이 높은 결정을 미리 잘 내리는 것이다</h2><p>그렇다면 설계는 도대체 무엇이길래 복잡성을 잘 다루게 해주는 것일까? 소프트웨어 설계에 대한 정의는 비슷한 듯 모두 다르다. 그래서 자기만의 정의를 가지고 있는 것이 중요하다고 생각한다.</p>
+<p>내가 생각하는 소프트웨어 설계란, 변경의 비용이 높은 결정을 미리 잘 내리는 것이다. 명사로 사용되면 이러한 결정으로 인해 정해진 소프트웨어의 구조를 뜻한다. 여기서 말하는 변경의 비용이 높은 결정에는 다양한 것이 포함될 수 있지만, 결국 의존성으로 요약해서 이야기할 수 있다. 누군가가 의존하는 것은 변경하기 힘들다.</p>
+<p>DB 스키마는 한 번 결정하면 변경의 비용이 크다. 서버 로직, 데이터 파이프라인, 모니터링 메트릭 등 어플리케이션의 모든 부분이 DB에 의존한다. 또한 데이터는 한 번 적재되기 시작하면 새로운 형태로 마이그레이션하기 힘들다. DB는 롤백도 어렵다. 그래서 DB는 한 번 배포되고 나면 스키마를 변경하기 매우 힘들다.</p>
+<p>아키텍처도 변경의 비용이 크다. 열심히 계층을 나누고 컴포넌트를 쪼개서 책임을 분배한 후 개발했는데, 이후에 아키텍처를 변경하려고 하면 많은 코드를 다시 작성해야 한다. 이 과정에서 변경된 컴포넌트에 의존하던 다른 소프트웨어의 동작 방식이 달라져서 버그가 발생할 수도 있다.</p>
+<p>비슷한 이유로 MSA에서는 서비스의 경계를 정하는 것도 변경의 비용이 크다. 여기는 DB랑 배포 전략도 얽혀있으니 더욱 골치 아프다.</p>
+<p>서비스간의 통신 방식도 변경의 비용이 크다. HTTP를 활용하여 통신하는 시스템을 message queue를 활용하는 방식으로 변경하려면 비즈니스 로직의 많은 부분을 새롭게 짜야 할 것이다. 동기적 통신에서 비동기적 통신으로 바뀌었기 때문이다.</p>
+<p>왜 변경의 비용이 높은 결정을 미리 잘 내려야 할까? 실제 세계가 빠르게 변화하는 만큼 소프트웨어 역시 필연적으로 변해야 하기 때문이다. 최대한 적은 비용으로 많은 변경을 수용할 수 있는 구조로 소프트웨어를 설계해 놓아야 한다. 그렇지 않다면 소프트웨어는 현실의 프로세스가 변화하는 속도를 따라갈 수 없고, 따라서 가치를 제대로 창출해낼 수 없다. 만약 비용이 큰 결정을 잘못 내려서 이후에 이 결정을 번복해야 한다면 이는 매우 치명적인 문제로 되돌아올 것이다.<br><br></p>
+<h2 id="좋은-설계는-미래를-고려하는-설계이다"><a href="#좋은-설계는-미래를-고려하는-설계이다" class="headerlink" title="좋은 설계는 미래를 고려하는 설계이다"></a>좋은 설계는 미래를 고려하는 설계이다</h2><p>위에서 언급한대로, 실제 세계가 변화하기 때문에 소프트웨어는 필연적으로 변화해야 한다. 하지만 대부분의 경우 개발자가 소프트웨어를 변경할 수 있는 속도보다 실제 세계가 훨씬 더 빠르게 변화한다. 그래서 훌륭한 설계는 미래에 들어올 요구사항을 최대한 값싼 작업으로 수용할 수 있어야 한다.</p>
+<p>시스템을 변경할 때 가장 값싼 작업은 무언가를 추가하는 것이다. 예를 들어 enum type 추가, 필드 추가, 메소드 추가, interface 구현체 추가 등 무언가를 추가하는 행위는 기존 시스템을 변경하는 것보다 훨씬 값싸다. 무언가를 추가만 할 때는 새로운 스펙만 고려하면 되지만, 변경은 여기에 더해 기존 스펙을 지키는지도 고려해야 한다.</p>
+<p>만약 반드시 변경이 발생해야 한다면 특정 메소드나 컴포넌트 하나의 구현만 변경되는 상황이 가장 좋다. 단일 책임 원칙과 같은 말이다. 변경이 여러 군데에서 발생하면 기존 스펙에 영향을 주는 부분이 점점 많아진다. </p>
+<p>좋은 설계는 어떻게 할 수 있을까? 간단하다. 소프트웨어가 어떻게 변화할지 상상해보는 것이다. 지금 설계에서 미래의 들어올 변경을 얼마만큼 값싼 작업으로 수용할 수 있는지를 계산해본다. 계산된 비용이 가장 낮은 설계가 가장 좋은 설계다.</p>
+<p>이는 간단하지만 쉽지는 않다. 사실 매우 어렵다. 도대체 미래에 들어올 스펙을 어떻게 다 예측한단 말인가? 어쩔 수 없다. 미래에 발생할 수 있는 요구사항을 최대한 많이 브레인스토밍 해보고, 각각의 가능성을 잘 따져보는 수밖에. 이렇게 계산된 가능성을 바탕으로 지금의 설계에 stress test를 해보는 것이 중요하다. 더 많은 미래를 고민할수록 좋은 설계가 나올 확률도 높아진다.</p>
+<p>미래를 고려할 때 다른 팀과의 커뮤니케이션이 큰 도움이 될 수 있다. PM팀, 기획팀, 마케팅팀, UI/UX 팀 등 다른 팀에서 머리에 담아두고 있는 추가 스펙이나 기능의 고도화 방향성이 있을 수 있다. 이런 부분을 개발자가 먼저 물어보면 좋은 설계를 만드는 데에 큰 도움이 된다.</p>
+<p>모든 요구사항을 수용하는 완벽한 설계 따위는 당연히 존재하지 않을 것이다. 그래서 중요한 것은 최선의 설계를 찾는 것이다. 미래에 발생할 수 있는 요구사항이 각각 몇 퍼센트의 확률로 발생할 수 있을지. A, B, C라는 서로 다른 설계가 가능하다면 각 요구사항을 수용하기 위해 얼마만큼의 비용이 발생하는지. 이렇게 추산된 비용의 trade-off를 통해 지금 가장 나아보이는 설계를 고른다.</p>
+<p>하나 주의해야 할 점은 너무 먼 미래를 고려해서 과한 추상을 도입하지 않는 것이다. A라는 변경이 발생할 것으로 기대하고 일반화를 하고 추상을 도입했는데 나중에 A라는 변경이 발생하지 않으면 미리 도입한 추상은 오히려 변경의 비용을 높일 뿐이다. 설계의 비용을 예상할 때는 미리 내린 선택 역시 나중에 비용이 될 가능성이 있음을 고려해야 한다.<br><br></p>
+<h2 id="시스템을-지속적이고-점진적으로-개선해야-한다"><a href="#시스템을-지속적이고-점진적으로-개선해야-한다" class="headerlink" title="시스템을 지속적이고 점진적으로 개선해야 한다"></a>시스템을 지속적이고 점진적으로 개선해야 한다</h2><p>훌륭한 설계를 기반으로 구축된 시스템도 한계를 가진다. 현재의 설계로는 수용할 수 없는 요구사항이 발생하면 개발자는 선택의 기로에 선다. 소프트웨어의 설계를 변경할 것인가, 아니면 기존 설계에 어떻게든 기능을 우겨넣을 것인가?</p>
+<p>전자는, 더 좋은 설계로 바꾼다는 가정 하에, 지금 당장의 비용이 크지만 이후의 요구사항은 더 빠르게 수용할 수 있다. 후자를 선택하면 지금 당장 빠르게 개발할 수는 있지만 시스템은 점점 복잡해진다. 이후의 요구사항을 수용하는 데에 드는 비용과 설계를 변경하는 데에 드는 비용이 점점 더 커진다. 소프트웨어의 설계를 변경하고 리팩토링을 감행할 시점을 판단하는 것은 순수히 경험으로부터 나오는 개발자의 감각에 달린 듯하다.</p>
+<p>이미 배포된 기존 시스템을 변경하는 것은 새로운 시스템을 구축하는 것보다 훨씬 어렵다. 앞서 말했듯이 변경을 할 때는 새로 추가되는 요구사항 뿐만 아니라 시스템이 기존에 가지고 있던 요구사항까지 모두 만족하는 것을 확인해야 한다. 만약 단순히 한 서비스 내에서 일어나는 리팩토링이 아니라 여러 서비스에 걸친 리팩토링이라면 무중단으로 배포하는 것은 더욱 어려울 것이다. DB 스키마를 변경해야 한다면 무척 끔찍한 일이 될 것이다.</p>
+<p>변경된 시스템이 기존 요구사항을 만족하는지 확인하는 가장 좋은 방법은 많은 테스트이다. 스펙에 대한 테스트가 존재하면 빌드 한 번으로 리팩토링 이후에도 여전히 소프트웨어가 스펙을 만족하는지 확인할 수 있다. 테스트가 많으면 많을 수록 개발자는 안심하고 리팩토링을 진행할 수 있다.</p>
+<p>무중단으로 리팩토링을 진행하는 방법은 의존을 받는 컴포넌트부터 차례로 수정하고 배포하는 것이다. 여기에는 cyclic한 의존성이 없다는 전제조건이 깔린다.</p>
+<p>예를 들어보자. A → B 라는 컴포넌트와 의존성이 있고, 이를 A’ → C → B’ 로 리팩토링 한다고 하자. 그러면 배포 절차를 아래와 같이 가져가야 무중단으로 배포할 수 있을 것이다.</p>
+<ol>
+<li>C와 A에 대해 모두 정상적으로 동작하는 B’을 개발하고 B’을 배포한다. (A → B’)</li>
+<li>A’에 대해 정상적으로 동작하고 B’에 의존하는 C를 개발하고 C를 배포한다. (A → B’ / C → B’)</li>
+<li>C에 의존하는 A’을 배포한다. (A’ → C → B’)</li>
+<li>B’에서 A를 위한 코드를 제거하고 다시 배포한다.</li>
+</ol>
+<p>DB 스키마의 변경 역시 비슷하다. 특정 테이블의 A라는 column을 B와 C라는 column으로 대체하고 싶다고 하자. 여기서는 어플리케이션 → DB 라는 의존성이 있는 것이다.</p>
+<ol>
+<li>테이블에 B, C column을 추가한다.</li>
+<li>어플리케이션에서 A, B, C column에 대해 모두 데이터를 적재하도록 하고 배포한다. 이 때 B, C column은 데이터를 쌓기만 하고 로직에는 사용하지 않는다.</li>
+<li>기존 row에 대해서 A column의 값을 B, C column으로 적절히 마이그레이션 한다.</li>
+<li>어플리케이션에서 B, C column만 바라보도록 코드를 수정하고 다시 배포한다.</li>
+<li>필요하다면 A column을 제거한다.</li>
+</ol>
+<p>기존 시스템의 변경은 많은 요구사항을 만족시켜야 하고, 또한 점진적으로 이루어져야만 한다. 그래서 극히 어렵다. 하지만 이러한 변화는 어렵다고 피해갈 수 있는 것이 아니다. 소프트웨어가 손을 댈 수 없을 만큼 복잡해지기 전에 소프트웨어를 실제 세계에 맞춰 지속적으로 재설계하는 것이 중요하다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/01/16/spring-transaction-common-mistakes/">
+        <span class="nav-arrow">← </span>
+        
+          Spring Transaction 사용 시 주의할 점
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/05/09/life-full-of-passion/">
+        
+          2020.05.09.
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EA%B0%9C%EC%9A%94"><span class="toc-nav-text">개요</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%84%A4%EA%B3%84%EB%8A%94-%EB%B3%B5%EC%9E%A1%EC%84%B1%EC%9D%84-%ED%98%84%EB%AA%85%ED%95%98%EA%B2%8C-%EB%8B%A4%EB%A3%A8%EA%B8%B0-%EC%9C%84%ED%95%B4-%ED%95%84%EC%9A%94%ED%95%98%EB%8B%A4"><span class="toc-nav-text">설계는 복잡성을 현명하게 다루기 위해 필요하다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%84%A4%EA%B3%84%EB%8A%94-%EB%B3%80%EA%B2%BD%EC%9D%98-%EB%B9%84%EC%9A%A9%EC%9D%B4-%EB%86%92%EC%9D%80-%EA%B2%B0%EC%A0%95%EC%9D%84-%EB%AF%B8%EB%A6%AC-%EC%9E%98-%EB%82%B4%EB%A6%AC%EB%8A%94-%EA%B2%83%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">설계는 변경의 비용이 높은 결정을 미리 잘 내리는 것이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%A2%8B%EC%9D%80-%EC%84%A4%EA%B3%84%EB%8A%94-%EB%AF%B8%EB%9E%98%EB%A5%BC-%EA%B3%A0%EB%A0%A4%ED%95%98%EB%8A%94-%EC%84%A4%EA%B3%84%EC%9D%B4%EB%8B%A4"><span class="toc-nav-text">좋은 설계는 미래를 고려하는 설계이다</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%84-%EC%A7%80%EC%86%8D%EC%A0%81%EC%9D%B4%EA%B3%A0-%EC%A0%90%EC%A7%84%EC%A0%81%EC%9C%BC%EB%A1%9C-%EA%B0%9C%EC%84%A0%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4"><span class="toc-nav-text">시스템을 지속적이고 점진적으로 개선해야 한다</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2020/04/11/backend-application-design-202004/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "소프트웨어 개발과 설계",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>

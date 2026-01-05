@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137809918-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137809918-1');
+  </script>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Suhwan Jee&#39;s blog">
+  <meta name="keyword" content="Develop, Backend, Server, Spring">
+  
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.png"/> 
+  
+  <title>
+    
+      [라포 회고록] 들어가며 - 3년간 배운 것들
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plugins/gitment.css">
+
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+<script src="/js/qrious.js"></script>
+<script src="/js/gitment.js"></script>
+
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js"></script>
+    <!-- MathJax support END -->
+  
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/images/favicon.png" />
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <span>Home</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/develop/" class="item-link">Develop</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/diary/" class="item-link">Diary</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archive/" class="item-link">Archive</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/develop/" class="menu-link">Develop</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/diary/" class="menu-link">Diary</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archive/" class="menu-link">Archive</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>[라포 회고록] 들어가며 - 3년간 배운 것들</h2>
+  <p class="post-date">2025-07-09</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>이 글을 시작으로 작성하는 일련의 글 시리즈는 3년 3개월간의 라포랩스 생활에 대한 회고록이다.</p>
+<p>라포랩스에서 얻은 추억은 내 아이폰 사진 앱에 남아 언제든지 꺼내볼 수 있다. 하지만 그 과정에서 경험한 것, 배운 것, 했던 고민은 지금 내 머릿속에만 있고, 높은 확률로 언젠가 휘발될 것이다. 감사하고 운이 좋게도 라포랩스에서 얻어가는 것이 많고 또 귀중하다고 느끼는데, 이 생각들이 휘발되면 아깝겠다는 생각이 들었다. 그래서 VCNC를 퇴사할 때는 (의지의 부족으로…) 하지 못했던 블로그 시리즈를 적어보려고 한다.</p>
+<p>이번 글을 시작으로 게시할 일련의 회고록 시리즈는 ‘내가 3년간 배운 것 &amp; 고민한 것’을 주제로 작성할 예정이다.</p>
+<hr>
+<p>우선 3년 3개월간의 생활을 전반적으로 훑으면서 어떤 것들을 배웠는지를 슥 살펴보려고 한다.</p>
+<p>가장 먼저, 지난 이직 사이클에서 얻고 싶었던 경험이 무엇이었는지 되돌아보자.</p>
+<ol>
+<li>플랫폼 개발을 해보고 싶다.</li>
+<li>스톡옵션의 가치를 느껴보고 싶다.</li>
+</ol>
+<p>플랫폼 개발에 대한 갈증은 라포랩스 서버 플랫폼 팀을 선택하고, 3년간 플랫폼 쪽에서 다양한 경험을 하면서 잘 해소되었다. 단순히 서버 플랫폼 팀으로 입사했다는 사실 때문에 배울 수 있던 것은 아니다. 서버 플랫폼 팀에서 있던 2년간 그 안에서 치열하게 고민하고 실행했던 시간이 있었고, 커머스 플랫폼 팀으로 옮긴 이후에는 큰 회사에서 오신 다른 플랫폼 개발자 분들이 진행하는 다양한 작업들을 옆에서 볼 수 있었기에 많은 것을 배울 수 있었다.</p>
+<p>스톡옵션의 가치를 느껴보고 싶다는 점 역시 어느정도 달성했다. 당시 ‘전 직원 스톡옵션’이라는 복지를 내세워 채용을 했던 라포랩스였기에, 나도 스톡옵션을 받고 행사하는 것까지 경험해볼 수 있었다. 다소 희소한 경험이었다고 생각한다.</p>
+<hr>
+<p>라포랩스에서 내가 가지고 있던 주요한 정체성 중 하나는 ‘플랫폼 개발자’였지만, 다른 하나는 ‘리더’였다. 라포랩스를 선택할 당시에 라포랩스가 상대적으로 연차가 낮은 개발자들로 구성된 팀이라는 이야기를 들었는데, 이전부터 리더에 대한 욕심이 좀 있었던지라 라포랩스를 다니면서 리더를 달 수 있겠다는 계산을 하면서 입사를 했다. 하지만 어쩌다 보니 계산보다는 조금 더 일찍 리더를 달게 되어서, 거의 2년 반 정도를 리더로 일하게 되었다.</p>
+<p>라포랩스는 VCNC에 비해 리더에게 더 많은 것을 기대하고 요구했는데, 그 덕분에 리더로서도 상당히 성장하고 성숙해질 수 있었다고 생각한다. OKR을 짜면서 팀의 정체성, 회사의 전략, 그 안에서 우리가 할 수 있는 비즈니스 기회를 고민해보고, 팀원들의 성과 평가와 보상 관리도 해보았고, 팀원들을 성장시키기 위해 무엇을 해야할지도 고민해보고, 채용에 관여하고 JD를 쓰면서 우리 팀이 몇 명이어야 하는지도 고민해보았다. 상대적으로 낮은 연차에 이런 경험을 해볼 수 있어서 참 만족스럽다.</p>
+<p>라포랩스에서 서버 플랫폼 팀과 커머스 플랫폼 팀을 (아마 성공적으로?) 리딩한 경험은 ‘창업은 나랑 절대 안 어울려’라는 생각을 ‘창업해도 한 6~7명 규모 개발팀까지는 리딩 할만하겠는데?’ 정도로 바꿔놓았다. 이렇게 생긴 창업에 대한 자신감은 실제로 계단뿌셔클럽 합류라는 인생의 큰 선택으로 이어졌다. 그러므로 리더로서의 성장은 내 인생에 가장 큰 영향을 미친 변화라고 할 수 있겠다. </p>
+<hr>
+<p>2024년부터는 커머스 플랫폼 팀의 리더로서도 일을 하게 되었다. 이는 입사할 당시에는 예상하지 못한 변화였는데, 결과적으로 보면 아주 좋은 선택이었다고 생각한다. 서버 플랫폼 팀보다 보다 적성에 맞기도 했고, 커머스 플랫폼에서 했던 경험들이 상당히 중요하면서도 꽤나 독특했기 때문이다.</p>
+<ol>
+<li>주문, 결제, 정산, 가격 계산, 상품, 물류 등 커머스 공통 도메인 개발 경험</li>
+<li>목적조직 구조 하에서 필연적으로 발생하는 리소스 불균형을 보완하는 경험</li>
+<li>팀의 리더가 퇴사할 때 어떤 일이 벌어지는지에 대한 경험</li>
+</ol>
+<hr>
+<p>지난 이직 사이클에서 마지막 선택 당시 라포랩스와 다른 회사 후보 B를 두고 고민했었는데, 라포랩스를 선택한 소소한 이유 중 하나로 비슷한 또래의 구성원이 많다는 부분도 꽤 중요한 선택 이유였다. 회사를 선택할 당시, 이미 VCNC를 다니면서 좋은 친구를 많이 사귄 경험이 있어서, 가능하면 다음 회사에서도 친구를 많이 사귈 수 있으면 좋겠다는 생각이 있었다. B 회사는 주로 시니어 개발자로 구성되어 있는 반면 라포랩스는 주로 20대 위주로 개발자가 구성되어 있었다는 이야기를 들었는데, 내게 떨어질 수 있는 기회가 많다는 부분 뿐만 아니라 또래 친구를 더 사귀기 쉽겠다는 계산을 했다.</p>
+<p>3년 3개월의 회사 생활을 마친 지금, 좋은 친구를 많이 사귄 것은 라포랩스에서 얻은 가장 큰 가치 중 하나가 되었다. 크로스핏 - 부락 모임과는 늙어서도 같이 보고 싶다는 생각을 하고 있고, 이외에도 건전하고 기분 좋게 만날 수 있는 몇 개의 사모임이 만들어졌다. 동료와 친구 사이 어딘가의 기분 좋은 느슨한 관계들을 많이 맺을 수 있었다. VCNC를 다닐 때는 인간관계에 전혀 신경을 쓰고 다니지 않았지만 회사 생활을 더 하면서 인간관계의 중요성에 대해 깨닫기도 했고, 나이를 먹으면서 인간관계에서 조금 더 관용적인 태도를 갖게 되기도 해서, 오히려 VCNC를 다닐 때보다 더 많은 관계를 쌓아올릴 수 있었다고 생각한다. 라포랩스에서 쌓은 관계가 두고두고 내 삶의 자산이 될 것 같다는 좋은 예감이 든다.</p>
+<p>이렇게 좋은 사람들과 일 외적으로도 다양한 활동을 하면서 시간을 보냈는데, 내 인생에서 가장 다채로운 소비를 했던 기간이었던 것 같다. 회사를 다니면서 처음 해본 것들이 참 많다고 생각한다. 크로스핏이나 수영 등 다양한 운동을 처음 체험해보고, 락 페스티벌도 가보고, 국내 여행도 이곳저곳으로 많이 다녔다. 기존에는 개발이랑 게임밖에 몰랐는데, 이렇게 다양한 취미 생활을 다양한 사람들이랑 하면서 일 말고도 인생에 재밌는 것이 많다는 사실을 깨닫게 되었다.</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2023/06/17/jdk-virtual-thread/">
+        <span class="nav-arrow">← </span>
+        
+          JDK Virtual Thread 살펴보기
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2025/07/13/devex-as-implicit-product/">
+        
+          [라포 회고록] 개발자 경험은 의도하든 의도하지 않았든 하나의 제품이다
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!--COMMENT START-->
+    <!---->
+      <!--&lt;!&ndash; No Comment &ndash;&gt;-->
+    <!---->
+    <!--COMMENT END-->
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://suhwan.dev/2025/07/09/rapportlabs-memoir-intro/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+     // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+        
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+
+    // gitment
+    var gitmentConfig = "";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "[라포 회고록] 들어가며 - 3년간 배운 것들",
+        owner: "",
+        repo: "",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  })();
+</script>
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2026 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js", function(){
+      async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js", function(){
+        $('figure pre').each(function(i, block) {
+          var figure = $(this).parents('figure');
+          if (hasLine === 'false') {
+            figure.find('.gutter').hide();
+          }
+          var lang = figure.attr('class').split(' ')[1] || 'code';
+          var codeHtml = $(this).html();
+          var codeTag = document.createElement('code');
+          codeTag.className = lang;
+          codeTag.innerHTML = codeHtml;
+          $(this).attr('class', '').empty().html(codeTag);
+          figure.attr('data-lang', lang.toUpperCase());
+          hljs.highlightBlock(block);
+        });
+      })
+    })
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+  </body>
+</html>
